@@ -1,20 +1,10 @@
-# CLAUDE.md
+# CCS Calculator — notes for Claude Code
 
-Guidance for Claude Code when working in this repository.
+Read `docs/HANDOFF.md` first. It explains what this module is, how the calculation works, and how to wire it into another codebase.
 
-## About this repo
-
-<!-- What is this repo for? Fill in. -->
-
-## Context
-
-Reference material lives in `context/`. Read what's relevant to the task
-before answering.
-
-## Conventions
-
-<!-- Coding style, file layout, tone, anything to follow consistently. -->
-
-## Commands
-
-<!-- Build / test / lint commands, once there are any. -->
+Rules for this repo:
+- `src/ccsRates.ts` holds every number. Never hard-code a threshold or cap anywhere else.
+- `src/ccsEngine.ts` is pure and framework-free. Keep it that way.
+- `ccs-calculator.html` inlines a copy of the engine for no-install testing. If you change the engine, change the HTML copy too.
+- `tests/golden-cases.json` is the source of truth for "matches StartingBlocks.gov.au". Never edit expected values to make a test pass; fix the engine or the rounding switch.
+- Run `npm test` and `npm run typecheck` before finishing any change.

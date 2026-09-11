@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCS calculator — test harness</title>
+<style>
+  :root { --ink:#1f2a37; --muted:#5b6674; --line:#d9dee5; --bg:#f6f7f9; --ok:#1e7a4a; --bad:#b4232c; --accent:#0b5fa5; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); background:#fff; }
+  main { max-width:1080px; margin:0 auto; padding:24px 20px 60px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  .grid { display:grid; gap:20px; grid-template-columns: 1fr 1fr; }
+  @media (max-width:820px){ .grid { grid-template-columns:1fr; } }
+  fieldset { border:1px solid var(--line); border-radius:8px; padding:14px 16px 16px; margin:0 0 16px; }
+  legend { padding:0 6px; font-weight:600; }
+  label { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--muted); }
+  input, select { font:inherit; color:var(--ink); padding:7px 9px; border:1px solid var(--line); border-radius:6px; background:#fff; }
+  input[type=checkbox] { width:auto; }
+  .row { display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom:10px; }
+  .inline { flex-direction:row; align-items:center; gap:8px; color:var(--ink); }
+  button { font:inherit; padding:7px 12px; border-radius:6px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button.small { padding:3px 9px; font-size:13px; }
+  .child { border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px; background:var(--bg); }
+  .child h3 { margin:0 0 10px; font-size:14px; display:flex; justify-content:space-between; }
+  .note { font-size:13px; color:var(--muted); margin:6px 0 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  th { font-weight:500; color:var(--muted); }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr.total td { font-weight:600; }
+  .results { background:var(--bg); border-radius:8px; padding:14px 16px; }
+  .diff-ok { color:var(--ok); } .diff-bad { color:var(--bad); }
+  textarea { width:100%; min-height:120px; font:12px/1.4 ui-monospace, Menlo, Consolas, monospace; border:1px solid var(--line); border-radius:6px; padding:8px; }
+  .golden { border-top:1px solid var(--line); margin-top:24px; padding-top:20px; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Child Care Subsidy calculator — test harness</h1>
+  <p class="sub">Open <a href="https://www.startingblocks.gov.au/child-care-subsidy-calculator" target="_blank" rel="noopener">StartingBlocks</a> beside this, enter the same inputs in both, then record what StartingBlocks shows. Rates: CCS year <span id="year"></span>.</p>
+
+  <div class="grid">
+    <div>
+      <fieldset>
+        <legend>Family</legend>
+        <div class="row">
+          <label>Situation
+            <select id="partnered"><option value="1">Partnered</option><option value="0">Single</option></select>
+          </label>
+          <label>Combined family income (per year)
+            <input id="income" type="number" min="0" step="1000" value="150000">
+          </label>
+          <label>Your activity (hrs / fortnight)
+            <input id="p1" type="number" min="0" value="76">
+          </label>
+          <label id="p2wrap">Partner's activity (hrs / fortnight)
+            <input id="p2" type="number" min="0" value="76">
+          </label>
+        </div>
+        <label class="inline"><input id="withholding" type="checkbox"> Show after 5% withholding</label>
+        <p class="note" id="hoursNote"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Children in care</legend>
+        <div id="children"></div>
+        <button id="addChild" class="small">Add a child</button>
+      </fieldset>
+    </div>
+
+    <div>
+      <div class="results">
+        <h2>This calculator</h2>
+        <table id="ours"></table>
+        <div id="perChild"></div>
+        <p class="note" id="warnings"></p>
+      </div>
+
+      <fieldset style="margin-top:16px">
+        <legend>What StartingBlocks shows for the same inputs</legend>
+        <div class="row">
+          <label>Weekly subsidy <input id="sbWeekSub" type="number" step="0.01"></label>
+          <label>Weekly you pay <input id="sbWeekOop" type="number" step="0.01"></label>
+          <label>Fortnightly subsidy <input id="sbFnSub" type="number" step="0.01"></label>
+          <label>Fortnightly you pay <input id="sbFnOop" type="number" step="0.01"></label>
+          <label>CCS % shown <input id="sbPct" type="number" step="0.01"></label>
+        </div>
+        <table id="compare"></table>
+        <div class="actions">
+          <button id="record" class="primary">Record as golden case</button>
+          <button id="clear" class="small">Clear recorded</button>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <section class="golden">
+    <h2>Recorded golden cases (<span id="count">0</span>)</h2>
+    <p class="note">Copy this into <code>tests/golden-cases.json</code> and run <code>npm run golden</code>. Cases are kept in this page's memory only; download before closing.</p>
+    <div class="actions"><button id="download">Download golden-cases.json</button><button id="copy">Copy to clipboard</button></div>
+    <textarea id="goldenOut" readonly></textarea>
+  </section>
+</main>
+
+<script>
+// ============================================================================
+// ENGINE — identical logic to src/ccsEngine.ts + src/ccsRates.ts.
+// If you change one, change the other (tests/golden.test.ts guards the TS side).
+// ============================================================================
+const RATES = {
+  ccsYear: '2026-27', effectiveFrom: '2026-07-06',
+  standard: { maxPercent: 90, lowerThreshold: 88520, taperPerDollars: 5000 },
+  higher: { maxPercent: 95, t1: 146437, taperPerDollars: 3000, plateau1Percent: 80, t2: 191437, t3: 270726, plateau2Percent: 50, t4: 360726, revertThreshold: 370726 },
+  hourlyCaps: { CBDC:{belowSchoolAge:15.19, schoolAge:13.30}, OSHC:{belowSchoolAge:15.19, schoolAge:13.30}, FDC:{belowSchoolAge:14.08, schoolAge:14.08}, IHC:{belowSchoolAge:41.31, schoolAge:41.31} },
+  hours: { baseline: 72, full: 100, participationHoursForFull: 48 },
+  withholdingRate: 0.05,
+  percentRounding: { decimals: 2, mode: 'nearest' }, // try 'down' or 'none' if golden cases differ by cents
+};
+const CARE_LABELS = { CBDC:'Centre based day care', FDC:'Family day care', OSHC:'Outside school hours care', IHC:'In home care' };
+const DEFAULT_HOURS = { CBDC:10, FDC:10, OSHC:3, IHC:10 };
+const DEFAULT_FEE = { CBDC:150, FDC:120, OSHC:35, IHC:400 };
+
+const round2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
+function roundPercent(p) {
+  const { decimals, mode } = RATES.percentRounding;
+  if (mode === 'none') return p;
+  const f = 10 ** decimals;
+  return mode === 'down' ? Math.floor(p * f) / f : Math.round(p * f) / f;
+}
+function standardPercent(income) {
+  const s = RATES.standard, upper = s.lowerThreshold + s.maxPercent * s.taperPerDollars;
+  if (income <= s.lowerThreshold) return s.maxPercent;
+  if (income >= upper) return 0;
+  return roundPercent(s.maxPercent - (income - s.lowerThreshold) / s.taperPerDollars);
+}
+function higherPercent(income) {
+  const h = RATES.higher;
+  if (income >= h.revertThreshold) return null;
+  if (income <= h.t1) return h.maxPercent;
+  if (income < h.t2) return roundPercent(h.maxPercent - (income - h.t1) / h.taperPerDollars);
+  if (income <= h.t3) return h.plateau1Percent;
+  if (income < h.t4) return roundPercent(h.plateau1Percent - (income - h.t3) / h.taperPerDollars);
+  return h.plateau2Percent;
+}
+function entitledHours(input) {
+  if (input.participationExempt) return RATES.hours.full;
+  const a1 = input.participationHours.adult1 ?? 0;
+  const a2 = input.partnered ? (input.participationHours.adult2 ?? 0) : null;
+  const lowest = a2 === null ? a1 : Math.min(a1, a2);
+  return lowest > RATES.hours.participationHoursForFull ? RATES.hours.full : RATES.hours.baseline;
+}
+function calculateCcs(input) {
+  const income = Math.max(0, input.familyIncome || 0);
+  const stdPct = standardPercent(income), higherPct = higherPercent(income), familyHours = entitledHours(input);
+  const underSix = input.children.filter(c => c.ageYears <= 5);
+  const standardRateChildId = underSix.length ? [...underSix].sort((a,b)=>b.ageYears-a.ageYears)[0].id : null;
+  const higherApplies = higherPct !== null && underSix.length >= 2;
+  const warnings = [];
+  if (input.children.some(c => c.careType === 'IHC') && input.children.length > 1) warnings.push('In Home Care cap is per family; applied per child here.');
+  const children = input.children.map(c => {
+    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId;
+    const pct = isHigher ? higherPct : stdPct;
+    const schoolAge = c.schoolAge ?? c.ageYears >= 6;
+    const cap = schoolAge ? RATES.hourlyCaps[c.careType].schoolAge : RATES.hourlyCaps[c.careType].belowSchoolAge;
+    const hourlyFee = c.hourlyFee != null ? c.hourlyFee : (c.dailyFee != null && c.hoursPerDay > 0 ? c.dailyFee / c.hoursPerDay : 0);
+    const cappedFee = Math.min(hourlyFee, cap), hourlySubsidy = (pct/100) * cappedFee;
+    const hours = c.hoursPerDay * c.daysPerFortnight;
+    const entitled = c.firstNations ? RATES.hours.full : familyHours;
+    const subsidisedHours = Math.min(hours, entitled);
+    const feeFn = hourlyFee * hours, subsidyFn = hourlySubsidy * subsidisedHours;
+    const withheld = input.applyWithholding ? subsidyFn * RATES.withholdingRate : 0;
+    const paid = subsidyFn - withheld;
+    return { id:c.id, rateType: isHigher?'higher':'standard', ccsPercent:pct, hourlyFee:round2(hourlyFee), hourlyCap:cap, cappedHourlyFee:round2(cappedFee), hourlySubsidy:round2(hourlySubsidy),
+      hoursPerFortnight:hours, entitledHoursPerFortnight:entitled, subsidisedHoursPerFortnight:subsidisedHours, unsubsidisedHoursPerFortnight:Math.max(0,hours-subsidisedHours),
+      feePerFortnight:round2(feeFn), subsidyPerFortnight:round2(subsidyFn), withheldPerFortnight:round2(withheld), paidSubsidyPerFortnight:round2(paid), outOfPocketPerFortnight:round2(feeFn-paid) };
+  });
+  const sum = k => children.reduce((t,c)=>t+c[k],0);
+  const fn = { fees:round2(sum('feePerFortnight')), subsidy:round2(sum('subsidyPerFortnight')), withheld:round2(sum('withheldPerFortnight')), paidSubsidy:round2(sum('paidSubsidyPerFortnight')), outOfPocket:round2(sum('outOfPocketPerFortnight')) };
+  const scale = (t,k) => Object.fromEntries(Object.entries(t).map(([a,b])=>[a,round2(b*k)]));
+  return { ccsYear:RATES.ccsYear, familyIncome:income, standardPercent:stdPct, higherPercent: higherApplies?higherPct:null, entitledHoursPerFortnight:familyHours, children,
+    totals:{ perFortnight:fn, perWeek:scale(fn,0.5), perYear:scale(fn,26) }, warnings };
+}
+
+// ============================================================================
+// UI
+// ============================================================================
+const $ = id => document.getElementById(id);
+const money = n => n.toLocaleString('en-AU',{style:'currency',currency:'AUD'});
+let children = [];
+let golden = [];
+let seq = 0;
+
+function newChild(){ seq++; return { id:`child-${seq}`, ageYears:3, careType:'CBDC', dailyFee:DEFAULT_FEE.CBDC, hoursPerDay:DEFAULT_HOURS.CBDC, daysPerFortnight:6, schoolAge:undefined }; }
+
+function readInput(){
+  return {
+    ccsYear: RATES.ccsYear,
+    partnered: $('partnered').value === '1',
+    familyIncome: Number($('income').value)||0,
+    participationHours: { adult1: Number($('p1').value)||0, adult2: $('partnered').value==='1' ? (Number($('p2').value)||0) : null },
+    applyWithholding: $('withholding').checked,
+    children: children.map(c => ({ id:c.id, ageYears:c.ageYears, schoolAge:c.schoolAge, careType:c.careType, dailyFee:c.dailyFee, hoursPerDay:c.hoursPerDay, daysPerFortnight:c.daysPerFortnight })),
+  };
+}
+
+function renderChildren(){
+  $('children').innerHTML = children.map((c,i)=>`
+    <div class="child" data-id="${c.id}">
+      <h3>Child ${i+1} ${children.length>1?`<button class="small" data-remove="${c.id}">Remove</button>`:''}</h3>
+      <div class="row">
+        <label>Age (years) <input type="number" min="0" max="17" data-f="ageYears" value="${c.ageYears}"></label>
+        <label>Type of care <select data-f="careType">${Object.entries(CARE_LABELS).map(([k,v])=>`<option value="${k}" ${c.careType===k?'selected':''}>${v}</option>`).join('')}</select></label>
+        <label>Daily fee ($) <input type="number" min="0" step="1" data-f="dailyFee" value="${c.dailyFee}"></label>
+        <label>Hours per day <input type="number" min="1" max="24" step="0.5" data-f="hoursPerDay" value="${c.hoursPerDay}"></label>
+        <label>Days per fortnight <input type="number" min="0" max="10" data-f="daysPerFortnight" value="${c.daysPerFortnight}"></label>
+        <label class="inline" style="align-self:end"><input type="checkbox" data-f="schoolAge" ${(c.schoolAge ?? c.ageYears>=6)?'checked':''}> Attends school</label>
+      </div>
+      <p class="note" data-summary></p>
+    </div>`).join('');
+}
+
+function render(){
+  const input = readInput();
+  const res = calculateCcs(input);
+  $('p2wrap').style.display = input.partnered ? '' : 'none';
+  $('hoursNote').textContent = `Subsidised hours: ${res.entitledHoursPerFortnight} per fortnight. Standard rate ${res.standardPercent}%` + (res.higherPercent!==null?`, higher rate ${res.higherPercent}% for younger children`:'') + '.';
+  const subKey = input.applyWithholding ? 'paidSubsidy' : 'subsidy';
+  const rows = [['Child care fees','fees'],['Child Care Subsidy',subKey],['You pay','outOfPocket']];
+  $('ours').innerHTML = `<tr><th></th><th class="num">Weekly</th><th class="num">Fortnightly</th><th class="num">Yearly</th></tr>` +
+    rows.map(([l,k])=>`<tr class="${k==='outOfPocket'?'total':''}"><td>${l}</td><td class="num">${money(res.totals.perWeek[k])}</td><td class="num">${money(res.totals.perFortnight[k])}</td><td class="num">${money(res.totals.perYear[k])}</td></tr>`).join('');
+  res.children.forEach((cr,i)=>{
+    const el = document.querySelector(`[data-id="${cr.id}"] [data-summary]`);
+    if (el) el.textContent = `${cr.rateType==='higher'?'Higher':'Standard'} rate ${cr.ccsPercent}% × ${money(cr.cappedHourlyFee)}/hr${cr.hourlyFee>cr.hourlyCap?` (fee ${money(cr.hourlyFee)}/hr above ${money(cr.hourlyCap)} cap)`:''} · ${cr.subsidisedHoursPerFortnight} of ${cr.hoursPerFortnight} hrs subsidised · subsidy ${money(cr.subsidyPerFortnight)} / fortnight`;
+  });
+  $('perChild').innerHTML = '';
+  $('warnings').textContent = res.warnings.join(' ');
+  renderCompare(res, input);
+  return res;
+}
+
+function renderCompare(res, input){
+  const subKey = input.applyWithholding ? 'paidSubsidy' : 'subsidy';
+  const pairs = [
+    ['Weekly subsidy', res.totals.perWeek[subKey], $('sbWeekSub').value],
+    ['Weekly you pay', res.totals.perWeek.outOfPocket, $('sbWeekOop').value],
+    ['Fortnightly subsidy', res.totals.perFortnight[subKey], $('sbFnSub').value],
+    ['Fortnightly you pay', res.totals.perFortnight.outOfPocket, $('sbFnOop').value],
+    ['CCS %', res.standardPercent, $('sbPct').value],
+  ];
+  $('compare').innerHTML = `<tr><th></th><th class="num">Ours</th><th class="num">StartingBlocks</th><th class="num">Difference</th></tr>` +
+    pairs.map(([l,o,s])=>{ if (s==='') return `<tr><td>${l}</td><td class="num">${o}</td><td class="num">—</td><td class="num">—</td></tr>`;
+      const d = round2(o - Number(s)); const ok = Math.abs(d) <= 0.01;
+      return `<tr><td>${l}</td><td class="num">${o}</td><td class="num">${s}</td><td class="num ${ok?'diff-ok':'diff-bad'}">${ok?'match':(d>0?'+':'')+d}</td></tr>`; }).join('');
+}
+
+function renderGolden(){
+  $('count').textContent = golden.length;
+  $('goldenOut').value = JSON.stringify(golden, null, 2);
+}
+
+// events
+$('children').addEventListener('input', e => {
+  const wrap = e.target.closest('[data-id]'); const c = children.find(x=>x.id===wrap.dataset.id); const f = e.target.dataset.f;
+  if (!c || !f) return;
+  if (f==='schoolAge') c.schoolAge = e.target.checked;
+  else if (f==='careType') { c.careType = e.target.value; c.hoursPerDay = DEFAULT_HOURS[c.careType]; c.dailyFee = DEFAULT_FEE[c.careType]; renderChildren(); }
+  else { c[f] = Number(e.target.value); if (f==='ageYears') { c.schoolAge = undefined; wrap.querySelector('[data-f=schoolAge]').checked = c.ageYears>=6; } }
+  render();
+});
+$('children').addEventListener('click', e => { const id = e.target.dataset.remove; if (id){ children = children.filter(c=>c.id!==id); renderChildren(); render(); } });
+$('addChild').addEventListener('click', ()=>{ children.push(newChild()); renderChildren(); render(); });
+['partnered','income','p1','p2','withholding','sbWeekSub','sbWeekOop','sbFnSub','sbFnOop','sbPct'].forEach(id => $(id).addEventListener('input', render));
+
+$('record').addEventListener('click', ()=>{
+  const input = readInput();
+  const exp = { perWeek:{}, perFortnight:{}, children:[] };
+  if ($('sbWeekSub').value!=='') exp.perWeek.subsidy = Number($('sbWeekSub').value);
+  if ($('sbWeekOop').value!=='') exp.perWeek.outOfPocket = Number($('sbWeekOop').value);
+  if ($('sbFnSub').value!=='') exp.perFortnight.subsidy = Number($('sbFnSub').value);
+  if ($('sbFnOop').value!=='') exp.perFortnight.outOfPocket = Number($('sbFnOop').value);
+  if ($('sbPct').value!=='') exp.children.push({ id: input.children[0].id, ccsPercent: Number($('sbPct').value) });
+  if (!exp.children.length) delete exp.children;
+  golden.push({ name:`case-${golden.length+1} income ${input.familyIncome} ${input.partnered?'partnered':'single'} ${input.children.length} child`, input, expected: exp, tolerance: 0.01 });
+  renderGolden();
+});
+$('clear').addEventListener('click', ()=>{ golden = []; renderGolden(); });
+$('download').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(golden,null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'golden-cases.json'; a.click();
+});
+$('copy').addEventListener('click', ()=> navigator.clipboard.writeText($('goldenOut').value));
+
+$('year').textContent = RATES.ccsYear;
+children.push(newChild());
+renderChildren(); render(); renderGolden();
+</script>
+</body>
+</html>

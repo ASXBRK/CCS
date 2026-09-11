@@ -1,0 +1,20 @@
+[
+  {
+    "name": "TEMPLATE — replace expected values with what StartingBlocks displays, then remove skip",
+    "skip": true,
+    "input": {
+      "partnered": true,
+      "familyIncome": 150000,
+      "participationHours": { "adult1": 76, "adult2": 76 },
+      "applyWithholding": false,
+      "children": [
+        { "id": "child-1", "ageYears": 3, "careType": "CBDC", "dailyFee": 160, "hoursPerDay": 10, "daysPerFortnight": 10 }
+      ]
+    },
+    "expected": {
+      "perWeek": { "fees": 800, "subsidy": 590.13, "outOfPocket": 209.87 },
+      "perFortnight": { "fees": 1600, "subsidy": 1180.26, "outOfPocket": 419.74 },
+      "children": [{ "id": "child-1", "ccsPercent": 77.7, "subsidisedHoursPerFortnight": 100 }]
+    }
+  }
+]
