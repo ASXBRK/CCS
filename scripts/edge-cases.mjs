@@ -12,7 +12,17 @@ export function edgeCases() {
   const incomes = [0, 88519, 88520, 88521, 146436, 146437, 146438, 191436, 191437, 270726, 270727, 360726, 370725, 370726, 538519, 538520, 538521];
   const cases = [];
   for (const i of incomes) cases.push({ name: `edge income ${i} one child`, input: fam({ familyIncome: i, children: [child()] }) });
-  for (const i of [100000, 150000, 200000, 300000, 365000, 371000]) cases.push({ name: `edge income ${i} two under 6`, input: fam({ familyIncome: i, children: [child({ id: 'child-1', ageYears: 4 }), child({ id: 'child-2', ageYears: 1 })] }) });
+  // Two children under 6 is the only shape that exercises the HIGHER rate table,
+  // so its thresholds have to be hit here and not in the one-child list above.
+  // 370,726/370,727 is the one discontinuity in that table — the higher rate
+  // stops and every child drops to the standard rate — and so the only boundary
+  // in it a displayed figure can actually resolve. The original list jumped from
+  // 365,000 to 371,000 and stepped straight over it.
+  for (const i of [100000, 150000, 200000, 300000, 365000, 371000,
+                   146436, 146437, 146438, 191436, 191437,
+                   270725, 270726, 270727, 360725, 360726, 360727,
+                   370725, 370726, 370727, 370728])
+    cases.push({ name: `edge income ${i} two under 6`, input: fam({ familyIncome: i, children: [child({ id: 'child-1', ageYears: 4 }), child({ id: 'child-2', ageYears: 1 })] }) });
   cases.push({ name: 'edge fee below cap', input: fam({ familyIncome: 120000, children: [child({ dailyFee: 120 })] }) });
   cases.push({ name: 'edge fee at cap', input: fam({ familyIncome: 120000, children: [child({ dailyFee: 151.9 })] }) });
   cases.push({ name: 'edge fee above cap', input: fam({ familyIncome: 120000, children: [child({ dailyFee: 200 })] }) });

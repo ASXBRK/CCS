@@ -21747,5 +21747,710 @@
       }
     },
     "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146436 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146436,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 780.31,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146437 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146437,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 780.31,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146438 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146438,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 780.31,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 191436 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 191436,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 672.31,
+        "paidSubsidy": 638.69,
+        "withheld": 33.62,
+        "outOfPocket": 261.32
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1344.6,
+        "paidSubsidy": 1277.37,
+        "withheld": 67.23,
+        "outOfPocket": 522.63
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 191437 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 191437,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 672.31,
+        "paidSubsidy": 638.69,
+        "withheld": 33.62,
+        "outOfPocket": 261.32
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1344.6,
+        "paidSubsidy": 1277.37,
+        "withheld": 67.23,
+        "outOfPocket": 522.63
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 600.91,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 600.91,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 600.91,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 384.91,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 384.91,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 384.91,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 375.9,
+        "paidSubsidy": 357.1,
+        "withheld": 18.8,
+        "outOfPocket": 542.9
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 751.8,
+        "paidSubsidy": 714.21,
+        "withheld": 37.59,
+        "outOfPocket": 1085.79
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 375.9,
+        "paidSubsidy": 357.1,
+        "withheld": 18.8,
+        "outOfPocket": 542.9
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 751.8,
+        "paidSubsidy": 714.21,
+        "withheld": 37.59,
+        "outOfPocket": 1085.79
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 301.8,
+        "paidSubsidy": 286.7,
+        "withheld": 15.1,
+        "outOfPocket": 613.3
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 603.6,
+        "paidSubsidy": 573.42,
+        "withheld": 30.18,
+        "outOfPocket": 1226.58
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370728 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370728,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "subsidy": 301.8,
+        "paidSubsidy": 286.7,
+        "withheld": 15.1,
+        "outOfPocket": 613.3
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 603.6,
+        "paidSubsidy": 573.42,
+        "withheld": 30.18,
+        "outOfPocket": 1226.58
+      }
+    },
+    "tolerance": 0.01
   }
 ]

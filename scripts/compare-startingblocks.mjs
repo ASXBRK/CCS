@@ -554,16 +554,30 @@ async function dumpForm(page) {
 
 /** The case list, generated once and reused so a resumed run compares the same inputs. */
 function caseList() {
-  if (!FRESH && existsSync(CASES_FILE)) {
-    const saved = JSON.parse(readFileSync(CASES_FILE, 'utf8'));
-    if (saved.length >= N - 40) return saved;
-    console.log(`${CASES_FILE} holds ${saved.length} cases, fewer than asked for; regenerating.`);
-  }
-  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))].map(c => ({
+  const wrap = c => ({
     name: c.name,
     // The site always reports net of the 5% withholding; match its convention.
     input: { ...c.input, applyWithholding: SITE_APPLIES_WITHHOLDING },
-  }));
+  });
+  if (!FRESH && existsSync(CASES_FILE)) {
+    const saved = JSON.parse(readFileSync(CASES_FILE, 'utf8'));
+    if (saved.length >= N - 40) {
+      // Edge cases are deterministic and named, so ones added to edge-cases.mjs
+      // since the list was saved should extend the run rather than be ignored.
+      // The random gen-* sample is left exactly as it was, so a resumed run stays
+      // comparable with the report it is extending.
+      const have = new Set(saved.map(c => c.name));
+      const added = edgeCases().filter(c => !have.has(c.name)).map(wrap);
+      if (added.length) {
+        console.log(`${added.length} new edge case(s) since this list was saved; adding them.`);
+        saved.push(...added);
+        writeFileSync(CASES_FILE, JSON.stringify(saved, null, 2));
+      }
+      return saved;
+    }
+    console.log(`${CASES_FILE} holds ${saved.length} cases, fewer than asked for; regenerating.`);
+  }
+  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))].map(wrap);
   mkdirSync('reports', { recursive: true });
   writeFileSync(CASES_FILE, JSON.stringify(cases, null, 2));
   return cases;
