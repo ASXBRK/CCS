@@ -18,6 +18,7 @@ Thumbs.db
 *.log
 tmp/
 .cache/
+.scratch/
 
 # Node
 node_modules/

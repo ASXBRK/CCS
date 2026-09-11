@@ -10,10 +10,41 @@
  *   reports/comparison.csv
  *   reports/dom-dump.md          — with --dump: every control the form exposes, step by step
  *
- * --dump is the tool to reach for when selectors drift. It walks the form
- * without filling anything and records the role, accessible name, tag, type
- * and options of every control on every step. Feed that to whoever is fixing
- * the matchers below; it turns a blind guess into a lookup.
+ * --dump is the tool to reach for when selectors drift. It records the role,
+ * accessible name, tag, type and value of every control on the landing page,
+ * the form and the results panel. It turns a blind guess into a lookup.
+ *
+ * ---------------------------------------------------------------------------
+ * WHAT THE LIVE FORM ACTUALLY LOOKS LIKE (verified 2026-09-11)
+ * ---------------------------------------------------------------------------
+ * It is NOT a multi-step wizard. It is a landing page with one "Get started"
+ * button, then a SINGLE form page holding every question, then a results page.
+ *
+ * Everything below was read off the live DOM, not guessed:
+ *   - family type          two radios, value="single" / value="partnered"
+ *   - your participation   number, PER FORTNIGHT (default 76)
+ *   - family income        text, comma-formatted (default 115,000)
+ *   - partner participation  number, PER FORTNIGHT — only rendered when partnered
+ *                          (default 0)
+ *   - children             TABS. "Add another child" appends a tab; only the
+ *                          selected child's fields are in the DOM, so children
+ *                          must be filled one tab at a time. This is why the
+ *                          old "nth matching control" walk could not work.
+ *   - child age            number, whole years (default 2). There is NO
+ *                          school-age question — the site derives it from age,
+ *                          with the school-age cap starting at 6.
+ *   - care type            four radios, value="centreBasedDayCare" /
+ *                          "familyDayCare" / "outsideSchoolHoursCare" / "inHomeCare"
+ *   - fee                  DAILY rate, number, accepts decimals (default 120)
+ *   - session length       hours charged per day (default 8)
+ *   - days                 PER FORTNIGHT (default 7)
+ *   - submit               "Calculate subsidy"
+ *
+ * Both units the harness worried about (activity hours, days) are per
+ * FORTNIGHT on the live form, which is what our engine takes. No conversion.
+ *
+ * The results page ALWAYS shows figures net of the 5% withholding, so every
+ * case is run with applyWithholding: true (see WITHHOLDING below).
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
@@ -27,58 +58,85 @@ const N = Number(ARGS[0] ?? 200);
 const HEADED = process.argv.includes('--headed');
 const DUMP = process.argv.includes('--dump');
 const TOL = 0.01;
+const RETRIES = 3;
+
+/**
+ * WITHHOLDING. The results panel has no switch for this: it always reports
+ * "What the Australian Government pays" net of the 5% Services Australia holds
+ * back, and "What you pay" as fee minus that net figure. So the comparison
+ * runs every case with withholding on, and the golden file records the inputs
+ * that way, so `npm run golden` reproduces what the site displayed.
+ */
+const SITE_APPLIES_WITHHOLDING = true;
 
 // ---------------------------------------------------------------------------
 // Field matchers.
 //
-// Everything the form asks for is matched on its VISIBLE TEXT, not on CSS
-// classes or generated ids — a Next.js build regenerates those on every
-// deploy, wording survives. Each entry is a list of alternatives tried in
-// order. If StartingBlocks rewords a question, add the new wording here and
-// nothing else needs to change.
+// Questions are matched on their VISIBLE WORDING, radios on their stable
+// `value` attribute — never on CSS classes or generated ids, which a Next.js
+// build regenerates on every deploy (the live ids look like `_r_11_-form-item`).
+// Each entry is a list of alternatives tried in order: the exact live wording
+// first, looser fallbacks after it, so a reword degrades instead of breaking.
 // ---------------------------------------------------------------------------
 const M = {
-  start:        [/get started/i, /start( the)? calculator/i, /calculate/i, /begin/i],
-  next:         [/^next$/i, /^continue$/i, /next step/i, /^done$/i, /see (my )?(results|estimate)/i, /calculate/i],
-  income:       [/combined.*family.*income/i, /family.*income/i, /taxable income/i, /household income/i],
-  partnered:    [/partner/i, /couple/i, /two parents/i],
-  single:       [/single/i, /no partner/i, /one parent/i, /sole parent/i],
-  activity:     [/hours.*(activity|work|study)/i, /(activity|work|recognised).*hours/i, /how many hours/i],
-  activity2:    [/partner.*hours/i, /second.*(adult|parent).*hours/i, /hours.*partner/i],
-  childAge:     [/age of (the |your )?child/i, /child.*age/i, /how old/i],
-  schoolAge:    [/school/i],
-  careType:     [/type of (child ?care|care)/i, /care type/i, /service type/i],
-  dailyFee:     [/(daily|per day).*fee/i, /fee.*(per day|each day|daily)/i, /session fee/i, /cost.*per day/i],
-  hourlyFee:    [/(hourly|per hour).*fee/i, /fee.*(per hour|an hour|hourly)/i, /rate per hour/i],
-  hoursPerDay:  [/hours.*(per|each) (day|session)/i, /session length/i, /length of.*session/i],
-  days:         [/days.*(per|each) (week|fortnight)/i, /how many days/i, /number of days/i],
-  addChild:     [/add (another |a )?child/i, /another child/i],
-  // Result readouts
-  resSubsidy:   [/subsidy/i, /government.*(pay|contribut)/i, /ccs.*amount/i],
-  resOop:       [/out of pocket/i, /you(r)? (will )?pay/i, /gap fee/i, /your cost/i],
-  resFees:      [/total fee/i, /full fee/i, /child ?care fee/i],
-  resPercent:   [/subsidy (rate|percentage)/i, /ccs (rate|percentage)/i, /your rate/i, /% ?subsidy/i],
+  start:        [/^get started$/i, /get started/i, /start( the)? calculator/i],
+  submit:       [/^calculate subsidy$/i, /calculate subsidy/i, /^calculate$/i, /see (my )?(results|estimate)/i],
+  addChild:     [/^add another child$/i, /add (another|a) child/i],
+  selfHours:    [/recognised participation .*do you do per fortnight/i,
+                 /how many hours of recognised participation/i,
+                 /hours of (work|recognised)/i],
+  partnerHours: [/does your partner do per fortnight/i,
+                 /recognised activity does your partner/i,
+                 /partner/i],
+  income:       [/estimated annual income/i, /family'?s? .*income/i, /household income/i],
+  childAge:     [/age of your child/i, /child'?s? age/i, /how old/i],
+  dailyFee:     [/daily rate charged by your service/i, /daily rate/i, /(daily|per day).*(fee|rate)/i],
+  hoursPerDay:  [/hours are you charged per day/i, /hours.*(per|each) (day|session)/i, /session length/i],
+  days:         [/number of days your child will attend/i, /days.*(per|each) fortnight/i, /how many days/i],
 };
 
+/**
+ * Care type. The radios carry a stable `value`; CARE_LABEL is the fallback for
+ * clicking by visible text if the values ever change.
+ */
+const CARE_VALUE = {
+  CBDC: 'centreBasedDayCare',
+  FDC:  'familyDayCare',
+  OSHC: 'outsideSchoolHoursCare',
+  IHC:  'inHomeCare',
+};
 const CARE_LABEL = {
-  CBDC: [/centre ?based/i, /long day care/i, /day care centre/i],
-  FDC:  [/family day care/i],
-  OSHC: [/outside school hours/i, /oshc/i, /before.*after school/i, /vacation care/i],
-  IHC:  [/in ?home care/i],
+  CBDC: [/^centre based care$/i, /centre ?based/i, /long day care/i],
+  FDC:  [/^family day care$/i, /family day care/i],
+  OSHC: [/^out of school hours care$/i, /outside school hours/i, /oshc/i],
+  IHC:  [/^in home care$/i, /in ?home care/i],
+};
+
+/** Rows of the results tables, by the label in their first cell. */
+const ROW = {
+  fees:      /your total service fee/i,
+  rate:      /your ccs rate/i,
+  govPays:   /what the australian government pays/i,
+  withheld:  /^withholding$/i,
+  youPay:    /what you pay/i,
 };
 
 // ---------- low-level helpers -------------------------------------------------
 
+const hit = (text, pats) => pats.some(p => p.test(text || ''));
 const money = t => {
   const m = String(t).replace(/,/g, '').match(/-?\$?\s*(\d+(?:\.\d+)?)/);
   return m ? Number(m[1]) : null;
 };
-const pct = t => {
-  const m = String(t).match(/(\d+(?:\.\d+)?)\s*%/);
-  return m ? Number(m[1]) : null;
-};
+const round2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
 
-/** Every visible, enabled control on the current step, with its accessible name. */
+/**
+ * Every visible, enabled control on screen, with the question it belongs to.
+ *
+ * Each is stamped with `data-cmp-idx` so a Playwright locator addresses exactly
+ * the element inspected here. Indexing a fresh locator would not line up: it
+ * would also count the hidden and disabled controls filtered out below.
+ */
 async function controls(page) {
   return page.evaluate(() => {
     const vis = el => {
@@ -92,147 +150,163 @@ async function controls(page) {
               (el.id ? document.querySelector(`label[for="${CSS.escape(el.id)}"]`)?.innerText : '') ||
               el.closest('label')?.innerText || el.getAttribute('placeholder') || el.name || '';
       if (!n.trim()) {
-        // fall back to the nearest preceding heading or paragraph
+        // fall back to the nearest enclosing label or legend
         let p = el.parentElement, hops = 0;
         while (p && hops++ < 4) {
-          const t = [...p.querySelectorAll('label,legend,h1,h2,h3,h4,p')].map(x => x.innerText).find(Boolean);
+          const t = [...p.querySelectorAll('label,legend')].map(x => x.innerText).find(Boolean);
           if (t && t.trim()) { n = t; break; }
           p = p.parentElement;
         }
       }
-      return n.replace(/\s+/g, ' ').trim().slice(0, 160);
+      return n.replace(/\s+/g, ' ').trim().slice(0, 180);
     };
-    // Stamp each control so a Playwright locator can address exactly the element
-    // we inspected. Indexing a fresh locator would not line up: it would also
-    // count the hidden and disabled controls filtered out here.
     for (const el of document.querySelectorAll('[data-cmp-idx]')) el.removeAttribute('data-cmp-idx');
-    return [...document.querySelectorAll('input,select,textarea,button,[role="radio"],[role="button"],[role="combobox"]')]
+    return [...document.querySelectorAll('input,select,textarea,button')]
       .filter(vis).filter(el => !el.disabled)
       .map((el, i) => {
         el.setAttribute('data-cmp-idx', String(i));
         return {
           i, tag: el.tagName.toLowerCase(), type: el.type || el.getAttribute('role') || '',
           name: name(el), value: el.value ?? '',
+          text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 60),
           options: el.tagName === 'SELECT' ? [...el.options].map(o => o.text.trim()) : undefined,
         };
       });
   });
 }
 
-const hit = (text, pats) => pats.some(p => p.test(text || ''));
+const handleOf = (page, ctrl) => page.locator(`[data-cmp-idx="${ctrl.i}"]`).first();
 
-/** Nth control matching `pats` with one of the given tag/type shapes. */
-function find(ctrls, pats, want) {
-  return ctrls.filter(c => want(c)).find(c => hit(c.name, pats)) ?? null;
-}
-
-function handleOf(page, ctrl) {
-  return page.locator(`[data-cmp-idx="${ctrl.i}"]`).first();
-}
-
+/**
+ * Put a number into a React-controlled input.
+ *
+ * `fill()` is not enough here: the income field reformats itself with commas on
+ * every keystroke, and the number fields sit next to +/- steppers that re-read
+ * state on change. Selecting all, deleting and typing drives the same events a
+ * person would, which is what the form's state expects.
+ */
 async function typeInto(page, ctrl, value) {
   const h = handleOf(page, ctrl);
   await h.scrollIntoViewIfNeeded().catch(() => {});
-  await h.fill('');
-  await h.fill(String(value));
+  await h.click({ timeout: 8000 });
+  await h.press('Control+a');
+  await h.press('Delete');
+  await h.type(String(value), { delay: 8 });
   await h.blur().catch(() => {});
+  await page.waitForTimeout(100);
 }
 
-async function selectMatching(page, ctrl, pats) {
-  const h = handleOf(page, ctrl);
-  const idx = (ctrl.options ?? []).findIndex(o => hit(o, pats));
-  if (idx < 0) return false;
-  await h.selectOption({ index: idx });
-  return true;
-}
-
-/** Click the first thing on the page whose text matches, radio/button/link alike. */
-async function clickText(page, pats, { timeout = 4000 } = {}) {
+/** Click the first thing on the page whose accessible name or text matches. */
+async function clickText(page, pats, { timeout = 6000 } = {}) {
   for (const p of pats) {
-    for (const role of ['button', 'radio', 'link', 'tab', 'checkbox']) {
-      const l = page.getByRole(role, { name: p }).first();
-      if (await l.count().then(n => n > 0).catch(() => false)) {
-        try { await l.click({ timeout }); return true; } catch { /* keep looking */ }
-      }
-    }
-    const t = page.getByText(p).first();
-    if (await t.count().then(n => n > 0).catch(() => false)) {
-      try { await t.click({ timeout }); return true; } catch { /* keep looking */ }
+    const l = page.getByRole('button', { name: p }).first();
+    if (await l.count().then(n => n > 0).catch(() => false)) {
+      try { await l.click({ timeout }); return true; } catch { /* keep looking */ }
     }
   }
+  const ctrls = await controls(page);
+  const c = ctrls.find(x => hit(x.name, pats) || hit(x.text, pats));
+  if (c) { try { await handleOf(page, c).click({ timeout }); return true; } catch { /* fall through */ } }
   return false;
 }
 
+/** The one control on screen whose question matches `pats`. */
+function find(ctrls, pats, want = c => true) {
+  for (const p of pats) {
+    const c = ctrls.filter(want).find(x => p.test(x.name || ''));
+    if (c) return c;
+  }
+  return null;
+}
+
+const isField = c => (c.tag === 'input' && /^(text|number|tel|)$/.test(c.type)) || c.tag === 'select';
+
 async function settle(page) {
   await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 }
 
 // ---------- results -----------------------------------------------------------
 
 /**
- * Read the results panel. Pulls every "label: $amount" pair the page shows,
- * tags each with the period its surrounding text names, and returns only what
- * was actually on screen. Nothing here calculates — a figure the page does not
- * display comes back null.
+ * Read the results panel.
+ *
+ * The page renders one summary table (family totals) and, under "Full
+ * breakdown", one table per child headed "Child N - Aged M". Every table has a
+ * Weekly and a Fortnightly column, so the period comes from the column, not
+ * from the row's wording.
+ *
+ * Nothing here calculates a subsidy. Two figures ARE summed from figures the
+ * page displays, and both are noted where they are used:
+ *   - gross subsidy  = "What the Australian Government pays" + "Withholding"
+ *     (the page shows the net and the withheld amount, never the sum)
+ *   - family fees    = the per-child "Your total service fee" rows
+ *     (the summary table has no fee row)
+ * A figure the page does not display comes back null.
  */
 async function readResults(page) {
-  const blocks = await page.evaluate(() => {
-    const vis = el => {
-      const r = el.getBoundingClientRect();
-      return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden';
-    };
-    const out = [];
-    for (const el of document.querySelectorAll('li,tr,p,div,span,dd,dt,h2,h3,h4,strong')) {
-      if (!vis(el)) continue;
-      const t = (el.innerText || '').replace(/\s+/g, ' ').trim();
-      if (!t || t.length > 220) continue;
-      if (!/[$%]/.test(t)) continue;
-      // include the nearest heading so "per week" / "per fortnight" context survives
-      let ctx = '', p = el.parentElement, hops = 0;
-      while (p && hops++ < 5) {
-        const h = [...p.querySelectorAll('h1,h2,h3,h4,legend,th,caption')].map(x => x.innerText).filter(Boolean).join(' ');
-        if (h) { ctx = h.replace(/\s+/g, ' ').trim().slice(0, 200); break; }
-        p = p.parentElement;
+  const raw = await page.evaluate(() => {
+    const parse = tb => {
+      const rows = [];
+      for (const tr of tb.querySelectorAll('tbody tr')) {
+        const td = [...tr.children];
+        if (td.length < 3) continue; // the repeated "Weekly | Fortnightly" header rows
+        rows.push({
+          label: (td[0].innerText || '').replace(/\s+/g, ' ').trim(),
+          week: (td[1].innerText || '').trim(),
+          fn: (td[2].innerText || '').trim(),
+        });
       }
-      out.push({ text: t, ctx });
+      return rows;
+    };
+    const tables = [...document.querySelectorAll('table')];
+    const children = [];
+    for (const h of document.querySelectorAll('h3')) {
+      const m = (h.innerText || '').match(/Child\s+(\d+)\s*-\s*Aged\s+(\d+)/i);
+      if (!m) continue;
+      const tb = h.parentElement?.querySelector('table');
+      if (tb) children.push({ n: Number(m[1]), age: Number(m[2]), rows: parse(tb) });
     }
-    return out;
+    return { summary: tables.length ? parse(tables[0]) : [], children };
   });
 
-  const period = s =>
-    /fortnight|fortnightly|per 2 weeks|每/i.test(s) ? 'perFortnight'
-    : /per week|weekly|a week|\/wk|\/week/i.test(s) ? 'perWeek'
-    : /per year|annual|yearly|pa\b/i.test(s) ? 'perYear'
-    : null;
+  if (!raw.summary.length) return null;
 
-  const res = { perWeek: {}, perFortnight: {}, perYear: {}, ccsPercent: null };
-  for (const b of blocks) {
-    const whole = `${b.ctx} ${b.text}`;
-    const per = period(b.text) ?? period(b.ctx);
-    if (res.ccsPercent == null && hit(whole, M.resPercent)) {
-      const p = pct(b.text);
-      if (p != null) res.ccsPercent = p;
-    }
-    if (!per) continue;
-    const amt = money(b.text);
-    if (amt == null) continue;
-    const key = hit(whole, M.resOop) ? 'outOfPocket'
-              : hit(whole, M.resSubsidy) ? 'subsidy'
-              : hit(whole, M.resFees) ? 'fees' : null;
-    if (key && res[per][key] == null) res[per][key] = amt;
+  const cell = (rows, re, k) => {
+    const r = rows.find(x => re.test(x.label));
+    return r ? money(r[k]) : null;
+  };
+  const pctOf = rows => {
+    const r = rows.find(x => ROW.rate.test(x.label));
+    const m = r ? String(r.fn).match(/(\d+(?:\.\d+)?)\s*%/) : null;
+    return m ? Number(m[1]) : null;
+  };
+
+  const out = { perWeek: {}, perFortnight: {}, children: [], ccsPercent: null };
+  for (const [key, k] of [['perWeek', 'week'], ['perFortnight', 'fn']]) {
+    const paid = cell(raw.summary, ROW.govPays, k);
+    const withheld = cell(raw.summary, ROW.withheld, k);
+    const oop = cell(raw.summary, ROW.youPay, k);
+    const fees = raw.children.length
+      ? raw.children.reduce((t, c) => t + (cell(c.rows, ROW.fees, k) ?? 0), 0)
+      : null;
+    out[key] = {
+      fees: fees == null ? null : round2(fees),
+      // gross = net + withheld; the page displays both halves but never the sum
+      subsidy: paid == null || withheld == null ? null : round2(paid + withheld),
+      paidSubsidy: paid, withheld, outOfPocket: oop,
+    };
   }
-
-  for (const p of ['perWeek', 'perFortnight', 'perYear']) {
-    if (!Object.keys(res[p]).length) delete res[p];
-  }
-  const got = ['perWeek', 'perFortnight', 'perYear'].some(p => res[p]);
-  return got ? res : null;
-}
-
-async function resultsVisible(page) {
-  const r = await readResults(page);
-  return r != null;
+  out.children = raw.children.map(c => ({
+    n: c.n, age: c.age,
+    displayedPercent: pctOf(c.rows),
+    feePerFortnight: cell(c.rows, ROW.fees, 'fn'),
+    paidSubsidyPerFortnight: cell(c.rows, ROW.govPays, 'fn'),
+    withheldPerFortnight: cell(c.rows, ROW.withheld, 'fn'),
+    outOfPocketPerFortnight: cell(c.rows, ROW.youPay, 'fn'),
+  }));
+  out.ccsPercent = out.children[0]?.displayedPercent ?? null;
+  return out;
 }
 
 // ---------- the form walk -----------------------------------------------------
@@ -240,136 +314,124 @@ async function resultsVisible(page) {
 /**
  * Enter `input` into the StartingBlocks form and return what the page shows.
  *
- * The form is a multi-step wizard, so this does not assume a field order.
- * It looks at whatever step is on screen, fills every field it recognises,
- * presses Next, and repeats until the results panel appears. A field the step
- * does not show is simply not filled on that pass.
+ * Shape of the walk, which follows the real form (see the header comment):
+ *   landing → "Get started" → one form page → "Calculate subsidy" → results.
+ *
+ * Children are TABS, so each child is selected and filled in turn; there is no
+ * step in which two children's fields are on screen together.
  *
  * READ ONLY. Every number returned is scraped from the page.
  */
 async function fillAndRead(page, input) {
-  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  await settle(page);
-  await clickText(page, M.start).catch(() => {});
+  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  if (!(await clickText(page, M.start, { timeout: 20000 }))) {
+    throw new Error('no "Get started" button on the landing page');
+  }
+  await page.waitForSelector('input[value="single"]', { timeout: 20000 });
   await settle(page);
 
-  const filled = new Set();
-  // A field is weekly only if it says "week" and does not say "fortnight".
+  // --- single / partnered. Radios carry a stable value attribute.
+  const famBtn = page.locator(`button[value="${input.partnered ? 'partnered' : 'single'}"]`).first();
+  if (await famBtn.count()) await famBtn.click();
+  else if (!(await clickText(page, input.partnered ? [/^partnered$/i] : [/^single$/i])))
+    throw new Error('no single/partnered control');
+  await page.waitForTimeout(250);
+
+  // --- participation hours. The live field says "per fortnight", which is the
+  // unit our input already uses. Assert that rather than assume it: if the
+  // wording ever changes to weekly, halve instead of feeding it a fortnight.
   const perWeekField = c => /week/i.test(c.name) && !/fortnight/i.test(c.name);
-  const isText = c => c.tag === 'input' && /^(text|number|tel|)$/.test(c.type);
-  const isSelect = c => c.tag === 'select';
-  const isAny = c => isText(c) || isSelect(c);
+  const putHours = async (ctrl, hoursPerFortnight) =>
+    typeInto(page, ctrl, perWeekField(ctrl) ? hoursPerFortnight / 2 : hoursPerFortnight);
 
-  for (let step = 0; step < 24; step++) {
-    if (await resultsVisible(page)) break;
-    const ctrls = await controls(page);
-    let did = false;
+  let ctrls = await controls(page);
+  const self = find(ctrls, M.selfHours, isField);
+  if (!self) throw new Error('no participation-hours field');
+  await putHours(self, input.participationHours.adult1 ?? 0);
 
-    // --- family income
-    if (!filled.has('income')) {
-      const c = find(ctrls, M.income, isText);
-      if (c) { await typeInto(page, c, Math.round(input.familyIncome)); filled.add('income'); did = true; }
-    }
+  ctrls = await controls(page);
+  const inc = find(ctrls, M.income, isField);
+  if (!inc) throw new Error('no income field');
+  await typeInto(page, inc, Math.round(input.familyIncome));
 
-    // --- single / partnered
-    if (!filled.has('partnered')) {
-      if (await clickText(page, input.partnered ? M.partnered : M.single, { timeout: 1500 })) {
-        filled.add('partnered'); did = true;
-      }
-    }
-
-    // --- activity hours
-    // Our input is hours per FORTNIGHT. The form may ask per week. As with
-    // days, the field's own wording decides — never assume the unit.
-    const putHours = async (ctrl, hoursPerFortnight) => {
-      const v = perWeekField(ctrl) ? hoursPerFortnight / 2 : hoursPerFortnight;
-      if (isSelect(ctrl)) return selectMatching(page, ctrl, [new RegExp(`\\b${v}\\b`)]);
-      await typeInto(page, ctrl, v);
-      return true;
-    };
-    if (!filled.has('activity')) {
-      const a1 = find(ctrls, M.activity, isAny);
-      if (a1) { await putHours(a1, input.participationHours.adult1); filled.add('activity'); did = true; }
-    }
-    if (input.partnered && input.participationHours.adult2 != null && !filled.has('activity2')) {
-      const a2 = find(ctrls, M.activity2, isAny);
-      if (a2) { await putHours(a2, input.participationHours.adult2); filled.add('activity2'); did = true; }
-    }
-
-    // --- children
-    for (let ci = 0; ci < input.children.length; ci++) {
-      const ch = input.children[ci];
-      const k = s => `child${ci}:${s}`;
-      if (ci > 0 && !filled.has(k('added'))) {
-        if (await clickText(page, M.addChild, { timeout: 1500 })) { filled.add(k('added')); did = true; await settle(page); }
-      }
-      const cur = await controls(page);
-      const nth = (pats, want) => cur.filter(want).filter(c => hit(c.name, pats))[ci] ?? null;
-
-      if (!filled.has(k('age'))) {
-        const c = nth(M.childAge, isAny);
-        if (c) {
-          if (isSelect(c)) await selectMatching(page, c, [new RegExp(`\\b${ch.ageYears}\\b`)]);
-          else await typeInto(page, c, ch.ageYears);
-          filled.add(k('age')); did = true;
-        }
-      }
-      if (!filled.has(k('care'))) {
-        const c = nth(M.careType, isSelect);
-        if (c && await selectMatching(page, c, CARE_LABEL[ch.careType])) { filled.add(k('care')); did = true; }
-        else if (await clickText(page, CARE_LABEL[ch.careType], { timeout: 1500 })) { filled.add(k('care')); did = true; }
-      }
-      if (!filled.has(k('fee'))) {
-        // Some versions of the form ask for an hourly fee rather than a daily
-        // one. Fill whichever it shows, converting only when the form's own
-        // wording says hourly.
-        const cd = nth(M.dailyFee, isText);
-        const chr = nth(M.hourlyFee, isText);
-        if (cd) { await typeInto(page, cd, ch.dailyFee ?? ''); filled.add(k('fee')); did = true; }
-        else if (chr) {
-          const hourly = ch.hourlyFee ?? (ch.dailyFee != null && ch.hoursPerDay > 0 ? ch.dailyFee / ch.hoursPerDay : '');
-          await typeInto(page, chr, typeof hourly === 'number' ? Math.round(hourly * 100) / 100 : hourly);
-          filled.add(k('fee')); did = true;
-        }
-      }
-      if (!filled.has(k('hours'))) {
-        const c = nth(M.hoursPerDay, isAny);
-        if (c) {
-          if (isSelect(c)) await selectMatching(page, c, [new RegExp(`\\b${ch.hoursPerDay}\\b`)]);
-          else await typeInto(page, c, ch.hoursPerDay);
-          filled.add(k('hours')); did = true;
-        }
-      }
-      if (!filled.has(k('days'))) {
-        const c = nth(M.days, isAny);
-        if (c) {
-          // The form may ask per WEEK or per FORTNIGHT. Decide from its own
-          // wording, never from a guess: the label is the only authority.
-          const v = perWeekField(c) ? ch.daysPerFortnight / 2 : ch.daysPerFortnight;
-          if (isSelect(c)) await selectMatching(page, c, [new RegExp(`\\b${v}\\b`)]);
-          else await typeInto(page, c, v);
-          filled.add(k('days')); did = true;
-        }
-      }
-    }
-
-    const advanced = await clickText(page, M.next, { timeout: 2500 });
-    await settle(page);
-    if (!advanced && !did) break; // nothing recognised and nowhere to go
+  if (input.partnered) {
+    ctrls = await controls(page);
+    // the self field also matches loose "partner" wording, so exclude it by index
+    const p2 = find(ctrls.filter(c => c.i !== self.i), M.partnerHours, isField);
+    if (!p2) throw new Error('no partner participation field');
+    await putHours(p2, input.participationHours.adult2 ?? 0);
   }
 
-  await settle(page);
+  // --- children. Add every tab first, then fill them one at a time.
+  for (let i = 1; i < input.children.length; i++) {
+    if (!(await clickText(page, M.addChild))) throw new Error(`could not add child ${i + 1}`);
+    await page.waitForTimeout(400);
+  }
+
+  for (let i = 0; i < input.children.length; i++) {
+    const ch = input.children[i];
+    if (input.children.length > 1) {
+      const tab = page.getByRole('button', { name: new RegExp(`^Child ${i + 1}$`) }).first();
+      if (!(await tab.count())) throw new Error(`no tab for child ${i + 1}`);
+      await tab.click();
+      await page.waitForTimeout(350);
+    }
+
+    // Care type first: it decides which fee fields the panel renders.
+    const careBtn = page.locator(`button[value="${CARE_VALUE[ch.careType]}"]`).first();
+    if (await careBtn.count()) await careBtn.click();
+    else if (!(await clickText(page, CARE_LABEL[ch.careType])))
+      throw new Error(`no ${ch.careType} option`);
+    await page.waitForTimeout(250);
+
+    const fill = async (pats, value, what) => {
+      const cs = await controls(page);
+      const c = find(cs, pats, isField);
+      if (!c) throw new Error(`child ${i + 1}: no ${what} field`);
+      return { c, done: await typeInto(page, c, value) };
+    };
+    await fill(M.childAge, ch.ageYears, 'age');
+    await fill(M.dailyFee, ch.dailyFee, 'daily fee');
+    await fill(M.hoursPerDay, ch.hoursPerDay, 'session hours');
+
+    // Days: per fortnight on the live form, which is our unit. Decide from the
+    // field's own wording all the same — the label is the only authority.
+    const cs = await controls(page);
+    const dc = find(cs, M.days, isField);
+    if (!dc) throw new Error(`child ${i + 1}: no days field`);
+    await typeInto(page, dc, perWeekField(dc) ? ch.daysPerFortnight / 2 : ch.daysPerFortnight);
+  }
+
+  if (!(await clickText(page, M.submit))) throw new Error('no "Calculate subsidy" button');
+  await page.waitForSelector('table', { timeout: 30000 });
+  await page.waitForTimeout(300);
+
   const out = await readResults(page);
   if (!out) {
-    const seen = (await controls(page)).map(c => `${c.tag}[${c.type}] "${c.name}"`).slice(0, 12).join(' | ');
-    throw new Error(`no results panel found; controls on screen: ${seen || '(none)'}`);
+    const seen = (await controls(page)).map(c => `${c.tag}[${c.type}] "${c.name || c.text}"`).slice(0, 12).join(' | ');
+    throw new Error(`no results tables found; controls on screen: ${seen || '(none)'}`);
   }
   return out;
 }
 
 // ---------------------------------------------------------------------------
 async function launch() {
-  const opts = { headless: !HEADED };
+  // A sandbox that routes egress through an HTTPS proxy has to tell Chromium
+  // about it — Chromium does not read HTTPS_PROXY. Both accommodations are
+  // inert when no proxy is configured:
+  //   --proxy-server            point it at the proxy the shell already uses
+  //   --ssl-version-max=tls1.2  some intercepting proxies reset the tunnel on a
+  //     TLS 1.3 handshake from Chromium (curl and openssl negotiate 1.3 through
+  //     the same proxy fine, so this is a Chromium/proxy interaction, not a
+  //     policy block). 1.2 negotiates cleanly, still verifies the certificate
+  //     against the proxy CA, and every host this script touches supports it.
+  const proxyUrl = process.env.HTTPS_PROXY ?? process.env.https_proxy ?? null;
+  const args = ['--no-sandbox'];
+  const opts = { headless: !HEADED, args };
+  if (proxyUrl) {
+    opts.proxy = { server: proxyUrl };
+    args.push('--ssl-version-max=tls1.2');
+  }
   try {
     return await chromium.launch(opts);
   } catch (e) {
@@ -392,30 +454,67 @@ async function preflight(page) {
   }
 }
 
+/**
+ * Record every control the site exposes: the landing page, the form (single and
+ * partnered, one child and two, since the partner field and the child tabs are
+ * conditional), and the results panel.
+ */
 async function dumpForm(page) {
   const steps = [];
-  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  const snap = async label => {
+    steps.push({ label, heading: (await page.locator('h1,h2').first().innerText().catch(() => '')).replace(/\s+/g, ' ').trim(), ctrls: await controls(page) });
+  };
+  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await settle(page);
-  await clickText(page, M.start).catch(() => {});
+  await snap('Landing page');
+
+  await clickText(page, M.start, { timeout: 20000 });
+  await page.waitForSelector('input[value="single"]', { timeout: 20000 });
   await settle(page);
-  for (let i = 0; i < 12; i++) {
-    const ctrls = await controls(page);
-    const heading = await page.locator('h1,h2,legend').first().innerText().catch(() => '');
-    steps.push({ i, heading: heading.replace(/\s+/g, ' ').trim(), ctrls });
-    if (await resultsVisible(page)) break;
-    if (!(await clickText(page, M.next, { timeout: 2500 }))) break;
-    await settle(page);
-  }
+  await snap('Form — single, one child (defaults as pre-filled)');
+
+  await page.locator('button[value="partnered"]').first().click();
+  await page.waitForTimeout(400);
+  await snap('Form — partnered (adds the partner participation field)');
+
+  await clickText(page, M.addChild);
+  await page.waitForTimeout(500);
+  await snap('Form — two children (children are TABS; only the selected one renders)');
+
+  // Reload before submitting. A child tab that has been added but never visited
+  // leaves the form unsubmittable — "Calculate subsidy" simply does nothing —
+  // which is the other reason fillAndRead selects and fills every tab in turn.
+  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await settle(page);
+  await clickText(page, M.start, { timeout: 20000 });
+  await page.waitForSelector('input[value="single"]', { timeout: 20000 });
+  await settle(page);
+  await clickText(page, M.submit);
+  await page.waitForSelector('table', { timeout: 30000 });
+  await settle(page);
+  await snap('Results');
+  const tables = await page.evaluate(() =>
+    [...document.querySelectorAll('table')].map(t => t.innerText.replace(/\t/g, ' | ')));
+
   mkdirSync('reports', { recursive: true });
-  const md = ['# StartingBlocks form dump', '', `Captured ${new Date().toISOString()}`, '',
+  const md = ['# StartingBlocks form dump', '',
+    `Captured ${new Date().toISOString()} from ${URL}`, '',
+    'The calculator is a landing page, then ONE form page, then a results page —',
+    'not a multi-step wizard. Children are tabs: only the selected child\'s fields',
+    'exist in the DOM. Activity hours and days are both asked PER FORTNIGHT, and the',
+    'fee is asked as a DAILY rate.', '',
     ...steps.flatMap(s => [
-      `## Step ${s.i}${s.heading ? ` — ${s.heading}` : ''}`, '',
-      '| # | tag | type | accessible name | options |', '|---:|---|---|---|---|',
-      ...s.ctrls.map(c => `| ${c.i} | ${c.tag} | ${c.type} | ${(c.name || '').replace(/\|/g, '\\|')} | ${(c.options ?? []).join(' · ').replace(/\|/g, '\\|')} |`),
+      `## ${s.label}${s.heading ? ` — ${s.heading}` : ''}`, '',
+      '| # | tag | type | value | button text | accessible name / question |',
+      '|---:|---|---|---|---|---|',
+      ...s.ctrls.map(c => `| ${c.i} | ${c.tag} | ${c.type} | ${String(c.value).replace(/\|/g, '\\|')} | ${(c.text || '').replace(/\|/g, '\\|')} | ${(c.name || '').replace(/\|/g, '\\|')} |`),
       '',
-    ])].join('\n');
+    ]),
+    '## Results tables (rendered text)', '',
+    ...tables.flatMap((t, i) => ['```', `table ${i}`, t, '```', '']),
+  ].join('\n');
   writeFileSync('reports/dom-dump.md', md);
-  console.log(`Wrote reports/dom-dump.md (${steps.length} steps).`);
+  console.log(`Wrote reports/dom-dump.md (${steps.length} snapshots).`);
 }
 
 async function main() {
@@ -439,31 +538,46 @@ async function main() {
   const rows = [], golden = [];
 
   for (const c of cases) {
-    const ours = calculateCcs(c.input);
-    let sb, error = null;
-    try { sb = await fillAndRead(page, c.input); } catch (e) { error = String(e.message); sb = null; }
-    const cmp = (o, s) => (s == null ? null : Math.round((o - s) * 100) / 100);
+    // The site always reports net of the 5% withholding; match its convention.
+    const input = { ...c.input, applyWithholding: SITE_APPLIES_WITHHOLDING };
+    const ours = calculateCcs(input);
+    let sb = null, error = null;
+    for (let attempt = 1; attempt <= RETRIES && !sb; attempt++) {
+      try { sb = await fillAndRead(page, input); error = null; }
+      catch (e) { error = String(e.message).split('\n')[0]; }
+    }
+    const cmp = (o, s) => (s == null ? null : round2(o - s));
     const row = {
       name: c.name, error,
       ourWeekSub: ours.totals.perWeek.subsidy, sbWeekSub: sb?.perWeek?.subsidy ?? null,
+      ourWeekPaid: ours.totals.perWeek.paidSubsidy, sbWeekPaid: sb?.perWeek?.paidSubsidy ?? null,
       ourWeekOop: ours.totals.perWeek.outOfPocket, sbWeekOop: sb?.perWeek?.outOfPocket ?? null,
       ourFnOop: ours.totals.perFortnight.outOfPocket, sbFnOop: sb?.perFortnight?.outOfPocket ?? null,
-      ourPct: ours.standardPercent, sbPct: sb?.ccsPercent ?? null,
+      ourFnFees: ours.totals.perFortnight.fees, sbFnFees: sb?.perFortnight?.fees ?? null,
+      ourPct: ours.standardPercent, sbShownPct: sb?.ccsPercent ?? null,
     };
-    row.dWeekSub = cmp(row.ourWeekSub, row.sbWeekSub); row.dWeekOop = cmp(row.ourWeekOop, row.sbWeekOop); row.dFnOop = cmp(row.ourFnOop, row.sbFnOop);
-    row.pass = !error && [row.dWeekSub, row.dWeekOop, row.dFnOop].every(d => d === null || Math.abs(d) <= TOL);
+    row.dWeekSub = cmp(row.ourWeekSub, row.sbWeekSub);
+    row.dWeekPaid = cmp(row.ourWeekPaid, row.sbWeekPaid);
+    row.dWeekOop = cmp(row.ourWeekOop, row.sbWeekOop);
+    row.dFnOop = cmp(row.ourFnOop, row.sbFnOop);
+    row.dFnFees = cmp(row.ourFnFees, row.sbFnFees);
+    row.pass = !error && [row.dWeekSub, row.dWeekPaid, row.dWeekOop, row.dFnOop, row.dFnFees]
+      .every(d => d === null || Math.abs(d) <= TOL);
     rows.push(row);
-        if (sb) {
-      // Only pin a displayed percentage to a child when there is exactly one.
-      // With two or more, the page may be showing the higher-rate child's rate
-      // and attributing it to child-1 would bake a wrong expectation into the
-      // golden file.
-      const single = c.input.children.length === 1 && sb.ccsPercent != null;
+
+    if (sb) {
       golden.push({
-        name: c.name, input: c.input,
+        name: c.name, input,
         expected: {
+          // Only figures the page displayed, plus the two documented sums
+          // (gross subsidy, family fees) explained on readResults.
+          //
+          // The displayed "Your CCS Rate" is NOT recorded as a child's
+          // ccsPercent: the site prints it rounded to a whole percent with two
+          // decimal places tacked on (84.70% shows as "85.00%"), so it is a
+          // display convention, not a figure to compare against. It is kept in
+          // reports/comparison.{md,csv} as `sbShownPct` instead.
           perWeek: sb.perWeek, perFortnight: sb.perFortnight,
-          children: single ? [{ id: c.input.children[0].id, ccsPercent: sb.ccsPercent }] : undefined,
         },
         tolerance: TOL,
       });
@@ -475,15 +589,20 @@ async function main() {
   mkdirSync('reports', { recursive: true });
   writeFileSync('tests/golden-cases.json', JSON.stringify(golden, null, 2));
   const fails = rows.filter(r => !r.pass);
+  const errs = rows.filter(r => r.error);
   const md = [
     `# StartingBlocks comparison — ${new Date().toISOString().slice(0, 10)}`, '',
-    `${rows.length} cases, ${rows.length - fails.length} pass, ${fails.length} fail (tolerance $${TOL}).`, '',
-    '| Case | Our wk subsidy | SB wk subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Result |',
-    '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|',
-    ...rows.map(r => `| ${r.name} | ${r.ourWeekSub} | ${r.sbWeekSub ?? '—'} | ${r.dWeekSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.error ? 'ERROR' : r.pass ? 'pass' : 'FAIL'} |`),
+    `${rows.length} cases, ${rows.length - fails.length} pass, ${fails.length} fail ` +
+      `(${errs.length} of them could not be read at all). Tolerance $${TOL}.`, '',
+    'Every case ran with `applyWithholding: true`, the convention the results panel uses.',
+    'Subsidy columns are GROSS (the page\'s "government pays" plus its "withholding").',
+    '"SB %" is the rate the page printed, which it rounds to a whole percent.', '',
+    '| Case | Our wk subsidy | SB wk subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Our fn fees | SB fn fees | Δ | Our % | SB % | Result |',
+    '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|',
+    ...rows.map(r => `| ${r.name} | ${r.ourWeekSub} | ${r.sbWeekSub ?? '—'} | ${r.dWeekSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.ourFnFees} | ${r.sbFnFees ?? '—'} | ${r.dFnFees ?? '—'} | ${r.ourPct} | ${r.sbShownPct ?? '—'} | ${r.error ? 'ERROR: ' + r.error : r.pass ? 'pass' : 'FAIL'} |`),
   ].join('\n');
   writeFileSync('reports/comparison.md', md);
-  writeFileSync('reports/comparison.csv', [Object.keys(rows[0]).join(','), ...rows.map(r => Object.values(r).join(','))].join('\n'));
+  writeFileSync('reports/comparison.csv', [Object.keys(rows[0]).join(','), ...rows.map(r => Object.values(r).map(v => typeof v === 'string' && v.includes(',') ? `"${v.replace(/"/g, '""')}"` : v).join(','))].join('\n'));
   console.log(`\n${rows.length - fails.length}/${rows.length} pass. Report: reports/comparison.md`);
   process.exit(fails.length ? 1 : 0);
 }
