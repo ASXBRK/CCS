@@ -3,11 +3,21 @@
  *
  *   npm i -D playwright && npx playwright install chromium
  *   npm run compare -- [n=200] [--headed] [--dump]
+ *                      [--jobs=3] [--budget=SECONDS] [--fresh]
+ *
+ * A full run takes most of an hour, so it is resumable: re-running the same
+ * command picks up where the last one stopped. `--budget=480` stops pulling new
+ * cases after eight minutes and exits 3, which is how a long run is driven in
+ * bounded chunks. `--fresh` throws the saved state away and starts over.
+ * Exit codes: 0 all pass, 1 complete with failures, 2 site unreachable,
+ * 3 incomplete (resumable).
  *
  * Writes:
  *   tests/golden-cases.json      — cases with StartingBlocks' displayed figures (feeds `npm run golden`)
  *   reports/comparison.md        — human-readable pass/fail table with diffs
  *   reports/comparison.csv
+ *   reports/comparison-cases.json — the generated case list, so a resume compares the same inputs
+ *   reports/comparison-raw.jsonl  — one line per case already read off the site
  *   reports/dom-dump.md          — with --dump: every control the form exposes, step by step
  *
  * --dump is the tool to reach for when selectors drift. It records the role,
@@ -47,7 +57,7 @@
  * case is run with applyWithholding: true (see WITHHOLDING below).
  */
 import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, appendFileSync, existsSync } from 'node:fs';
 import { calculateCcs } from '../src/ccsEngine';
 import { generateCases } from './generate-cases.mjs';
 import { edgeCases } from './edge-cases.mjs';
@@ -57,8 +67,31 @@ const ARGS = process.argv.slice(2).filter(a => !a.startsWith('--'));
 const N = Number(ARGS[0] ?? 200);
 const HEADED = process.argv.includes('--headed');
 const DUMP = process.argv.includes('--dump');
+const FRESH = process.argv.includes('--fresh');
+const flag = (name, dflt) => {
+  const a = process.argv.find(x => x.startsWith(`--${name}=`));
+  return a ? Number(a.split('=')[1]) : dflt;
+};
+/** Pages driven at once. Three is brisk without hammering a government site. */
+const JOBS = flag('jobs', 3);
+/** Stop pulling new cases after this long, so a run fits in a bounded window. */
+const BUDGET_MS = flag('budget', 0) * 1000;
 const TOL = 0.01;
 const RETRIES = 3;
+
+/**
+ * A full run takes the better part of an hour, so it is written to survive being
+ * cut short. Two files carry the state:
+ *
+ *   reports/comparison-cases.json   the case list, generated once and reused.
+ *     generateCases() is random, so a resumed run would otherwise be comparing a
+ *     different set of inputs than the one it is resuming.
+ *   reports/comparison-raw.jsonl    one line per case already read off the site.
+ *
+ * Re-running picks up where it left off. `--fresh` discards both and starts over.
+ */
+const CASES_FILE = 'reports/comparison-cases.json';
+const RAW_FILE = 'reports/comparison-raw.jsonl';
 
 /**
  * WITHHOLDING. The results panel has no switch for this: it always reports
@@ -191,9 +224,9 @@ async function typeInto(page, ctrl, value) {
   await h.click({ timeout: 8000 });
   await h.press('Control+a');
   await h.press('Delete');
-  await h.type(String(value), { delay: 8 });
+  await h.type(String(value), { delay: 0 });
   await h.blur().catch(() => {});
-  await page.waitForTimeout(100);
+  await page.waitForTimeout(40);
 }
 
 /** Click the first thing on the page whose accessible name or text matches. */
@@ -328,14 +361,16 @@ async function fillAndRead(page, input) {
     throw new Error('no "Get started" button on the landing page');
   }
   await page.waitForSelector('input[value="single"]', { timeout: 20000 });
-  await settle(page);
+  // Not settle(): this page never reaches networkidle, so waiting for it burns
+  // the full timeout on every case. The form is already in the DOM by here.
+  await page.waitForTimeout(150);
 
   // --- single / partnered. Radios carry a stable value attribute.
   const famBtn = page.locator(`button[value="${input.partnered ? 'partnered' : 'single'}"]`).first();
   if (await famBtn.count()) await famBtn.click();
   else if (!(await clickText(page, input.partnered ? [/^partnered$/i] : [/^single$/i])))
     throw new Error('no single/partnered control');
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(150);
 
   // --- participation hours. The live field says "per fortnight", which is the
   // unit our input already uses. Assert that rather than assume it: if the
@@ -365,7 +400,7 @@ async function fillAndRead(page, input) {
   // --- children. Add every tab first, then fill them one at a time.
   for (let i = 1; i < input.children.length; i++) {
     if (!(await clickText(page, M.addChild))) throw new Error(`could not add child ${i + 1}`);
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(250);
   }
 
   for (let i = 0; i < input.children.length; i++) {
@@ -374,7 +409,7 @@ async function fillAndRead(page, input) {
       const tab = page.getByRole('button', { name: new RegExp(`^Child ${i + 1}$`) }).first();
       if (!(await tab.count())) throw new Error(`no tab for child ${i + 1}`);
       await tab.click();
-      await page.waitForTimeout(350);
+      await page.waitForTimeout(250);
     }
 
     // Care type first: it decides which fee fields the panel renders.
@@ -382,7 +417,7 @@ async function fillAndRead(page, input) {
     if (await careBtn.count()) await careBtn.click();
     else if (!(await clickText(page, CARE_LABEL[ch.careType])))
       throw new Error(`no ${ch.careType} option`);
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(150);
 
     const fill = async (pats, value, what) => {
       const cs = await controls(page);
@@ -517,6 +552,94 @@ async function dumpForm(page) {
   console.log(`Wrote reports/dom-dump.md (${steps.length} snapshots).`);
 }
 
+/** The case list, generated once and reused so a resumed run compares the same inputs. */
+function caseList() {
+  if (!FRESH && existsSync(CASES_FILE)) {
+    const saved = JSON.parse(readFileSync(CASES_FILE, 'utf8'));
+    if (saved.length >= N - 40) return saved;
+    console.log(`${CASES_FILE} holds ${saved.length} cases, fewer than asked for; regenerating.`);
+  }
+  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))].map(c => ({
+    name: c.name,
+    // The site always reports net of the 5% withholding; match its convention.
+    input: { ...c.input, applyWithholding: SITE_APPLIES_WITHHOLDING },
+  }));
+  mkdirSync('reports', { recursive: true });
+  writeFileSync(CASES_FILE, JSON.stringify(cases, null, 2));
+  return cases;
+}
+
+/** Compare one case's engine result against what the page displayed. */
+function compareCase(c, sb, error) {
+  const ours = calculateCcs(c.input);
+  const cmp = (o, s) => (s == null ? null : round2(o - s));
+  const row = {
+    name: c.name, error: error ?? null,
+    ourWeekSub: ours.totals.perWeek.subsidy, sbWeekSub: sb?.perWeek?.subsidy ?? null,
+    ourWeekPaid: ours.totals.perWeek.paidSubsidy, sbWeekPaid: sb?.perWeek?.paidSubsidy ?? null,
+    ourWeekOop: ours.totals.perWeek.outOfPocket, sbWeekOop: sb?.perWeek?.outOfPocket ?? null,
+    ourFnOop: ours.totals.perFortnight.outOfPocket, sbFnOop: sb?.perFortnight?.outOfPocket ?? null,
+    ourFnFees: ours.totals.perFortnight.fees, sbFnFees: sb?.perFortnight?.fees ?? null,
+    ourPct: ours.standardPercent, sbShownPct: sb?.ccsPercent ?? null,
+  };
+  row.dWeekSub = cmp(row.ourWeekSub, row.sbWeekSub);
+  row.dWeekPaid = cmp(row.ourWeekPaid, row.sbWeekPaid);
+  row.dWeekOop = cmp(row.ourWeekOop, row.sbWeekOop);
+  row.dFnOop = cmp(row.ourFnOop, row.sbFnOop);
+  row.dFnFees = cmp(row.ourFnFees, row.sbFnFees);
+  row.pass = !row.error && [row.dWeekSub, row.dWeekPaid, row.dWeekOop, row.dFnOop, row.dFnFees]
+    .every(d => d === null || Math.abs(d) <= TOL);
+  return row;
+}
+
+function writeReports(cases, recorded) {
+  const rows = cases.filter(c => recorded.has(c.name))
+    .map(c => { const r = recorded.get(c.name); return compareCase(c, r.sb, r.error); });
+  const golden = cases.filter(c => recorded.get(c.name)?.sb).map(c => ({
+    name: c.name, input: c.input,
+    expected: {
+      // Only figures the page displayed, plus the two documented sums (gross
+      // subsidy, family fees) explained on readResults.
+      //
+      // The displayed "Your CCS Rate" is NOT recorded as a child's ccsPercent:
+      // the site prints it rounded to a whole percent with two decimal places
+      // tacked on (84.70% shows as "85.00%"), so it is a display convention,
+      // not a figure to compare against. It is kept in
+      // reports/comparison.{md,csv} as `sbShownPct` instead.
+      perWeek: recorded.get(c.name).sb.perWeek,
+      perFortnight: recorded.get(c.name).sb.perFortnight,
+    },
+    tolerance: TOL,
+  }));
+
+  mkdirSync('reports', { recursive: true });
+  writeFileSync('tests/golden-cases.json', JSON.stringify(golden, null, 2));
+  const fails = rows.filter(r => !r.pass);
+  const errs = rows.filter(r => r.error);
+  const complete = rows.length === cases.length;
+  const md = [
+    `# StartingBlocks comparison — ${new Date().toISOString().slice(0, 10)}`, '',
+    complete
+      ? `${rows.length} cases, ${rows.length - fails.length} pass, ${fails.length} fail ` +
+        `(${errs.length} of them could not be read at all). Tolerance $${TOL}.`
+      : `PARTIAL RUN: ${rows.length} of ${cases.length} cases read so far. ` +
+        `${rows.length - fails.length} pass, ${fails.length} fail (${errs.length} unreadable). Tolerance $${TOL}.`,
+    '',
+    'Every case ran with `applyWithholding: true`, the convention the results panel uses.',
+    'Subsidy columns are GROSS (the page\'s "government pays" plus its "withholding").',
+    '"SB %" is the rate the page printed, which it rounds to a whole percent, so it is',
+    'not comparable to "Our %" and is shown for reference only.', '',
+    '| Case | Our wk subsidy | SB wk subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Our fn fees | SB fn fees | Δ | Our % | SB % | Result |',
+    '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|',
+    ...rows.map(r => `| ${r.name} | ${r.ourWeekSub} | ${r.sbWeekSub ?? '—'} | ${r.dWeekSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.ourFnFees} | ${r.sbFnFees ?? '—'} | ${r.dFnFees ?? '—'} | ${r.ourPct} | ${r.sbShownPct ?? '—'} | ${r.error ? 'ERROR: ' + r.error : r.pass ? 'pass' : 'FAIL'} |`),
+  ].join('\n');
+  writeFileSync('reports/comparison.md', md);
+  const csvCell = v => (typeof v === 'string' && /[",]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
+  writeFileSync('reports/comparison.csv',
+    [Object.keys(rows[0]).join(','), ...rows.map(r => Object.values(r).map(csvCell).join(','))].join('\n'));
+  return { rows, fails, errs, complete };
+}
+
 async function main() {
   const browser = await launch();
   const page = await browser.newPage();
@@ -533,76 +656,53 @@ async function main() {
   }
 
   if (DUMP) { await dumpForm(page); await browser.close(); return; }
+  await page.close();
 
-  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))];
-  const rows = [], golden = [];
+  if (FRESH) for (const f of [CASES_FILE, RAW_FILE]) if (existsSync(f)) writeFileSync(f, '');
+  const cases = caseList();
 
-  for (const c of cases) {
-    // The site always reports net of the 5% withholding; match its convention.
-    const input = { ...c.input, applyWithholding: SITE_APPLIES_WITHHOLDING };
-    const ours = calculateCcs(input);
-    let sb = null, error = null;
-    for (let attempt = 1; attempt <= RETRIES && !sb; attempt++) {
-      try { sb = await fillAndRead(page, input); error = null; }
-      catch (e) { error = String(e.message).split('\n')[0]; }
+  // Replay whatever a previous run already read off the site.
+  const recorded = new Map();
+  if (existsSync(RAW_FILE)) {
+    for (const line of readFileSync(RAW_FILE, 'utf8').split('\n')) {
+      if (!line.trim()) continue;
+      try { const r = JSON.parse(line); recorded.set(r.name, r); } catch { /* truncated tail */ }
     }
-    const cmp = (o, s) => (s == null ? null : round2(o - s));
-    const row = {
-      name: c.name, error,
-      ourWeekSub: ours.totals.perWeek.subsidy, sbWeekSub: sb?.perWeek?.subsidy ?? null,
-      ourWeekPaid: ours.totals.perWeek.paidSubsidy, sbWeekPaid: sb?.perWeek?.paidSubsidy ?? null,
-      ourWeekOop: ours.totals.perWeek.outOfPocket, sbWeekOop: sb?.perWeek?.outOfPocket ?? null,
-      ourFnOop: ours.totals.perFortnight.outOfPocket, sbFnOop: sb?.perFortnight?.outOfPocket ?? null,
-      ourFnFees: ours.totals.perFortnight.fees, sbFnFees: sb?.perFortnight?.fees ?? null,
-      ourPct: ours.standardPercent, sbShownPct: sb?.ccsPercent ?? null,
-    };
-    row.dWeekSub = cmp(row.ourWeekSub, row.sbWeekSub);
-    row.dWeekPaid = cmp(row.ourWeekPaid, row.sbWeekPaid);
-    row.dWeekOop = cmp(row.ourWeekOop, row.sbWeekOop);
-    row.dFnOop = cmp(row.ourFnOop, row.sbFnOop);
-    row.dFnFees = cmp(row.ourFnFees, row.sbFnFees);
-    row.pass = !error && [row.dWeekSub, row.dWeekPaid, row.dWeekOop, row.dFnOop, row.dFnFees]
-      .every(d => d === null || Math.abs(d) <= TOL);
-    rows.push(row);
-
-    if (sb) {
-      golden.push({
-        name: c.name, input,
-        expected: {
-          // Only figures the page displayed, plus the two documented sums
-          // (gross subsidy, family fees) explained on readResults.
-          //
-          // The displayed "Your CCS Rate" is NOT recorded as a child's
-          // ccsPercent: the site prints it rounded to a whole percent with two
-          // decimal places tacked on (84.70% shows as "85.00%"), so it is a
-          // display convention, not a figure to compare against. It is kept in
-          // reports/comparison.{md,csv} as `sbShownPct` instead.
-          perWeek: sb.perWeek, perFortnight: sb.perFortnight,
-        },
-        tolerance: TOL,
-      });
-    }
-    process.stdout.write(`${row.pass ? 'PASS' : 'FAIL'} ${c.name}${error ? ' — ' + error : ''}\n`);
   }
+  const todo = cases.filter(c => !recorded.has(c.name));
+  console.log(`${cases.length} cases; ${recorded.size} already read, ${todo.length} to go (${JOBS} in parallel).`);
+
+  const started = Date.now();
+  let next = 0, stopped = false;
+  const worker = async () => {
+    const p = await browser.newPage();
+    try {
+      while (next < todo.length) {
+        if (BUDGET_MS && Date.now() - started > BUDGET_MS) { stopped = true; break; }
+        const c = todo[next++];
+        let sb = null, error = null;
+        for (let attempt = 1; attempt <= RETRIES && !sb; attempt++) {
+          try { sb = await fillAndRead(p, c.input); error = null; }
+          catch (e) { error = String(e.message).split('\n')[0]; }
+        }
+        const rec = { name: c.name, sb, error };
+        recorded.set(c.name, rec);
+        appendFileSync(RAW_FILE, JSON.stringify(rec) + '\n');
+        const row = compareCase(c, sb, error);
+        process.stdout.write(`${row.pass ? 'PASS' : 'FAIL'} ${c.name}${error ? ' — ' + error : ''}\n`);
+      }
+    } finally { await p.close().catch(() => {}); }
+  };
+  await Promise.all(Array.from({ length: Math.max(1, JOBS) }, worker));
   await browser.close();
 
-  mkdirSync('reports', { recursive: true });
-  writeFileSync('tests/golden-cases.json', JSON.stringify(golden, null, 2));
-  const fails = rows.filter(r => !r.pass);
-  const errs = rows.filter(r => r.error);
-  const md = [
-    `# StartingBlocks comparison — ${new Date().toISOString().slice(0, 10)}`, '',
-    `${rows.length} cases, ${rows.length - fails.length} pass, ${fails.length} fail ` +
-      `(${errs.length} of them could not be read at all). Tolerance $${TOL}.`, '',
-    'Every case ran with `applyWithholding: true`, the convention the results panel uses.',
-    'Subsidy columns are GROSS (the page\'s "government pays" plus its "withholding").',
-    '"SB %" is the rate the page printed, which it rounds to a whole percent.', '',
-    '| Case | Our wk subsidy | SB wk subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Our fn fees | SB fn fees | Δ | Our % | SB % | Result |',
-    '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|',
-    ...rows.map(r => `| ${r.name} | ${r.ourWeekSub} | ${r.sbWeekSub ?? '—'} | ${r.dWeekSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.ourFnFees} | ${r.sbFnFees ?? '—'} | ${r.dFnFees ?? '—'} | ${r.ourPct} | ${r.sbShownPct ?? '—'} | ${r.error ? 'ERROR: ' + r.error : r.pass ? 'pass' : 'FAIL'} |`),
-  ].join('\n');
-  writeFileSync('reports/comparison.md', md);
-  writeFileSync('reports/comparison.csv', [Object.keys(rows[0]).join(','), ...rows.map(r => Object.values(r).map(v => typeof v === 'string' && v.includes(',') ? `"${v.replace(/"/g, '""')}"` : v).join(','))].join('\n'));
+  const { rows, fails, complete } = writeReports(cases, recorded);
+  if (!complete) {
+    const left = cases.length - rows.length;
+    console.log(`\n${rows.length - fails.length}/${rows.length} pass so far. ` +
+      `${left} case(s) still to read${stopped ? ' (time budget reached)' : ''} — re-run the same command to resume.`);
+    process.exit(3);
+  }
   console.log(`\n${rows.length - fails.length}/${rows.length} pass. Report: reports/comparison.md`);
   process.exit(fails.length ? 1 : 0);
 }
