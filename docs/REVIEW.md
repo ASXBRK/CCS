@@ -10,6 +10,19 @@ quoted from a page this review could open).
 Nothing in this review changes code. Every recommendation is stated as a diff so it
 can be applied deliberately.
 
+> **Applied.** E1, E2, E3 and T1 below were applied the same day, mirrored into
+> `ccs-calculator.html`, with the tests in §6 added. Applying them exposed one
+> more convention, in two parts: StartingBlocks builds its **weekly family total
+> by halving and rounding each child's fortnight and summing**, where the engine
+> halved the family fortnight — a 1–2 cent drift on some three-child families
+> (`gen-454`) — and its **weekly withholding is 5% of the week's gross**, worked
+> out afresh rather than halved from the fortnight (11 cases, 2 cents each). The
+> engine now does both the site's way. The golden harness also now marks the
+> 21 cases the site refuses to model as `skip` with the reason recorded, and no
+> longer records a derived weekly gross the page never displays. Result:
+> `npm run golden → 487 passed | 21 skipped`, `npm test` green, typecheck clean.
+> U1 and A1 remain open.
+
 ## 1. Verdict
 
 The engine's **figures are all correct**. Every threshold, taper, hourly cap, the

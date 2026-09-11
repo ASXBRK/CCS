@@ -24,13 +24,14 @@ It is split so the host app can use as much or as little as it wants:
 
 1. **CCS percentage** comes from combined family income.
    - Standard rate: 90% up to $88,520; drops 1 percentage point per $5,000 above that; nil at $538,520.
-   - Higher rate for second and younger children aged 5 or under: 95% up to $146,437; tapers to 80% at $191,437; flat 80% to $270,726; tapers to 50% at $360,726; flat 50%; at $370,726 or more every child reverts to the standard rate.
+   - Higher rate for second and younger children aged 5 or under: 95% up to $146,437; tapers to 80% at $191,437; flat 80% to $270,726; tapers to 50% at $360,726; flat 50% up to and including $370,726; from $370,727 every child reverts to the standard rate.
    - The eldest child aged 5 or under is always on the standard rate. Children 6 and over are always standard and do not count toward the higher-rate test.
+   - An In Home Care child is always on the standard rate (IHC is subsidised per family, not per child), but still counts toward the two-children test and toward which child is the eldest under six.
 2. **Hourly fee** = daily fee ÷ session hours.
 3. **Hourly subsidy** = CCS % × the lower of hourly fee and the hourly cap (2026-27: $15.19 below school age / $13.30 school age for centre-based and OSHC; $14.08 family day care; $41.31 in-home care).
 4. **Subsidised hours** per fortnight = the lower of hours attended and the entitlement. Entitlement is 72 hours for every eligible family (the 3 Day Guarantee, from 5 January 2026); 100 hours if the adult with the fewer recognised-participation hours does more than 48 hours a fortnight, or the child is First Nations, or an exemption applies.
-5. **Subsidy** = hourly subsidy × subsidised hours. Optionally shown after the 5% Services Australia withholds until end-of-year balancing.
-6. **Out of pocket** = fees − subsidy. Weekly is half a fortnight; yearly is 26 fortnights.
+5. **Subsidy** = hourly subsidy × subsidised hours, where the hourly subsidy is first rounded to the cent (as Services Australia and StartingBlocks do). Optionally shown after the 5% Services Australia withholds until end-of-year balancing.
+6. **Out of pocket** = fees − subsidy. Weekly is each child's fortnight halved and rounded, then summed (how StartingBlocks builds its weekly family total); yearly is 26 fortnights.
 
 Everything the engine returns is per child and as family totals, with intermediate values (hourly fee, capped fee, hourly subsidy, subsidised vs unsubsidised hours) exposed so the host app can explain the number, not just display it.
 
@@ -151,7 +152,7 @@ Each June the Department of Education publishes the next year's thresholds and c
 
 ## 9. Known simplifications (shared with StartingBlocks)
 
-- In-home care cap is per family; applied per child here (flagged in `warnings`).
+- In-home care cap is per family; applied per child here (flagged in `warnings`). StartingBlocks does not model a second In Home Care child at all — it renders `-` for every figure of the second and later such child — so this cannot be reconciled against it.
 - No Additional Child Care Subsidy, no preschool-year exemptions.
 - Session hours count in full even if the child attends fewer hours; that is how CCS works.
 - Income is one annual figure per run; run per year for projections.

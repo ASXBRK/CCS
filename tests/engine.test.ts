@@ -31,7 +31,8 @@ describe('higher percentage table (2026-27)', () => {
     expect(higherPercent(300_726, r)).toBe(70);
     expect(higherPercent(360_726, r)).toBe(50);
     expect(higherPercent(370_725, r)).toBe(50);
-    expect(higherPercent(370_726, r)).toBeNull();
+    expect(higherPercent(370_726, r)).toBe(50);   // last dollar that still gets it
+    expect(higherPercent(370_727, r)).toBeNull(); // Services Australia: "income below $370,727"
   });
 });
 
@@ -60,10 +61,33 @@ describe('end-to-end calculation', () => {
     expect(c.hourlySubsidy).toBe(11.80);
     expect(c.subsidisedHoursPerFortnight).toBe(100);
     expect(c.feePerFortnight).toBe(1600);
-    expect(c.subsidyPerFortnight).toBe(1180.26);
-    expect(c.outOfPocketPerFortnight).toBe(419.74);
-    expect(res.totals.perWeek.outOfPocket).toBe(209.87);
-    expect(res.totals.perYear.outOfPocket).toBe(10913.24);
+    // 11.80 × 100, not 11.8026 × 100: the per-hour subsidy is a cents figure
+    // before it is multiplied by hours, as on StartingBlocks.
+    expect(c.subsidyPerFortnight).toBe(1180);
+    expect(c.outOfPocketPerFortnight).toBe(420);
+    expect(res.totals.perWeek.outOfPocket).toBe(210);
+    expect(res.totals.perYear.outOfPocket).toBe(10920);
+  });
+
+  it('the displayed hourly subsidy times the hours is the displayed subsidy', () => {
+    const res = calculateCcs({
+      partnered: true, familyIncome: 120_000, participationHours: { adult1: 76, adult2: 76 },
+      children: [{ id: 'a', ageYears: 3, careType: 'CBDC', dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 }],
+    });
+    const c = res.children[0];
+    expect(c.ccsPercent).toBe(83.7);
+    expect(c.hourlySubsidy).toBe(12.56);     // 0.8370 × 15.00 = 12.555 → 12.56
+    expect(c.subsidyPerFortnight).toBe(753.6); // 12.56 × 60, matches StartingBlocks
+  });
+
+  it('half-cent ties resolve as Services Australia resolves them', () => {
+    const child = { id: 'a', ageYears: 3, careType: 'CBDC' as const, dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 };
+    const at = (familyIncome: number) =>
+      calculateCcs({ partnered: true, familyIncome, participationHours: { adult1: 76, adult2: 76 }, children: [child] }).children[0];
+    expect(at(300_000).ccsPercent).toBe(47.7);
+    expect(at(300_000).hourlySubsidy).toBe(7.15);   // 47.70% × $15.00 = 7.155 → 7.15 on the live tool
+    expect(at(280_000).ccsPercent).toBe(51.7);
+    expect(at(280_000).hourlySubsidy).toBe(7.76);   // 51.70% × $15.00 = 7.755 → 7.76 on the live tool
   });
 
   it('hours above entitlement are unsubsidised', () => {
@@ -109,7 +133,53 @@ describe('end-to-end calculation', () => {
     expect(res.higherPercent).toBeNull();
   });
 
-  it('higher rate reverts to standard at $370,726+', () => {
+  it('an In Home Care child is always on the standard rate but still counts toward the test', () => {
+    const fam = (children: Parameters<typeof calculateCcs>[0]['children']) =>
+      calculateCcs({ partnered: true, familyIncome: 150_000, participationHours: { adult1: 76, adult2: 76 }, children });
+    const child = (id: string, ageYears: number, careType: 'CBDC' | 'IHC') =>
+      ({ id, ageYears, careType, dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 });
+
+    // IHC second child: the family qualifies, the CBDC eldest is standard, and
+    // the IHC child is standard too rather than 93.81%.
+    let byId = Object.fromEntries(fam([child('old', 4, 'CBDC'), child('young', 1, 'IHC')]).children.map(c => [c.id, c]));
+    expect(byId.old.rateType).toBe('standard');
+    expect(byId.young.rateType).toBe('standard');
+    expect(byId.young.ccsPercent).toBe(77.7);
+
+    // IHC eldest: it is still the standard-rate child, so the CBDC younger
+    // child gets the higher rate.
+    byId = Object.fromEntries(fam([child('old', 4, 'IHC'), child('young', 1, 'CBDC')]).children.map(c => [c.id, c]));
+    expect(byId.old.rateType).toBe('standard');
+    expect(byId.young.rateType).toBe('higher');
+    expect(byId.young.ccsPercent).toBe(93.81);
+  });
+
+  it('two under-sixes of the same age: the first listed is the standard-rate child', () => {
+    const res = calculateCcs({
+      partnered: true, familyIncome: 150_000, participationHours: { adult1: 76, adult2: 76 },
+      children: [
+        { id: 'first', ageYears: 4, careType: 'CBDC', dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 },
+        { id: 'second', ageYears: 4, careType: 'FDC', dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 },
+      ],
+    });
+    const byId = Object.fromEntries(res.children.map(c => [c.id, c]));
+    expect(byId.first.rateType).toBe('standard');
+    expect(byId.second.rateType).toBe('higher');
+  });
+
+  it('higher rate survives at $370,726 and reverts to standard from $370,727', () => {
+    const kids = [
+      { id: 'a', ageYears: 1, careType: 'CBDC' as const, dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 },
+      { id: 'b', ageYears: 4, careType: 'CBDC' as const, dailyFee: 150, hoursPerDay: 10, daysPerFortnight: 6 },
+    ];
+    const at = (familyIncome: number) =>
+      calculateCcs({ partnered: true, familyIncome, participationHours: { adult1: 76, adult2: 76 }, children: kids });
+    expect(at(370_726).children.find(c => c.id === 'a')!.rateType).toBe('higher');
+    expect(at(370_726).children.find(c => c.id === 'a')!.ccsPercent).toBe(50);
+    expect(at(370_727).children.every(c => c.rateType === 'standard')).toBe(true);
+  });
+
+  it('higher rate reverts to standard well above the limit', () => {
     const res = calculateCcs({
       partnered: true, familyIncome: 380_000, participationHours: { adult1: 76, adult2: 76 },
       children: [

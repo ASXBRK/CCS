@@ -119,12 +119,14 @@ export function standardPercent(income: number, r: CcsRates = getRates()): numbe
  */
 export function higherPercent(income: number, r: CcsRates = getRates()): number | null {
   const h = r.higher;
-  if (income >= h.revertThreshold) return null;
+  // $370,726 itself still gets the higher rate; it ends at $370,727 (Services
+  // Australia: "income below $370,727"; confirmed on the live calculator).
+  if (income > h.revertThreshold) return null;
   if (income <= h.t1) return h.maxPercent;
   if (income < h.t2) return roundPercent(h.maxPercent - (income - h.t1) / h.taperPerDollars, r);
   if (income <= h.t3) return h.plateau1Percent;
   if (income < h.t4) return roundPercent(h.plateau1Percent - (income - h.t3) / h.taperPerDollars, r);
-  return h.plateau2Percent; // t4 ≤ income < revertThreshold
+  return h.plateau2Percent; // t4 ≤ income ≤ revertThreshold
 }
 
 // ---------- Hours ----------
@@ -172,7 +174,12 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
   }
 
   const children: ChildResult[] = input.children.map(c => {
-    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId;
+    // In Home Care is subsidised per family and is always paid the standard rate.
+    // An IHC child still counts toward the two-children test and toward which
+    // child is the eldest under six (both decided above); only its own rate is
+    // forced to standard.
+    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId
+                  && c.careType !== 'IHC';
     const pct = isHigher ? (higherPct as number) : stdPct;
 
     const schoolAge = c.schoolAge ?? c.ageYears >= 6;
@@ -180,7 +187,11 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
 
     const hourlyFee = hourlyFeeOf(c);
     const cappedFee = Math.min(hourlyFee, cap);
-    const hourlySubsidy = (pct / 100) * cappedFee;
+    // Services Australia works in a per-hour subsidy expressed in cents, then
+    // multiplies by hours. The rate is taken as a 4-decimal fraction rather than
+    // pct / 100 so that half-cent ties resolve the way theirs do: 47.70% of $15
+    // is 7.15 and 51.70% of $15 is 7.76, both exact ties in decimal.
+    const hourlySubsidy = round2(Number((pct / 100).toFixed(4)) * cappedFee);
 
     const hours = c.hoursPerDay * c.daysPerFortnight;
     const entitled = c.firstNations ? r.hours.full : familyHours;
@@ -188,7 +199,7 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
 
     const feeFn = hourlyFee * hours;
     const subsidyFn = hourlySubsidy * subsidisedHours;
-    const withheld = input.applyWithholding ? subsidyFn * r.withholdingRate : 0;
+    const withheld = input.applyWithholding ? round2(subsidyFn * r.withholdingRate) : 0;
     const paid = subsidyFn - withheld;
 
     return {
@@ -219,6 +230,28 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
     paidSubsidy: round2(sum('paidSubsidyPerFortnight')),
     outOfPocket: round2(sum('outOfPocketPerFortnight')),
   };
+  // Weekly figures are each child's fortnight halved and rounded, then summed —
+  // the same as reading each child's weekly column and adding them up, which is
+  // how StartingBlocks builds its family total. Halving the family fortnight
+  // instead can land a cent or two away on three-child families.
+  //
+  // The one exception is withholding, which the site works out afresh for the
+  // week as 5% of the week's gross rather than halving the fortnight's amount.
+  // It is rounded without the EPSILON nudge on purpose: the site's own float
+  // arithmetic sends exact half-cents down here, and this is what reproduces
+  // its weekly withholding to the cent across every recorded case.
+  const weekly = (k: keyof ChildResult) => round2(children.reduce((t, c) => t + round2((c[k] as number) / 2), 0));
+  const weeklyWithheld = round2(children.reduce((t, c) => {
+    const grossWeek = round2(c.subsidyPerFortnight / 2);
+    return t + (input.applyWithholding ? Math.round(grossWeek * r.withholdingRate * 100) / 100 : 0);
+  }, 0));
+  const wk: Totals = {
+    fees: weekly('feePerFortnight'),
+    subsidy: weekly('subsidyPerFortnight'),
+    withheld: weeklyWithheld,
+    paidSubsidy: weekly('paidSubsidyPerFortnight'),
+    outOfPocket: weekly('outOfPocketPerFortnight'),
+  };
   const scale = (t: Totals, k: number): Totals => ({
     fees: round2(t.fees * k),
     subsidy: round2(t.subsidy * k),
@@ -234,7 +267,7 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
     higherPercent: higherApplies ? higherPct : null,
     entitledHoursPerFortnight: familyHours,
     children,
-    totals: { perFortnight: fn, perWeek: scale(fn, 0.5), perYear: scale(fn, 26) },
+    totals: { perFortnight: fn, perWeek: wk, perYear: scale(fn, 26) },
     warnings,
   };
 }

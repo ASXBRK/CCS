@@ -141,7 +141,7 @@ function standardPercent(income) {
 }
 function higherPercent(income) {
   const h = RATES.higher;
-  if (income >= h.revertThreshold) return null;
+  if (income > h.revertThreshold) return null; // $370,726 itself still gets the higher rate
   if (income <= h.t1) return h.maxPercent;
   if (income < h.t2) return roundPercent(h.maxPercent - (income - h.t1) / h.taperPerDollars);
   if (income <= h.t3) return h.plateau1Percent;
@@ -164,17 +164,17 @@ function calculateCcs(input) {
   const warnings = [];
   if (input.children.some(c => c.careType === 'IHC') && input.children.length > 1) warnings.push('In Home Care cap is per family; applied per child here.');
   const children = input.children.map(c => {
-    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId;
+    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId && c.careType !== 'IHC'; // IHC is always standard rate
     const pct = isHigher ? higherPct : stdPct;
     const schoolAge = c.schoolAge ?? c.ageYears >= 6;
     const cap = schoolAge ? RATES.hourlyCaps[c.careType].schoolAge : RATES.hourlyCaps[c.careType].belowSchoolAge;
     const hourlyFee = c.hourlyFee != null ? c.hourlyFee : (c.dailyFee != null && c.hoursPerDay > 0 ? c.dailyFee / c.hoursPerDay : 0);
-    const cappedFee = Math.min(hourlyFee, cap), hourlySubsidy = (pct/100) * cappedFee;
+    const cappedFee = Math.min(hourlyFee, cap), hourlySubsidy = round2(Number((pct/100).toFixed(4)) * cappedFee); // per-hour subsidy in cents, as Services Australia does
     const hours = c.hoursPerDay * c.daysPerFortnight;
     const entitled = c.firstNations ? RATES.hours.full : familyHours;
     const subsidisedHours = Math.min(hours, entitled);
     const feeFn = hourlyFee * hours, subsidyFn = hourlySubsidy * subsidisedHours;
-    const withheld = input.applyWithholding ? subsidyFn * RATES.withholdingRate : 0;
+    const withheld = input.applyWithholding ? round2(subsidyFn * RATES.withholdingRate) : 0;
     const paid = subsidyFn - withheld;
     return { id:c.id, rateType: isHigher?'higher':'standard', ccsPercent:pct, hourlyFee:round2(hourlyFee), hourlyCap:cap, cappedHourlyFee:round2(cappedFee), hourlySubsidy:round2(hourlySubsidy),
       hoursPerFortnight:hours, entitledHoursPerFortnight:entitled, subsidisedHoursPerFortnight:subsidisedHours, unsubsidisedHoursPerFortnight:Math.max(0,hours-subsidisedHours),
@@ -183,8 +183,13 @@ function calculateCcs(input) {
   const sum = k => children.reduce((t,c)=>t+c[k],0);
   const fn = { fees:round2(sum('feePerFortnight')), subsidy:round2(sum('subsidyPerFortnight')), withheld:round2(sum('withheldPerFortnight')), paidSubsidy:round2(sum('paidSubsidyPerFortnight')), outOfPocket:round2(sum('outOfPocketPerFortnight')) };
   const scale = (t,k) => Object.fromEntries(Object.entries(t).map(([a,b])=>[a,round2(b*k)]));
+  // weekly = each child's fortnight halved and rounded, then summed (how StartingBlocks builds its family total)
+  const weekly = k => round2(children.reduce((t,c)=>t+round2(c[k]/2),0));
+  // weekly withholding is 5% of the week's gross, plain-rounded (matches the site's float ties)
+  const weeklyWithheld = round2(children.reduce((t,c)=>t+(input.applyWithholding ? Math.round(round2(c.subsidyPerFortnight/2)*RATES.withholdingRate*100)/100 : 0),0));
+  const wk = { fees:weekly('feePerFortnight'), subsidy:weekly('subsidyPerFortnight'), withheld:weeklyWithheld, paidSubsidy:weekly('paidSubsidyPerFortnight'), outOfPocket:weekly('outOfPocketPerFortnight') };
   return { ccsYear:RATES.ccsYear, familyIncome:income, standardPercent:stdPct, higherPercent: higherApplies?higherPct:null, entitledHoursPerFortnight:familyHours, children,
-    totals:{ perFortnight:fn, perWeek:scale(fn,0.5), perYear:scale(fn,26) }, warnings };
+    totals:{ perFortnight:fn, perWeek:wk, perYear:scale(fn,26) }, warnings };
 }
 
 // ============================================================================

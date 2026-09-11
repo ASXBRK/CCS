@@ -35,9 +35,16 @@ stable headless.
 | Differ | **416** |
 | Failed to read | **0** |
 
+> **Update, later the same day.** The engine has since been corrected for the
+> first three causes below (see `docs/REVIEW.md`, which verified each against
+> the published rules), plus the site's weekly-total convention. With those
+> changes the golden suite is green: `npm run golden → 487 passed | 21 skipped`,
+> the 21 being the fourth cause, which no engine can pass. The figures in this
+> section describe the run as it stood, against the engine as it was.
+
 Every one of the 416 is accounted for, and **none of them is a cap, taper or hours
 difference**. Four causes, all of them calculation logic inside `src/ccsEngine.ts`,
-which this work was not permitted to change:
+which the comparison work itself was not permitted to change:
 
 | Cause | Cases | Size |
 |---|---:|---|
@@ -228,7 +235,8 @@ have isolated them as cleanly.
 
 ## 6. Difference 1 — the hourly subsidy is rounded to cents
 
-**363 cases. $0.00 to $0.74 a fortnight, median $0.13.** Recorded, not fixed.
+**363 cases. $0.00 to $0.74 a fortnight, median $0.13.** Recorded by the
+comparison; since fixed in the engine (`docs/REVIEW.md` E3).
 
 Reverse-engineered from the live figures, the site computes, per child:
 
@@ -271,7 +279,10 @@ the site's fortnightly gross subsidy, fees and out-of-pocket exactly.
 
 ## 7. Difference 2 — In Home Care never gets the higher rate
 
-**17 cases. $11 to $300 a fortnight.** Recorded, not fixed.
+**17 cases. $11 to $300 a fortnight.** Recorded by the comparison; since
+confirmed against Services Australia guidance ("IHC will continue to be paid the
+standard CCS rate", while an IHC child "can still count" for younger siblings) and
+fixed in the engine (`docs/REVIEW.md` E2).
 
 The site puts every In Home Care child on the **standard** rate, even when the
 child is a second or younger child aged 5 or under and the family is well inside
@@ -298,14 +309,18 @@ The full 17 are `gen-55 gen-60 gen-126 gen-162 gen-164 gen-179 gen-182 gen-195
 gen-196 gen-212 gen-224 gen-234 gen-263 gen-303 gen-334 gen-350 gen-374`, all in
 `reports/comparison.md`.
 
-**Before implementing this, check it against the legislation.** It is a rule the
-site applies; whether it is the law or a quirk of their implementation was not
-established here, and it is the one difference where the site could be the one in
-the wrong.
+This was checked against the published rules before the engine was changed: the
+site is right. Services Australia states that the higher rate "does not apply to
+IHC sessions because IHC is subsidised per family, not per child" and that "IHC
+will continue to be paid the standard CCS rate", while an IHC child aged 5 or under
+"can still count when working out whether younger children in other approved care
+types attract the higher rate".
 
 ## 8. Difference 3 — the higher rate survives *at* $370,726
 
-**1 case. $147.72 a fortnight on that case.** Recorded, not fixed.
+**1 case. $147.72 a fortnight on that case.** Recorded by the comparison; since
+confirmed against Services Australia ("income below $370,727") and the BBB 2026/27
+tables, and fixed in the engine (`docs/REVIEW.md` E1).
 
 The engine drops every child to the standard rate once family income reaches
 $370,726:
@@ -348,9 +363,10 @@ resolve. The original edge-case list stepped from $365,000 to $371,000 and misse
 it; `scripts/edge-cases.mjs` now covers every higher-table threshold with two
 children under six.
 
-**Like §7, check this against the legislation before changing anything.** A
-one-dollar boundary is exactly the kind of thing an implementation gets wrong, and
-it is not obvious from here whether the site or the engine is the one in error.
+This was checked against the published rules before the engine was changed: the
+site is right. Services Australia describes the higher rate as applying to
+families with income "below $370,727", and the BBB 2026/27 table ends the 50% band
+at $370,726 inclusive.
 
 ## 9. Difference 4 — a second In Home Care child is not modelled at all
 

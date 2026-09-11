@@ -20,7 +20,7 @@ export interface CcsRates {
     taperPerDollars: number; // 1 percentage point per this many dollars
     // upperThreshold is implied: lower + maxPercent * taperPerDollars
   };
-  /** Higher rate — second and younger children aged 5 or under, while family income < revertThreshold */
+  /** Higher rate — second and younger children aged 5 or under (never In Home Care), while family income ≤ revertThreshold */
   higher: {
     maxPercent: number;       // 95
     t1: number;               // ≤ t1 → 95%
@@ -30,7 +30,7 @@ export interface CcsRates {
     t3: number;               // > t3 tapers again
     plateau2Percent: number;  // 50
     t4: number;               // t3 + (80-50)*3000; t4..t5 → 50%
-    revertThreshold: number;  // t5: at/above → higher rate no longer applies
+    revertThreshold: number;  // t5: the LAST income that still gets the higher rate; above it every child is standard
   };
   /** Hourly rate caps ($ per hour). IHC cap is per family, not per child. */
   hourlyCaps: Record<CareType, { belowSchoolAge: number; schoolAge: number }>;
