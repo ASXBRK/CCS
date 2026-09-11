@@ -12,7 +12,8 @@
     "golden": "vitest run tests/golden.test.ts",
     "gen-cases": "node scripts/generate-cases.mjs",
     "typecheck": "tsc --noEmit",
-    "compare": "tsx scripts/compare-startingblocks.mjs"
+    "compare": "tsx scripts/compare-startingblocks.mjs",
+    "baseline": "tsx scripts/engine-baseline.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

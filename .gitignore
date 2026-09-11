@@ -23,5 +23,7 @@ tmp/
 node_modules/
 dist/
 
-# Generated comparison output
-reports/
+# Generated comparison output. The baseline is kept: it is the one report that
+# can be produced without live access to StartingBlocks.
+reports/*
+!reports/engine-baseline.md
