@@ -56,8 +56,14 @@
           <label>Combined family income (per year)
             <input id="income" type="number" min="0" step="1000" value="150000">
           </label>
+          <label>Days a week you work
+            <input id="d1" type="number" min="0" max="7" step="0.5" value="5">
+          </label>
           <label>Your activity (hrs / fortnight)
             <input id="p1" type="number" min="0" value="76">
+          </label>
+          <label id="d2wrap">Days a week your partner works
+            <input id="d2" type="number" min="0" max="7" step="0.5" value="5">
           </label>
           <label id="p2wrap">Partner's activity (hrs / fortnight)
             <input id="p2" type="number" min="0" value="76">
@@ -205,6 +211,15 @@ let children = [];
 let golden = [];
 let seq = 0;
 
+// Days a week of work -> recognised activity hours a fortnight, at 7.6 hrs a day.
+const HOURS_PER_WORK_DAY = 7.6;
+function hoursFromWorkDays(d){ return Math.round(d * HOURS_PER_WORK_DAY * 2 * 10) / 10; }
+function wireWorkDays(dayId, hourId){
+  const day = document.getElementById(dayId), hour = document.getElementById(hourId);
+  day.addEventListener('input', () => { hour.value = hoursFromWorkDays(Number(day.value)||0); render(); });
+  hour.addEventListener('input', () => { day.value = ''; });
+}
+
 function newChild(){ seq++; return { id:`child-${seq}`, ageYears:3, careType:'CBDC', dailyFee:DEFAULT_FEE.CBDC, hoursPerDay:DEFAULT_HOURS.CBDC, careDaysPerWeek:3, familySupportDaysPerWeek:0, daysPerFortnight:6, schoolAge:undefined }; }
 // Days in paid care are the days needing care less the days family covers.
 function paidDays(c){ return Math.max(0, (c.careDaysPerWeek||0) - (c.familySupportDaysPerWeek||0)); }
@@ -242,6 +257,7 @@ function render(){
   const input = readInput();
   const res = calculateCcs(input);
   $('p2wrap').style.display = input.partnered ? '' : 'none';
+  $('d2wrap').style.display = input.partnered ? '' : 'none';
   $('hoursNote').textContent = `Subsidised hours: ${res.entitledHoursPerFortnight} per fortnight. Standard rate ${res.standardPercent}%` + (res.higherPercent!==null?`, higher rate ${res.higherPercent}% for younger children`:'') + '.';
   const subKey = input.applyWithholding ? 'paidSubsidy' : 'subsidy';
   const rows = [['Child care fees','fees'],['Child Care Subsidy',subKey],['You pay','outOfPocket']];
@@ -312,6 +328,7 @@ $('copy').addEventListener('click', ()=> navigator.clipboard.writeText($('golden
 
 $('year').textContent = RATES.ccsYear;
 children.push(newChild());
+wireWorkDays('d1','p1'); wireWorkDays('d2','p2');
 renderChildren(); render(); renderGolden();
 </script>
 </body>

@@ -48,6 +48,10 @@ interface WeekPattern { careDaysPerWeek: number; familySupportDaysPerWeek: numbe
 const DEFAULT_WEEK: WeekPattern = { careDaysPerWeek: DEFAULTS.daysPerFortnight / 2, familySupportDaysPerWeek: 0 };
 const paidDaysPerWeek = (w: WeekPattern) => Math.max(0, w.careDaysPerWeek - w.familySupportDaysPerWeek);
 
+/** Days a week of work → recognised activity hours a fortnight, at 7.6 hrs a day. */
+const hoursFromWorkDays = (daysPerWeek: number) =>
+  Math.round(daysPerWeek * DEFAULTS.hoursPerWorkDay * 2 * 10) / 10;
+
 export default function CcsCalculator({ initial, locked = [], onChange }: CcsCalculatorProps) {
   const [input, setInput] = useState<FamilyInput>({
     partnered: true,
@@ -58,6 +62,19 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
     ...initial,
   });
   const [weeks, setWeeks] = useState<Record<string, WeekPattern>>({ 'child-1': { ...DEFAULT_WEEK } });
+  // Work is entered in days a week and converted; the hours field below stays
+  // editable for study, volunteering or an irregular pattern that days cannot
+  // describe. Null means "entered as hours", so the days box shows blank rather
+  // than a number nobody typed.
+  const [workDays, setWorkDays] = useState<{ adult1: number | null; adult2: number | null }>({ adult1: 5, adult2: 5 });
+  const setWorkDaysFor = (who: 'adult1' | 'adult2', days: number) => {
+    setWorkDays(w => ({ ...w, [who]: days }));
+    update({ participationHours: { ...input.participationHours, [who]: hoursFromWorkDays(days) } });
+  };
+  const setHoursFor = (who: 'adult1' | 'adult2', hours: number) => {
+    setWorkDays(w => ({ ...w, [who]: null }));
+    update({ participationHours: { ...input.participationHours, [who]: hours } });
+  };
   const weekOf = (id: string) => weeks[id] ?? DEFAULT_WEEK;
   /** Change one child's week and push the resulting fortnightly days into the engine input. */
   const updateWeek = (id: string, patch: Partial<WeekPattern>) => {
@@ -120,15 +137,45 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
+            Days a week you work
+            <input
+              type="number" min={0} max={7} step={0.5}
+              className="rounded border border-slate-300 p-2"
+              disabled={isLocked('participation')}
+              value={workDays.adult1 ?? ''}
+              placeholder="entered as hours"
+              onChange={e => setWorkDaysFor('adult1', num(e.target.value))}
+            />
+            <span className="text-xs text-slate-500">
+              Or set the hours directly for study, volunteering or an irregular pattern.
+            </span>
+          </label>
+          <label className="flex flex-col gap-1 text-sm">
             Your recognised activity (hours per fortnight)
             <input
               type="number" min={0}
               className="rounded border border-slate-300 p-2"
               disabled={isLocked('participation')}
               value={input.participationHours.adult1}
-              onChange={e => update({ participationHours: { ...input.participationHours, adult1: num(e.target.value) } })}
+              onChange={e => setHoursFor('adult1', num(e.target.value))}
             />
           </label>
+          {input.partnered && (
+            <label className="flex flex-col gap-1 text-sm">
+              Days a week your partner works
+              <input
+                type="number" min={0} max={7} step={0.5}
+                className="rounded border border-slate-300 p-2"
+                disabled={isLocked('participation')}
+                value={workDays.adult2 ?? ''}
+                placeholder="entered as hours"
+                onChange={e => setWorkDaysFor('adult2', num(e.target.value))}
+              />
+              <span className="text-xs text-slate-500">
+                Or set the hours directly for study, volunteering or an irregular pattern.
+              </span>
+            </label>
+          )}
           {input.partnered && (
             <label className="flex flex-col gap-1 text-sm">
               Partner's recognised activity (hours per fortnight)
@@ -137,7 +184,7 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
                 className="rounded border border-slate-300 p-2"
                 disabled={isLocked('participation')}
                 value={input.participationHours.adult2 ?? 0}
-                onChange={e => update({ participationHours: { ...input.participationHours, adult2: num(e.target.value) } })}
+                onChange={e => setHoursFor('adult2', num(e.target.value))}
               />
             </label>
           )}
@@ -145,6 +192,34 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
         <p className="text-sm text-slate-600">
           Subsidised hours: <strong>{result.entitledHoursPerFortnight} per fortnight</strong> (72 for everyone under the 3 Day Guarantee; 100 if both adults do more than 48 hours of recognised activity a fortnight).
         </p>
+        {(() => {
+          // The 48-hour test is a cliff, and at 7.6 hours a day it falls
+          // between three and four days a week — exactly where a return-to-work
+          // conversation lands. Worth saying out loud rather than leaving the
+          // adviser to work out why 72 and not 100.
+          const hrs = [input.participationHours.adult1, input.partnered ? (input.participationHours.adult2 ?? 0) : null]
+            .filter((h): h is number => h != null);
+          if (!hrs.length) return null;
+          const lowest = Math.min(...hrs);
+          const threshold = 48;
+          if (lowest > threshold) {
+            const spare = Math.round((lowest - threshold) * 10) / 10;
+            return (
+              <p className="text-sm text-slate-600">
+                The lower of the two is {lowest} hours a fortnight, {spare} above the 48-hour test, so the family gets the full 100 hours.
+                {spare <= 8 && ' Half a day less a week would drop it to 72.'}
+              </p>
+            );
+          }
+          const gap = Math.round((threshold + 0.1 - lowest) * 10) / 10;
+          return (
+            <p className="rounded border border-amber-300 bg-amber-50 p-2 text-sm text-amber-900">
+              The lower of the two is {lowest} hours a fortnight, which does not clear the 48-hour test, so the family gets 72 subsidised
+              hours rather than 100. Another {gap} hours a fortnight of recognised activity would reach it. At 7.6 hours a day, three days
+              a week is 45.6 hours and falls just short; four days is 60.8 and clears it.
+            </p>
+          );
+        })()}
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={!!input.applyWithholding} onChange={e => update({ applyWithholding: e.target.checked })} />
           Show amounts after the 5% withheld until end-of-year balancing
