@@ -22,4 +22,5 @@ npm run typecheck
 - `tests/` — unit, adapter and golden tests; `scripts/generate-cases.mjs` emits bulk inputs
 - `docs/HANDOFF.md` — how to embed this in another codebase
 - `docs/STRATEGY-BUILDER-INTEGRATION.md` — the Strategy Builder flow: one click, defaults that hold, and the return-to-work link
+- `docs/STRATEGY-BUILDER-PROMPT.md` — paste this into the Strategy Builder's Claude Code session to start the work
 - `CLAUDE.md` — working rules for Claude Code
