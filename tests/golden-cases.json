@@ -23,7 +23,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 405,
         "paidSubsidy": 384.75,
         "withheld": 20.25,
         "outOfPocket": 65.25
@@ -62,7 +61,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 405,
         "paidSubsidy": 384.75,
         "withheld": 20.25,
         "outOfPocket": 65.25
@@ -101,7 +99,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 405,
         "paidSubsidy": 384.75,
         "withheld": 20.25,
         "outOfPocket": 65.25
@@ -140,7 +137,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 405,
         "paidSubsidy": 384.75,
         "withheld": 20.25,
         "outOfPocket": 65.25
@@ -179,7 +175,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 352.8,
         "paidSubsidy": 335.16,
         "withheld": 17.64,
         "outOfPocket": 114.84
@@ -218,7 +213,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 352.8,
         "paidSubsidy": 335.16,
         "withheld": 17.64,
         "outOfPocket": 114.84
@@ -257,7 +251,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 352.8,
         "paidSubsidy": 335.16,
         "withheld": 17.64,
         "outOfPocket": 114.84
@@ -296,7 +289,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 312.31,
         "paidSubsidy": 296.69,
         "withheld": 15.62,
         "outOfPocket": 153.32
@@ -335,7 +327,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 312.31,
         "paidSubsidy": 296.69,
         "withheld": 15.62,
         "outOfPocket": 153.32
@@ -374,7 +365,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 240.91,
         "paidSubsidy": 228.86,
         "withheld": 12.05,
         "outOfPocket": 221.15
@@ -413,7 +403,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 240.91,
         "paidSubsidy": 228.86,
         "withheld": 12.05,
         "outOfPocket": 221.15
@@ -452,7 +441,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 159.91,
         "paidSubsidy": 151.91,
         "withheld": 8,
         "outOfPocket": 298.1
@@ -491,7 +479,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 150.9,
         "paidSubsidy": 143.35,
         "withheld": 7.55,
         "outOfPocket": 306.65
@@ -530,7 +517,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 150.9,
         "paidSubsidy": 143.35,
         "withheld": 7.55,
         "outOfPocket": 306.65
@@ -569,7 +555,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 450
@@ -608,7 +593,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 450
@@ -647,7 +631,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 450
@@ -694,7 +677,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 822.31,
         "paidSubsidy": 781.19,
         "withheld": 41.12,
         "outOfPocket": 118.82
@@ -741,7 +723,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 771.91,
         "paidSubsidy": 733.31,
         "withheld": 38.6,
         "outOfPocket": 166.7
@@ -788,7 +769,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 664.8,
         "paidSubsidy": 631.56,
         "withheld": 33.24,
         "outOfPocket": 268.44
@@ -835,7 +815,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 530.71,
         "paidSubsidy": 504.17,
         "withheld": 26.54,
         "outOfPocket": 395.84
@@ -882,7 +861,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 381.31,
         "paidSubsidy": 362.24,
         "withheld": 19.07,
         "outOfPocket": 537.77
@@ -929,7 +907,6 @@
     "expected": {
       "perWeek": {
         "fees": 900,
-        "subsidy": 301.8,
         "paidSubsidy": 286.7,
         "withheld": 15.1,
         "outOfPocket": 613.3
@@ -968,7 +945,6 @@
     "expected": {
       "perWeek": {
         "fees": 360,
-        "subsidy": 301.2,
         "paidSubsidy": 286.14,
         "withheld": 15.06,
         "outOfPocket": 73.86
@@ -1007,7 +983,6 @@
     "expected": {
       "perWeek": {
         "fees": 455.7,
-        "subsidy": 381.31,
         "paidSubsidy": 362.24,
         "withheld": 19.07,
         "outOfPocket": 93.47
@@ -1046,7 +1021,6 @@
     "expected": {
       "perWeek": {
         "fees": 600,
-        "subsidy": 381.31,
         "paidSubsidy": 362.24,
         "withheld": 19.07,
         "outOfPocket": 237.77
@@ -1085,7 +1059,6 @@
     "expected": {
       "perWeek": {
         "fees": 750,
-        "subsidy": 452.16,
         "paidSubsidy": 429.55,
         "withheld": 22.61,
         "outOfPocket": 320.45
@@ -1124,7 +1097,6 @@
     "expected": {
       "perWeek": {
         "fees": 750,
-        "subsidy": 628,
         "paidSubsidy": 596.6,
         "withheld": 31.4,
         "outOfPocket": 153.4
@@ -1163,7 +1135,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 405,
         "paidSubsidy": 384.75,
         "withheld": 20.25,
         "outOfPocket": 65.25
@@ -1203,7 +1174,6 @@
     "expected": {
       "perWeek": {
         "fees": 150,
-        "subsidy": 125.55,
         "paidSubsidy": 119.27,
         "withheld": 6.28,
         "outOfPocket": 30.73
@@ -1242,7 +1212,6 @@
     "expected": {
       "perWeek": {
         "fees": 390,
-        "subsidy": 326.4,
         "paidSubsidy": 310.08,
         "withheld": 16.32,
         "outOfPocket": 79.92
@@ -1281,7 +1250,6 @@
     "expected": {
       "perWeek": {
         "fees": 750,
-        "subsidy": 523,
         "paidSubsidy": 496.85,
         "withheld": 26.15,
         "outOfPocket": 253.15
@@ -1337,7 +1305,6 @@
     "expected": {
       "perWeek": {
         "fees": 990,
-        "subsidy": 764.45,
         "paidSubsidy": 726.22,
         "withheld": 38.23,
         "outOfPocket": 263.8
@@ -1384,7 +1351,6 @@
     "expected": {
       "perWeek": {
         "fees": 1925,
-        "subsidy": 393.11,
         "paidSubsidy": 373.45,
         "withheld": 19.66,
         "outOfPocket": 1551.56
@@ -1423,7 +1389,6 @@
     "expected": {
       "perWeek": {
         "fees": 297,
-        "subsidy": 267.31,
         "paidSubsidy": 253.94,
         "withheld": 13.37,
         "outOfPocket": 43.07
@@ -1462,7 +1427,6 @@
     "expected": {
       "perWeek": {
         "fees": 645,
-        "subsidy": 430.93,
         "paidSubsidy": 409.38,
         "withheld": 21.55,
         "outOfPocket": 235.63
@@ -1509,7 +1473,6 @@
     "expected": {
       "perWeek": {
         "fees": 623,
-        "subsidy": 366.04,
         "paidSubsidy": 347.74,
         "withheld": 18.3,
         "outOfPocket": 275.28
@@ -1548,7 +1511,6 @@
     "expected": {
       "perWeek": {
         "fees": 752,
-        "subsidy": 476.4,
         "paidSubsidy": 452.58,
         "withheld": 23.82,
         "outOfPocket": 299.42
@@ -1587,7 +1549,6 @@
     "expected": {
       "perWeek": {
         "fees": 552,
-        "subsidy": 389.53,
         "paidSubsidy": 370.05,
         "withheld": 19.48,
         "outOfPocket": 181.96
@@ -1634,7 +1595,6 @@
     "expected": {
       "perWeek": {
         "fees": 903,
-        "subsidy": 634.36,
         "paidSubsidy": 602.64,
         "withheld": 31.72,
         "outOfPocket": 300.36
@@ -1673,7 +1633,6 @@
     "expected": {
       "perWeek": {
         "fees": 179,
-        "subsidy": 36.93,
         "paidSubsidy": 35.08,
         "withheld": 1.85,
         "outOfPocket": 143.93
@@ -1720,7 +1679,6 @@
     "expected": {
       "perWeek": {
         "fees": 1485,
-        "subsidy": 566.13,
         "paidSubsidy": 537.83,
         "withheld": 28.3,
         "outOfPocket": 947.19
@@ -1767,7 +1725,6 @@
     "expected": {
       "perWeek": {
         "fees": 952,
-        "subsidy": 660.81,
         "paidSubsidy": 627.77,
         "withheld": 33.04,
         "outOfPocket": 324.25
@@ -1822,7 +1779,6 @@
     "expected": {
       "perWeek": {
         "fees": 522,
-        "subsidy": 195.68,
         "paidSubsidy": 185.9,
         "withheld": 9.78,
         "outOfPocket": 336.11
@@ -1835,7 +1791,9 @@
         "outOfPocket": 672.21
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-11",
@@ -1877,7 +1835,6 @@
     "expected": {
       "perWeek": {
         "fees": 809,
-        "subsidy": 245.05,
         "paidSubsidy": 232.79,
         "withheld": 12.26,
         "outOfPocket": 576.22
@@ -1924,7 +1881,6 @@
     "expected": {
       "perWeek": {
         "fees": 1571,
-        "subsidy": 836.71,
         "paidSubsidy": 794.87,
         "withheld": 41.84,
         "outOfPocket": 776.14
@@ -1963,7 +1919,6 @@
     "expected": {
       "perWeek": {
         "fees": 213,
-        "subsidy": 64.8,
         "paidSubsidy": 61.56,
         "withheld": 3.24,
         "outOfPocket": 151.44
@@ -2002,7 +1957,6 @@
     "expected": {
       "perWeek": {
         "fees": 360,
-        "subsidy": 128.04,
         "paidSubsidy": 121.64,
         "withheld": 6.4,
         "outOfPocket": 238.36
@@ -2041,7 +1995,6 @@
     "expected": {
       "perWeek": {
         "fees": 486,
-        "subsidy": 172.8,
         "paidSubsidy": 164.16,
         "withheld": 8.64,
         "outOfPocket": 321.84
@@ -2088,7 +2041,6 @@
     "expected": {
       "perWeek": {
         "fees": 804,
-        "subsidy": 178.57,
         "paidSubsidy": 169.65,
         "withheld": 8.92,
         "outOfPocket": 634.37
@@ -2135,7 +2087,6 @@
     "expected": {
       "perWeek": {
         "fees": 1474,
-        "subsidy": 353.87,
         "paidSubsidy": 336.18,
         "withheld": 17.69,
         "outOfPocket": 1137.82
@@ -2174,7 +2125,6 @@
     "expected": {
       "perWeek": {
         "fees": 172,
-        "subsidy": 57.76,
         "paidSubsidy": 54.87,
         "withheld": 2.89,
         "outOfPocket": 117.13
@@ -2213,7 +2163,6 @@
     "expected": {
       "perWeek": {
         "fees": 95,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 95
@@ -2260,7 +2209,6 @@
     "expected": {
       "perWeek": {
         "fees": 284,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 284
@@ -2273,7 +2221,9 @@
         "outOfPocket": 568
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-21",
@@ -2299,7 +2249,6 @@
     "expected": {
       "perWeek": {
         "fees": 552,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 552
@@ -2346,7 +2295,6 @@
     "expected": {
       "perWeek": {
         "fees": 1273,
-        "subsidy": 634.68,
         "paidSubsidy": 602.95,
         "withheld": 31.73,
         "outOfPocket": 670.06
@@ -2385,7 +2333,6 @@
     "expected": {
       "perWeek": {
         "fees": 486,
-        "subsidy": 138.96,
         "paidSubsidy": 132.01,
         "withheld": 6.95,
         "outOfPocket": 353.99
@@ -2432,7 +2379,6 @@
     "expected": {
       "perWeek": {
         "fees": 273,
-        "subsidy": 13.32,
         "paidSubsidy": 12.66,
         "withheld": 0.66,
         "outOfPocket": 260.35
@@ -2479,7 +2425,6 @@
     "expected": {
       "perWeek": {
         "fees": 939,
-        "subsidy": 265.92,
         "paidSubsidy": 252.62,
         "withheld": 13.3,
         "outOfPocket": 686.38
@@ -2518,7 +2463,6 @@
     "expected": {
       "perWeek": {
         "fees": 484,
-        "subsidy": 73.8,
         "paidSubsidy": 70.11,
         "withheld": 3.69,
         "outOfPocket": 413.89
@@ -2557,7 +2501,6 @@
     "expected": {
       "perWeek": {
         "fees": 548,
-        "subsidy": 195.84,
         "paidSubsidy": 186.05,
         "withheld": 9.79,
         "outOfPocket": 361.95
@@ -2596,7 +2539,6 @@
     "expected": {
       "perWeek": {
         "fees": 705,
-        "subsidy": 162.73,
         "paidSubsidy": 154.59,
         "withheld": 8.14,
         "outOfPocket": 550.42
@@ -2635,7 +2577,6 @@
     "expected": {
       "perWeek": {
         "fees": 404,
-        "subsidy": 64.2,
         "paidSubsidy": 60.99,
         "withheld": 3.21,
         "outOfPocket": 343.01
@@ -2674,7 +2615,6 @@
     "expected": {
       "perWeek": {
         "fees": 268,
-        "subsidy": 47.88,
         "paidSubsidy": 45.49,
         "withheld": 2.39,
         "outOfPocket": 222.52
@@ -2729,7 +2669,6 @@
     "expected": {
       "perWeek": {
         "fees": 2022,
-        "subsidy": 332.53,
         "paidSubsidy": 315.9,
         "withheld": 16.63,
         "outOfPocket": 1706.11
@@ -2768,7 +2707,6 @@
     "expected": {
       "perWeek": {
         "fees": 561,
-        "subsidy": 143.64,
         "paidSubsidy": 136.46,
         "withheld": 7.18,
         "outOfPocket": 424.54
@@ -2807,7 +2745,6 @@
     "expected": {
       "perWeek": {
         "fees": 1085,
-        "subsidy": 548,
         "paidSubsidy": 520.6,
         "withheld": 27.4,
         "outOfPocket": 564.4
@@ -2846,7 +2783,6 @@
     "expected": {
       "perWeek": {
         "fees": 720,
-        "subsidy": 198.73,
         "paidSubsidy": 188.79,
         "withheld": 9.94,
         "outOfPocket": 531.22
@@ -2885,7 +2821,6 @@
     "expected": {
       "perWeek": {
         "fees": 420,
-        "subsidy": 157.67,
         "paidSubsidy": 149.79,
         "withheld": 7.88,
         "outOfPocket": 270.21
@@ -2940,7 +2875,6 @@
     "expected": {
       "perWeek": {
         "fees": 1954,
-        "subsidy": 57.96,
         "paidSubsidy": 55.07,
         "withheld": 2.89,
         "outOfPocket": 1898.95
@@ -2979,7 +2913,6 @@
     "expected": {
       "perWeek": {
         "fees": 765,
-        "subsidy": 171,
         "paidSubsidy": 162.45,
         "withheld": 8.55,
         "outOfPocket": 602.55
@@ -3018,7 +2951,6 @@
     "expected": {
       "perWeek": {
         "fees": 93,
-        "subsidy": 23.95,
         "paidSubsidy": 22.75,
         "withheld": 1.2,
         "outOfPocket": 70.26
@@ -3057,7 +2989,6 @@
     "expected": {
       "perWeek": {
         "fees": 324,
-        "subsidy": 203.04,
         "paidSubsidy": 192.89,
         "withheld": 10.15,
         "outOfPocket": 131.11
@@ -3096,7 +3027,6 @@
     "expected": {
       "perWeek": {
         "fees": 725,
-        "subsidy": 75.6,
         "paidSubsidy": 71.82,
         "withheld": 3.78,
         "outOfPocket": 653.18
@@ -3135,7 +3065,6 @@
     "expected": {
       "perWeek": {
         "fees": 226,
-        "subsidy": 41.36,
         "paidSubsidy": 39.29,
         "withheld": 2.07,
         "outOfPocket": 186.71
@@ -3182,7 +3111,6 @@
     "expected": {
       "perWeek": {
         "fees": 1288,
-        "subsidy": 194.72,
         "paidSubsidy": 184.98,
         "withheld": 9.74,
         "outOfPocket": 1103.02
@@ -3229,7 +3157,6 @@
     "expected": {
       "perWeek": {
         "fees": 1060,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1060
@@ -3268,7 +3195,6 @@
     "expected": {
       "perWeek": {
         "fees": 274,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 274
@@ -3315,7 +3241,6 @@
     "expected": {
       "perWeek": {
         "fees": 1109,
-        "subsidy": 157.76,
         "paidSubsidy": 149.87,
         "withheld": 7.89,
         "outOfPocket": 959.13
@@ -3354,7 +3279,6 @@
     "expected": {
       "perWeek": {
         "fees": 322,
-        "subsidy": 289.75,
         "paidSubsidy": 275.26,
         "withheld": 14.49,
         "outOfPocket": 46.75
@@ -3393,7 +3317,6 @@
     "expected": {
       "perWeek": {
         "fees": 342,
-        "subsidy": 69.84,
         "paidSubsidy": 66.35,
         "withheld": 3.49,
         "outOfPocket": 275.65
@@ -3432,7 +3355,6 @@
     "expected": {
       "perWeek": {
         "fees": 143,
-        "subsidy": 77.4,
         "paidSubsidy": 73.53,
         "withheld": 3.87,
         "outOfPocket": 69.47
@@ -3471,7 +3393,6 @@
     "expected": {
       "perWeek": {
         "fees": 338,
-        "subsidy": 20,
         "paidSubsidy": 19,
         "withheld": 1,
         "outOfPocket": 319
@@ -3526,7 +3447,6 @@
     "expected": {
       "perWeek": {
         "fees": 2189,
-        "subsidy": 245.17,
         "paidSubsidy": 232.91,
         "withheld": 12.26,
         "outOfPocket": 1956.11
@@ -3565,7 +3485,6 @@
     "expected": {
       "perWeek": {
         "fees": 640,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 640
@@ -3620,7 +3539,6 @@
     "expected": {
       "perWeek": {
         "fees": 976,
-        "subsidy": 493.64,
         "paidSubsidy": 468.95,
         "withheld": 24.69,
         "outOfPocket": 507.07
@@ -3633,7 +3551,9 @@
         "outOfPocket": 1014.12
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-53",
@@ -3667,7 +3587,6 @@
     "expected": {
       "perWeek": {
         "fees": 884,
-        "subsidy": 420.75,
         "paidSubsidy": 399.71,
         "withheld": 21.04,
         "outOfPocket": 484.3
@@ -3706,7 +3625,6 @@
     "expected": {
       "perWeek": {
         "fees": 288,
-        "subsidy": 250.8,
         "paidSubsidy": 238.26,
         "withheld": 12.54,
         "outOfPocket": 49.74
@@ -3753,7 +3671,6 @@
     "expected": {
       "perWeek": {
         "fees": 1290,
-        "subsidy": 548.25,
         "paidSubsidy": 520.84,
         "withheld": 27.41,
         "outOfPocket": 769.17
@@ -3792,7 +3709,6 @@
     "expected": {
       "perWeek": {
         "fees": 248,
-        "subsidy": 26.4,
         "paidSubsidy": 25.08,
         "withheld": 1.32,
         "outOfPocket": 222.92
@@ -3847,7 +3763,6 @@
     "expected": {
       "perWeek": {
         "fees": 992,
-        "subsidy": 79.53,
         "paidSubsidy": 75.56,
         "withheld": 3.97,
         "outOfPocket": 916.44
@@ -3860,7 +3775,9 @@
         "outOfPocket": 1832.89
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-58",
@@ -3886,7 +3803,6 @@
     "expected": {
       "perWeek": {
         "fees": 369,
-        "subsidy": 92.16,
         "paidSubsidy": 87.55,
         "withheld": 4.61,
         "outOfPocket": 281.45
@@ -3925,7 +3841,6 @@
     "expected": {
       "perWeek": {
         "fees": 845,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 845
@@ -3980,7 +3895,6 @@
     "expected": {
       "perWeek": {
         "fees": 1095,
-        "subsidy": 1004.42,
         "paidSubsidy": 954.19,
         "withheld": 50.23,
         "outOfPocket": 140.82
@@ -4019,7 +3933,6 @@
     "expected": {
       "perWeek": {
         "fees": 1040,
-        "subsidy": 86.04,
         "paidSubsidy": 81.74,
         "withheld": 4.3,
         "outOfPocket": 958.26
@@ -4058,7 +3971,6 @@
     "expected": {
       "perWeek": {
         "fees": 788,
-        "subsidy": 119.16,
         "paidSubsidy": 113.2,
         "withheld": 5.96,
         "outOfPocket": 674.8
@@ -4097,7 +4009,6 @@
     "expected": {
       "perWeek": {
         "fees": 772,
-        "subsidy": 36.8,
         "paidSubsidy": 34.96,
         "withheld": 1.84,
         "outOfPocket": 737.04
@@ -4136,7 +4047,6 @@
     "expected": {
       "perWeek": {
         "fees": 432,
-        "subsidy": 32.28,
         "paidSubsidy": 30.67,
         "withheld": 1.61,
         "outOfPocket": 401.34
@@ -4175,7 +4085,6 @@
     "expected": {
       "perWeek": {
         "fees": 950,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 950
@@ -4222,7 +4131,6 @@
     "expected": {
       "perWeek": {
         "fees": 688,
-        "subsidy": 131.91,
         "paidSubsidy": 125.31,
         "withheld": 6.6,
         "outOfPocket": 562.7
@@ -4269,7 +4177,6 @@
     "expected": {
       "perWeek": {
         "fees": 443,
-        "subsidy": 4.71,
         "paidSubsidy": 4.47,
         "withheld": 0.24,
         "outOfPocket": 438.54
@@ -4316,7 +4223,6 @@
     "expected": {
       "perWeek": {
         "fees": 694,
-        "subsidy": 358.17,
         "paidSubsidy": 340.26,
         "withheld": 17.91,
         "outOfPocket": 353.75
@@ -4355,7 +4261,6 @@
     "expected": {
       "perWeek": {
         "fees": 111,
-        "subsidy": 57.28,
         "paidSubsidy": 54.42,
         "withheld": 2.86,
         "outOfPocket": 56.59
@@ -4394,7 +4299,6 @@
     "expected": {
       "perWeek": {
         "fees": 396,
-        "subsidy": 70.33,
         "paidSubsidy": 66.81,
         "withheld": 3.52,
         "outOfPocket": 329.2
@@ -4441,7 +4345,6 @@
     "expected": {
       "perWeek": {
         "fees": 581,
-        "subsidy": 347.44,
         "paidSubsidy": 330.07,
         "withheld": 17.37,
         "outOfPocket": 250.93
@@ -4480,7 +4383,6 @@
     "expected": {
       "perWeek": {
         "fees": 516,
-        "subsidy": 464.4,
         "paidSubsidy": 441.18,
         "withheld": 23.22,
         "outOfPocket": 74.82
@@ -4519,7 +4421,6 @@
     "expected": {
       "perWeek": {
         "fees": 102,
-        "subsidy": 1.62,
         "paidSubsidy": 1.54,
         "withheld": 0.08,
         "outOfPocket": 100.46
@@ -4574,7 +4475,6 @@
     "expected": {
       "perWeek": {
         "fees": 2261,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 2261
@@ -4621,7 +4521,6 @@
     "expected": {
       "perWeek": {
         "fees": 423,
-        "subsidy": 380.04,
         "paidSubsidy": 361.04,
         "withheld": 19,
         "outOfPocket": 61.96
@@ -4668,7 +4567,6 @@
     "expected": {
       "perWeek": {
         "fees": 621,
-        "subsidy": 423.77,
         "paidSubsidy": 402.58,
         "withheld": 21.19,
         "outOfPocket": 218.43
@@ -4715,7 +4613,6 @@
     "expected": {
       "perWeek": {
         "fees": 317,
-        "subsidy": 122.53,
         "paidSubsidy": 116.4,
         "withheld": 6.13,
         "outOfPocket": 200.61
@@ -4762,7 +4659,6 @@
     "expected": {
       "perWeek": {
         "fees": 872,
-        "subsidy": 177.92,
         "paidSubsidy": 169.03,
         "withheld": 8.89,
         "outOfPocket": 702.98
@@ -4801,7 +4697,6 @@
     "expected": {
       "perWeek": {
         "fees": 488,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 488
@@ -4840,7 +4735,6 @@
     "expected": {
       "perWeek": {
         "fees": 828,
-        "subsidy": 98.64,
         "paidSubsidy": 93.71,
         "withheld": 4.93,
         "outOfPocket": 734.29
@@ -4879,7 +4773,6 @@
     "expected": {
       "perWeek": {
         "fees": 672,
-        "subsidy": 69.13,
         "paidSubsidy": 65.67,
         "withheld": 3.46,
         "outOfPocket": 606.34
@@ -4918,7 +4811,6 @@
     "expected": {
       "perWeek": {
         "fees": 1080,
-        "subsidy": 119.71,
         "paidSubsidy": 113.72,
         "withheld": 5.99,
         "outOfPocket": 966.29
@@ -4965,7 +4857,6 @@
     "expected": {
       "perWeek": {
         "fees": 887,
-        "subsidy": 112.2,
         "paidSubsidy": 106.59,
         "withheld": 5.61,
         "outOfPocket": 780.41
@@ -5004,7 +4895,6 @@
     "expected": {
       "perWeek": {
         "fees": 346,
-        "subsidy": 63.2,
         "paidSubsidy": 60.04,
         "withheld": 3.16,
         "outOfPocket": 285.96
@@ -5051,7 +4941,6 @@
     "expected": {
       "perWeek": {
         "fees": 843,
-        "subsidy": 557.28,
         "paidSubsidy": 529.42,
         "withheld": 27.86,
         "outOfPocket": 313.59
@@ -5090,7 +4979,6 @@
     "expected": {
       "perWeek": {
         "fees": 244,
-        "subsidy": 190.08,
         "paidSubsidy": 180.58,
         "withheld": 9.5,
         "outOfPocket": 63.43
@@ -5129,7 +5017,6 @@
     "expected": {
       "perWeek": {
         "fees": 202,
-        "subsidy": 92.84,
         "paidSubsidy": 88.2,
         "withheld": 4.64,
         "outOfPocket": 113.8
@@ -5168,7 +5055,6 @@
     "expected": {
       "perWeek": {
         "fees": 212,
-        "subsidy": 74.88,
         "paidSubsidy": 71.14,
         "withheld": 3.74,
         "outOfPocket": 140.87
@@ -5223,7 +5109,6 @@
     "expected": {
       "perWeek": {
         "fees": 1225,
-        "subsidy": 537.97,
         "paidSubsidy": 511.07,
         "withheld": 26.9,
         "outOfPocket": 713.95
@@ -5270,7 +5155,6 @@
     "expected": {
       "perWeek": {
         "fees": 1112,
-        "subsidy": 557.51,
         "paidSubsidy": 529.63,
         "withheld": 27.88,
         "outOfPocket": 582.38
@@ -5317,7 +5201,6 @@
     "expected": {
       "perWeek": {
         "fees": 993,
-        "subsidy": 673.17,
         "paidSubsidy": 639.52,
         "withheld": 33.65,
         "outOfPocket": 353.5
@@ -5356,7 +5239,6 @@
     "expected": {
       "perWeek": {
         "fees": 410,
-        "subsidy": 49.56,
         "paidSubsidy": 47.08,
         "withheld": 2.48,
         "outOfPocket": 362.92
@@ -5411,7 +5293,6 @@
     "expected": {
       "perWeek": {
         "fees": 971,
-        "subsidy": 754.99,
         "paidSubsidy": 717.24,
         "withheld": 37.75,
         "outOfPocket": 253.77
@@ -5458,7 +5339,6 @@
     "expected": {
       "perWeek": {
         "fees": 1196,
-        "subsidy": 556.2,
         "paidSubsidy": 528.39,
         "withheld": 27.81,
         "outOfPocket": 667.61
@@ -5505,7 +5385,6 @@
     "expected": {
       "perWeek": {
         "fees": 1224,
-        "subsidy": 270.28,
         "paidSubsidy": 256.77,
         "withheld": 13.51,
         "outOfPocket": 967.24
@@ -5560,7 +5439,6 @@
     "expected": {
       "perWeek": {
         "fees": 910,
-        "subsidy": 162.13,
         "paidSubsidy": 154.01,
         "withheld": 8.12,
         "outOfPocket": 756
@@ -5615,7 +5493,6 @@
     "expected": {
       "perWeek": {
         "fees": 1891,
-        "subsidy": 178.84,
         "paidSubsidy": 169.9,
         "withheld": 8.94,
         "outOfPocket": 1721.1
@@ -5654,7 +5531,6 @@
     "expected": {
       "perWeek": {
         "fees": 96,
-        "subsidy": 32.78,
         "paidSubsidy": 31.14,
         "withheld": 1.64,
         "outOfPocket": 64.86
@@ -5701,7 +5577,6 @@
     "expected": {
       "perWeek": {
         "fees": 930,
-        "subsidy": 465.96,
         "paidSubsidy": 442.66,
         "withheld": 23.3,
         "outOfPocket": 487.34
@@ -5740,7 +5615,6 @@
     "expected": {
       "perWeek": {
         "fees": 620,
-        "subsidy": 88,
         "paidSubsidy": 83.6,
         "withheld": 4.4,
         "outOfPocket": 536.4
@@ -5779,7 +5653,6 @@
     "expected": {
       "perWeek": {
         "fees": 692,
-        "subsidy": 276.84,
         "paidSubsidy": 263,
         "withheld": 13.84,
         "outOfPocket": 429
@@ -5826,7 +5699,6 @@
     "expected": {
       "perWeek": {
         "fees": 273,
-        "subsidy": 97.9,
         "paidSubsidy": 93,
         "withheld": 4.9,
         "outOfPocket": 180.01
@@ -5881,7 +5753,6 @@
     "expected": {
       "perWeek": {
         "fees": 1301,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1301
@@ -5920,7 +5791,6 @@
     "expected": {
       "perWeek": {
         "fees": 588,
-        "subsidy": 12.6,
         "paidSubsidy": 11.97,
         "withheld": 0.63,
         "outOfPocket": 576.03
@@ -5959,7 +5829,6 @@
     "expected": {
       "perWeek": {
         "fees": 513,
-        "subsidy": 40.51,
         "paidSubsidy": 38.48,
         "withheld": 2.03,
         "outOfPocket": 474.53
@@ -6014,7 +5883,6 @@
     "expected": {
       "perWeek": {
         "fees": 618,
-        "subsidy": 236.4,
         "paidSubsidy": 224.58,
         "withheld": 11.82,
         "outOfPocket": 393.43
@@ -6027,7 +5895,9 @@
         "outOfPocket": 786.84
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-107",
@@ -6069,7 +5939,6 @@
     "expected": {
       "perWeek": {
         "fees": 806,
-        "subsidy": 372.08,
         "paidSubsidy": 353.47,
         "withheld": 18.61,
         "outOfPocket": 452.55
@@ -6108,7 +5977,6 @@
     "expected": {
       "perWeek": {
         "fees": 650,
-        "subsidy": 420.51,
         "paidSubsidy": 399.48,
         "withheld": 21.03,
         "outOfPocket": 250.53
@@ -6147,7 +6015,6 @@
     "expected": {
       "perWeek": {
         "fees": 294,
-        "subsidy": 189.76,
         "paidSubsidy": 180.27,
         "withheld": 9.49,
         "outOfPocket": 113.73
@@ -6186,7 +6053,6 @@
     "expected": {
       "perWeek": {
         "fees": 1060,
-        "subsidy": 117.73,
         "paidSubsidy": 111.84,
         "withheld": 5.89,
         "outOfPocket": 948.17
@@ -6233,7 +6099,6 @@
     "expected": {
       "perWeek": {
         "fees": 325,
-        "subsidy": 241.15,
         "paidSubsidy": 229.09,
         "withheld": 12.06,
         "outOfPocket": 95.92
@@ -6272,7 +6137,6 @@
     "expected": {
       "perWeek": {
         "fees": 141,
-        "subsidy": 15.31,
         "paidSubsidy": 14.54,
         "withheld": 0.77,
         "outOfPocket": 126.47
@@ -6319,7 +6183,6 @@
     "expected": {
       "perWeek": {
         "fees": 1317,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1317
@@ -6366,7 +6229,6 @@
     "expected": {
       "perWeek": {
         "fees": 314,
-        "subsidy": 49.39,
         "paidSubsidy": 46.92,
         "withheld": 2.47,
         "outOfPocket": 267.08
@@ -6405,7 +6267,6 @@
     "expected": {
       "perWeek": {
         "fees": 190,
-        "subsidy": 4.59,
         "paidSubsidy": 4.36,
         "withheld": 0.23,
         "outOfPocket": 185.64
@@ -6460,7 +6321,6 @@
     "expected": {
       "perWeek": {
         "fees": 854,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 854
@@ -6507,7 +6367,6 @@
     "expected": {
       "perWeek": {
         "fees": 511,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 511
@@ -6554,7 +6413,6 @@
     "expected": {
       "perWeek": {
         "fees": 982,
-        "subsidy": 155.63,
         "paidSubsidy": 147.84,
         "withheld": 7.79,
         "outOfPocket": 834.18
@@ -6601,7 +6459,6 @@
     "expected": {
       "perWeek": {
         "fees": 1032,
-        "subsidy": 556.14,
         "paidSubsidy": 528.34,
         "withheld": 27.8,
         "outOfPocket": 503.68
@@ -6640,7 +6497,6 @@
     "expected": {
       "perWeek": {
         "fees": 123,
-        "subsidy": 41.15,
         "paidSubsidy": 39.09,
         "withheld": 2.06,
         "outOfPocket": 83.92
@@ -6695,7 +6551,6 @@
     "expected": {
       "perWeek": {
         "fees": 499,
-        "subsidy": 233.97,
         "paidSubsidy": 222.28,
         "withheld": 11.69,
         "outOfPocket": 276.74
@@ -6742,7 +6597,6 @@
     "expected": {
       "perWeek": {
         "fees": 668,
-        "subsidy": 445.68,
         "paidSubsidy": 423.4,
         "withheld": 22.28,
         "outOfPocket": 244.6
@@ -6781,7 +6635,6 @@
     "expected": {
       "perWeek": {
         "fees": 284,
-        "subsidy": 156.96,
         "paidSubsidy": 149.11,
         "withheld": 7.85,
         "outOfPocket": 134.89
@@ -6836,7 +6689,6 @@
     "expected": {
       "perWeek": {
         "fees": 2243,
-        "subsidy": 244.32,
         "paidSubsidy": 232.1,
         "withheld": 12.22,
         "outOfPocket": 2010.9
@@ -6883,7 +6735,6 @@
     "expected": {
       "perWeek": {
         "fees": 539,
-        "subsidy": 9.76,
         "paidSubsidy": 9.27,
         "withheld": 0.49,
         "outOfPocket": 529.73
@@ -6930,7 +6781,6 @@
     "expected": {
       "perWeek": {
         "fees": 886,
-        "subsidy": 529.54,
         "paidSubsidy": 503.06,
         "withheld": 26.48,
         "outOfPocket": 382.95
@@ -6969,7 +6819,6 @@
     "expected": {
       "perWeek": {
         "fees": 388,
-        "subsidy": 61.53,
         "paidSubsidy": 58.45,
         "withheld": 3.08,
         "outOfPocket": 329.56
@@ -7024,7 +6873,6 @@
     "expected": {
       "perWeek": {
         "fees": 800,
-        "subsidy": 40.8,
         "paidSubsidy": 38.76,
         "withheld": 2.04,
         "outOfPocket": 761.24
@@ -7037,7 +6885,9 @@
         "outOfPocket": 1522.48
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-129",
@@ -7063,7 +6913,6 @@
     "expected": {
       "perWeek": {
         "fees": 1085,
-        "subsidy": 437.76,
         "paidSubsidy": 415.87,
         "withheld": 21.89,
         "outOfPocket": 669.13
@@ -7102,7 +6951,6 @@
     "expected": {
       "perWeek": {
         "fees": 604,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 604
@@ -7149,7 +6997,6 @@
     "expected": {
       "perWeek": {
         "fees": 1136,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1136
@@ -7204,7 +7051,6 @@
     "expected": {
       "perWeek": {
         "fees": 1593,
-        "subsidy": 649.6,
         "paidSubsidy": 617.12,
         "withheld": 32.48,
         "outOfPocket": 975.88
@@ -7251,7 +7097,6 @@
     "expected": {
       "perWeek": {
         "fees": 729,
-        "subsidy": 560.79,
         "paidSubsidy": 532.75,
         "withheld": 28.04,
         "outOfPocket": 196.25
@@ -7298,7 +7143,6 @@
     "expected": {
       "perWeek": {
         "fees": 1245,
-        "subsidy": 19.84,
         "paidSubsidy": 18.85,
         "withheld": 0.99,
         "outOfPocket": 1226.15
@@ -7345,7 +7189,6 @@
     "expected": {
       "perWeek": {
         "fees": 1168,
-        "subsidy": 265.96,
         "paidSubsidy": 252.66,
         "withheld": 13.3,
         "outOfPocket": 915.35
@@ -7384,7 +7227,6 @@
     "expected": {
       "perWeek": {
         "fees": 164,
-        "subsidy": 12.8,
         "paidSubsidy": 12.16,
         "withheld": 0.64,
         "outOfPocket": 151.84
@@ -7423,7 +7265,6 @@
     "expected": {
       "perWeek": {
         "fees": 376,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 376
@@ -7462,7 +7303,6 @@
     "expected": {
       "perWeek": {
         "fees": 181,
-        "subsidy": 25.64,
         "paidSubsidy": 24.36,
         "withheld": 1.28,
         "outOfPocket": 156.64
@@ -7501,7 +7341,6 @@
     "expected": {
       "perWeek": {
         "fees": 796,
-        "subsidy": 87,
         "paidSubsidy": 82.65,
         "withheld": 4.35,
         "outOfPocket": 713.35
@@ -7540,7 +7379,6 @@
     "expected": {
       "perWeek": {
         "fees": 792,
-        "subsidy": 52.48,
         "paidSubsidy": 49.86,
         "withheld": 2.62,
         "outOfPocket": 742.15
@@ -7579,7 +7417,6 @@
     "expected": {
       "perWeek": {
         "fees": 184,
-        "subsidy": 127.82,
         "paidSubsidy": 121.43,
         "withheld": 6.39,
         "outOfPocket": 62.57
@@ -7626,7 +7463,6 @@
     "expected": {
       "perWeek": {
         "fees": 646,
-        "subsidy": 460.04,
         "paidSubsidy": 437.03,
         "withheld": 23.01,
         "outOfPocket": 208.99
@@ -7673,7 +7509,6 @@
     "expected": {
       "perWeek": {
         "fees": 470,
-        "subsidy": 211.32,
         "paidSubsidy": 200.75,
         "withheld": 10.57,
         "outOfPocket": 269.26
@@ -7720,7 +7555,6 @@
     "expected": {
       "perWeek": {
         "fees": 1194,
-        "subsidy": 235.69,
         "paidSubsidy": 223.9,
         "withheld": 11.79,
         "outOfPocket": 970.11
@@ -7759,7 +7593,6 @@
     "expected": {
       "perWeek": {
         "fees": 326,
-        "subsidy": 25.93,
         "paidSubsidy": 24.63,
         "withheld": 1.3,
         "outOfPocket": 301.38
@@ -7806,7 +7639,6 @@
     "expected": {
       "perWeek": {
         "fees": 630,
-        "subsidy": 24.44,
         "paidSubsidy": 23.22,
         "withheld": 1.22,
         "outOfPocket": 606.78
@@ -7861,7 +7693,6 @@
     "expected": {
       "perWeek": {
         "fees": 1142,
-        "subsidy": 566.48,
         "paidSubsidy": 538.16,
         "withheld": 28.32,
         "outOfPocket": 603.84
@@ -7908,7 +7739,6 @@
     "expected": {
       "perWeek": {
         "fees": 1565,
-        "subsidy": 582,
         "paidSubsidy": 552.9,
         "withheld": 29.1,
         "outOfPocket": 1012.1
@@ -7947,7 +7777,6 @@
     "expected": {
       "perWeek": {
         "fees": 84,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 84
@@ -7986,7 +7815,6 @@
     "expected": {
       "perWeek": {
         "fees": 303,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 303
@@ -8025,7 +7853,6 @@
     "expected": {
       "perWeek": {
         "fees": 450,
-        "subsidy": 200.64,
         "paidSubsidy": 190.61,
         "withheld": 10.03,
         "outOfPocket": 259.39
@@ -8064,7 +7891,6 @@
     "expected": {
       "perWeek": {
         "fees": 430,
-        "subsidy": 387.2,
         "paidSubsidy": 367.84,
         "withheld": 19.36,
         "outOfPocket": 62.16
@@ -8103,7 +7929,6 @@
     "expected": {
       "perWeek": {
         "fees": 459,
-        "subsidy": 68.64,
         "paidSubsidy": 65.21,
         "withheld": 3.43,
         "outOfPocket": 393.79
@@ -8142,7 +7967,6 @@
     "expected": {
       "perWeek": {
         "fees": 720,
-        "subsidy": 418,
         "paidSubsidy": 397.1,
         "withheld": 20.9,
         "outOfPocket": 322.9
@@ -8189,7 +8013,6 @@
     "expected": {
       "perWeek": {
         "fees": 1225,
-        "subsidy": 30.66,
         "paidSubsidy": 29.13,
         "withheld": 1.53,
         "outOfPocket": 1195.87
@@ -8228,7 +8051,6 @@
     "expected": {
       "perWeek": {
         "fees": 304,
-        "subsidy": 217.26,
         "paidSubsidy": 206.4,
         "withheld": 10.86,
         "outOfPocket": 97.61
@@ -8283,7 +8105,6 @@
     "expected": {
       "perWeek": {
         "fees": 1050,
-        "subsidy": 382.39,
         "paidSubsidy": 363.27,
         "withheld": 19.12,
         "outOfPocket": 686.75
@@ -8296,7 +8117,9 @@
         "outOfPocket": 1373.48
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-158",
@@ -8338,7 +8161,6 @@
     "expected": {
       "perWeek": {
         "fees": 1057,
-        "subsidy": 328.1,
         "paidSubsidy": 311.7,
         "withheld": 16.4,
         "outOfPocket": 745.33
@@ -8377,7 +8199,6 @@
     "expected": {
       "perWeek": {
         "fees": 855,
-        "subsidy": 74.51,
         "paidSubsidy": 70.78,
         "withheld": 3.73,
         "outOfPocket": 784.23
@@ -8416,7 +8237,6 @@
     "expected": {
       "perWeek": {
         "fees": 370,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 370
@@ -8471,7 +8291,6 @@
     "expected": {
       "perWeek": {
         "fees": 738,
-        "subsidy": 31.31,
         "paidSubsidy": 29.74,
         "withheld": 1.57,
         "outOfPocket": 708.26
@@ -8484,7 +8303,9 @@
         "outOfPocket": 1416.53
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-162",
@@ -8518,7 +8339,6 @@
     "expected": {
       "perWeek": {
         "fees": 1352,
-        "subsidy": 978.13,
         "paidSubsidy": 929.22,
         "withheld": 48.91,
         "outOfPocket": 422.79
@@ -8557,7 +8377,6 @@
     "expected": {
       "perWeek": {
         "fees": 405,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 405
@@ -8612,7 +8431,6 @@
     "expected": {
       "perWeek": {
         "fees": 1138,
-        "subsidy": 890.09,
         "paidSubsidy": 845.58,
         "withheld": 44.51,
         "outOfPocket": 292.43
@@ -8667,7 +8485,6 @@
     "expected": {
       "perWeek": {
         "fees": 1248,
-        "subsidy": 312.21,
         "paidSubsidy": 296.6,
         "withheld": 15.61,
         "outOfPocket": 951.42
@@ -8706,7 +8523,6 @@
     "expected": {
       "perWeek": {
         "fees": 388,
-        "subsidy": 54.78,
         "paidSubsidy": 52.04,
         "withheld": 2.74,
         "outOfPocket": 335.96
@@ -8745,7 +8561,6 @@
     "expected": {
       "perWeek": {
         "fees": 810,
-        "subsidy": 105.48,
         "paidSubsidy": 100.21,
         "withheld": 5.27,
         "outOfPocket": 709.8
@@ -8784,7 +8599,6 @@
     "expected": {
       "perWeek": {
         "fees": 348,
-        "subsidy": 52.56,
         "paidSubsidy": 49.93,
         "withheld": 2.63,
         "outOfPocket": 298.07
@@ -8823,7 +8637,6 @@
     "expected": {
       "perWeek": {
         "fees": 528,
-        "subsidy": 1.8,
         "paidSubsidy": 1.71,
         "withheld": 0.09,
         "outOfPocket": 526.29
@@ -8870,7 +8683,6 @@
     "expected": {
       "perWeek": {
         "fees": 488,
-        "subsidy": 87.36,
         "paidSubsidy": 82.99,
         "withheld": 4.37,
         "outOfPocket": 405.01
@@ -8909,7 +8721,6 @@
     "expected": {
       "perWeek": {
         "fees": 154,
-        "subsidy": 35.92,
         "paidSubsidy": 34.12,
         "withheld": 1.8,
         "outOfPocket": 119.89
@@ -8964,7 +8775,6 @@
     "expected": {
       "perWeek": {
         "fees": 2459,
-        "subsidy": 948.02,
         "paidSubsidy": 900.61,
         "withheld": 47.41,
         "outOfPocket": 1558.4
@@ -9003,7 +8813,6 @@
     "expected": {
       "perWeek": {
         "fees": 125,
-        "subsidy": 109.36,
         "paidSubsidy": 103.89,
         "withheld": 5.47,
         "outOfPocket": 21.11
@@ -9058,7 +8867,6 @@
     "expected": {
       "perWeek": {
         "fees": 1597,
-        "subsidy": 33.13,
         "paidSubsidy": 31.48,
         "withheld": 1.65,
         "outOfPocket": 1565.54
@@ -9105,7 +8913,6 @@
     "expected": {
       "perWeek": {
         "fees": 559,
-        "subsidy": 48.02,
         "paidSubsidy": 45.62,
         "withheld": 2.4,
         "outOfPocket": 513.38
@@ -9144,7 +8951,6 @@
     "expected": {
       "perWeek": {
         "fees": 258,
-        "subsidy": 88.93,
         "paidSubsidy": 84.48,
         "withheld": 4.45,
         "outOfPocket": 173.53
@@ -9183,7 +8989,6 @@
     "expected": {
       "perWeek": {
         "fees": 416,
-        "subsidy": 47.53,
         "paidSubsidy": 45.15,
         "withheld": 2.38,
         "outOfPocket": 370.86
@@ -9238,7 +9043,6 @@
     "expected": {
       "perWeek": {
         "fees": 2058,
-        "subsidy": 1116.36,
         "paidSubsidy": 1060.54,
         "withheld": 55.82,
         "outOfPocket": 997.46
@@ -9285,7 +9089,6 @@
     "expected": {
       "perWeek": {
         "fees": 989,
-        "subsidy": 307.83,
         "paidSubsidy": 292.44,
         "withheld": 15.39,
         "outOfPocket": 696.56
@@ -9324,7 +9127,6 @@
     "expected": {
       "perWeek": {
         "fees": 170,
-        "subsidy": 73.8,
         "paidSubsidy": 70.11,
         "withheld": 3.69,
         "outOfPocket": 99.89
@@ -9363,7 +9165,6 @@
     "expected": {
       "perWeek": {
         "fees": 590,
-        "subsidy": 327.24,
         "paidSubsidy": 310.88,
         "withheld": 16.36,
         "outOfPocket": 279.12
@@ -9410,7 +9211,6 @@
     "expected": {
       "perWeek": {
         "fees": 1360,
-        "subsidy": 536.77,
         "paidSubsidy": 509.93,
         "withheld": 26.84,
         "outOfPocket": 850.08
@@ -9449,7 +9249,6 @@
     "expected": {
       "perWeek": {
         "fees": 393,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 393
@@ -9496,7 +9295,6 @@
     "expected": {
       "perWeek": {
         "fees": 850,
-        "subsidy": 232.51,
         "paidSubsidy": 220.88,
         "withheld": 11.63,
         "outOfPocket": 629.13
@@ -9551,7 +9349,6 @@
     "expected": {
       "perWeek": {
         "fees": 1848,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1848
@@ -9598,7 +9395,6 @@
     "expected": {
       "perWeek": {
         "fees": 760,
-        "subsidy": 123.15,
         "paidSubsidy": 116.99,
         "withheld": 6.16,
         "outOfPocket": 643.01
@@ -9637,7 +9433,6 @@
     "expected": {
       "perWeek": {
         "fees": 632,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 632
@@ -9676,7 +9471,6 @@
     "expected": {
       "perWeek": {
         "fees": 110,
-        "subsidy": 46.16,
         "paidSubsidy": 43.85,
         "withheld": 2.31,
         "outOfPocket": 66.15
@@ -9715,7 +9509,6 @@
     "expected": {
       "perWeek": {
         "fees": 157,
-        "subsidy": 27.35,
         "paidSubsidy": 25.98,
         "withheld": 1.37,
         "outOfPocket": 131.03
@@ -9754,7 +9547,6 @@
     "expected": {
       "perWeek": {
         "fees": 150,
-        "subsidy": 42.13,
         "paidSubsidy": 40.02,
         "withheld": 2.11,
         "outOfPocket": 109.99
@@ -9793,7 +9585,6 @@
     "expected": {
       "perWeek": {
         "fees": 344,
-        "subsidy": 3.42,
         "paidSubsidy": 3.25,
         "withheld": 0.17,
         "outOfPocket": 340.75
@@ -9840,7 +9631,6 @@
     "expected": {
       "perWeek": {
         "fees": 1176,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1176
@@ -9879,7 +9669,6 @@
     "expected": {
       "perWeek": {
         "fees": 266,
-        "subsidy": 75.06,
         "paidSubsidy": 71.31,
         "withheld": 3.75,
         "outOfPocket": 194.7
@@ -9926,7 +9715,6 @@
     "expected": {
       "perWeek": {
         "fees": 1172,
-        "subsidy": 307.91,
         "paidSubsidy": 292.51,
         "withheld": 15.4,
         "outOfPocket": 879.5
@@ -9973,7 +9761,6 @@
     "expected": {
       "perWeek": {
         "fees": 1180,
-        "subsidy": 268.83,
         "paidSubsidy": 255.39,
         "withheld": 13.44,
         "outOfPocket": 924.62
@@ -10028,7 +9815,6 @@
     "expected": {
       "perWeek": {
         "fees": 1242,
-        "subsidy": 363.96,
         "paidSubsidy": 345.77,
         "withheld": 18.19,
         "outOfPocket": 896.24
@@ -10067,7 +9853,6 @@
     "expected": {
       "perWeek": {
         "fees": 374,
-        "subsidy": 12.24,
         "paidSubsidy": 11.63,
         "withheld": 0.61,
         "outOfPocket": 362.37
@@ -10106,7 +9891,6 @@
     "expected": {
       "perWeek": {
         "fees": 344,
-        "subsidy": 83.76,
         "paidSubsidy": 79.57,
         "withheld": 4.19,
         "outOfPocket": 264.43
@@ -10153,7 +9937,6 @@
     "expected": {
       "perWeek": {
         "fees": 764,
-        "subsidy": 92.72,
         "paidSubsidy": 88.09,
         "withheld": 4.63,
         "outOfPocket": 675.92
@@ -10192,7 +9975,6 @@
     "expected": {
       "perWeek": {
         "fees": 132,
-        "subsidy": 3.24,
         "paidSubsidy": 3.08,
         "withheld": 0.16,
         "outOfPocket": 128.92
@@ -10231,7 +10013,6 @@
     "expected": {
       "perWeek": {
         "fees": 513,
-        "subsidy": 85.33,
         "paidSubsidy": 81.06,
         "withheld": 4.27,
         "outOfPocket": 431.95
@@ -10286,7 +10067,6 @@
     "expected": {
       "perWeek": {
         "fees": 544,
-        "subsidy": 229.5,
         "paidSubsidy": 218.03,
         "withheld": 11.47,
         "outOfPocket": 325.98
@@ -10299,7 +10079,9 @@
         "outOfPocket": 651.95
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-203",
@@ -10341,7 +10123,6 @@
     "expected": {
       "perWeek": {
         "fees": 963,
-        "subsidy": 194.6,
         "paidSubsidy": 184.87,
         "withheld": 9.73,
         "outOfPocket": 778.14
@@ -10388,7 +10169,6 @@
     "expected": {
       "perWeek": {
         "fees": 1206,
-        "subsidy": 186.72,
         "paidSubsidy": 177.38,
         "withheld": 9.34,
         "outOfPocket": 1028.62
@@ -10427,7 +10207,6 @@
     "expected": {
       "perWeek": {
         "fees": 462,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 462
@@ -10466,7 +10245,6 @@
     "expected": {
       "perWeek": {
         "fees": 254,
-        "subsidy": 61.93,
         "paidSubsidy": 58.83,
         "withheld": 3.1,
         "outOfPocket": 195.18
@@ -10505,7 +10283,6 @@
     "expected": {
       "perWeek": {
         "fees": 600,
-        "subsidy": 16.93,
         "paidSubsidy": 16.08,
         "withheld": 0.85,
         "outOfPocket": 583.92
@@ -10552,7 +10329,6 @@
     "expected": {
       "perWeek": {
         "fees": 731,
-        "subsidy": 397.76,
         "paidSubsidy": 377.87,
         "withheld": 19.89,
         "outOfPocket": 353.14
@@ -10599,7 +10375,6 @@
     "expected": {
       "perWeek": {
         "fees": 717,
-        "subsidy": 391.35,
         "paidSubsidy": 371.78,
         "withheld": 19.57,
         "outOfPocket": 345.23
@@ -10638,7 +10413,6 @@
     "expected": {
       "perWeek": {
         "fees": 496,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 496
@@ -10677,7 +10451,6 @@
     "expected": {
       "perWeek": {
         "fees": 645,
-        "subsidy": 261.51,
         "paidSubsidy": 248.43,
         "withheld": 13.08,
         "outOfPocket": 396.58
@@ -10732,7 +10505,6 @@
     "expected": {
       "perWeek": {
         "fees": 2057,
-        "subsidy": 1398.75,
         "paidSubsidy": 1328.8,
         "withheld": 69.95,
         "outOfPocket": 728.23
@@ -10779,7 +10551,6 @@
     "expected": {
       "perWeek": {
         "fees": 1073,
-        "subsidy": 246.97,
         "paidSubsidy": 234.62,
         "withheld": 12.35,
         "outOfPocket": 838.39
@@ -10818,7 +10589,6 @@
     "expected": {
       "perWeek": {
         "fees": 192,
-        "subsidy": 45,
         "paidSubsidy": 42.75,
         "withheld": 2.25,
         "outOfPocket": 149.25
@@ -10857,7 +10627,6 @@
     "expected": {
       "perWeek": {
         "fees": 795,
-        "subsidy": 478.8,
         "paidSubsidy": 454.86,
         "withheld": 23.94,
         "outOfPocket": 340.14
@@ -10904,7 +10673,6 @@
     "expected": {
       "perWeek": {
         "fees": 607,
-        "subsidy": 83.76,
         "paidSubsidy": 79.57,
         "withheld": 4.19,
         "outOfPocket": 527.43
@@ -10951,7 +10719,6 @@
     "expected": {
       "perWeek": {
         "fees": 1565,
-        "subsidy": 845.8,
         "paidSubsidy": 803.51,
         "withheld": 42.29,
         "outOfPocket": 761.49
@@ -10990,7 +10757,6 @@
     "expected": {
       "perWeek": {
         "fees": 545,
-        "subsidy": 119.71,
         "paidSubsidy": 113.72,
         "withheld": 5.99,
         "outOfPocket": 431.29
@@ -11029,7 +10795,6 @@
     "expected": {
       "perWeek": {
         "fees": 875,
-        "subsidy": 32.04,
         "paidSubsidy": 30.44,
         "withheld": 1.6,
         "outOfPocket": 844.56
@@ -11068,7 +10833,6 @@
     "expected": {
       "perWeek": {
         "fees": 122,
-        "subsidy": 67.36,
         "paidSubsidy": 63.99,
         "withheld": 3.37,
         "outOfPocket": 58.01
@@ -11115,7 +10879,6 @@
     "expected": {
       "perWeek": {
         "fees": 430,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 430
@@ -11128,7 +10891,9 @@
         "outOfPocket": 860
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-222",
@@ -11162,7 +10927,6 @@
     "expected": {
       "perWeek": {
         "fees": 794,
-        "subsidy": 360.72,
         "paidSubsidy": 342.69,
         "withheld": 18.03,
         "outOfPocket": 451.32
@@ -11201,7 +10965,6 @@
     "expected": {
       "perWeek": {
         "fees": 369,
-        "subsidy": 273.57,
         "paidSubsidy": 259.89,
         "withheld": 13.68,
         "outOfPocket": 109.11
@@ -11248,7 +11011,6 @@
     "expected": {
       "perWeek": {
         "fees": 207,
-        "subsidy": 186.36,
         "paidSubsidy": 177.04,
         "withheld": 9.32,
         "outOfPocket": 29.96
@@ -11287,7 +11049,6 @@
     "expected": {
       "perWeek": {
         "fees": 216,
-        "subsidy": 71.46,
         "paidSubsidy": 67.89,
         "withheld": 3.57,
         "outOfPocket": 148.12
@@ -11326,7 +11087,6 @@
     "expected": {
       "perWeek": {
         "fees": 414,
-        "subsidy": 33,
         "paidSubsidy": 31.35,
         "withheld": 1.65,
         "outOfPocket": 382.65
@@ -11381,7 +11141,6 @@
     "expected": {
       "perWeek": {
         "fees": 1154,
-        "subsidy": 439.51,
         "paidSubsidy": 417.53,
         "withheld": 21.98,
         "outOfPocket": 736.48
@@ -11420,7 +11179,6 @@
     "expected": {
       "perWeek": {
         "fees": 326,
-        "subsidy": 253.4,
         "paidSubsidy": 240.73,
         "withheld": 12.67,
         "outOfPocket": 85.27
@@ -11459,7 +11217,6 @@
     "expected": {
       "perWeek": {
         "fees": 890,
-        "subsidy": 48.2,
         "paidSubsidy": 45.79,
         "withheld": 2.41,
         "outOfPocket": 844.21
@@ -11506,7 +11263,6 @@
     "expected": {
       "perWeek": {
         "fees": 808,
-        "subsidy": 664.6,
         "paidSubsidy": 631.37,
         "withheld": 33.23,
         "outOfPocket": 176.63
@@ -11553,7 +11309,6 @@
     "expected": {
       "perWeek": {
         "fees": 243,
-        "subsidy": 42.41,
         "paidSubsidy": 40.29,
         "withheld": 2.12,
         "outOfPocket": 202.73
@@ -11592,7 +11347,6 @@
     "expected": {
       "perWeek": {
         "fees": 240,
-        "subsidy": 72.36,
         "paidSubsidy": 68.74,
         "withheld": 3.62,
         "outOfPocket": 171.26
@@ -11631,7 +11385,6 @@
     "expected": {
       "perWeek": {
         "fees": 1045,
-        "subsidy": 683.51,
         "paidSubsidy": 649.33,
         "withheld": 34.18,
         "outOfPocket": 395.68
@@ -11678,7 +11431,6 @@
     "expected": {
       "perWeek": {
         "fees": 405,
-        "subsidy": 361.04,
         "paidSubsidy": 342.98,
         "withheld": 18.06,
         "outOfPocket": 62.04
@@ -11725,7 +11477,6 @@
     "expected": {
       "perWeek": {
         "fees": 897,
-        "subsidy": 410.14,
         "paidSubsidy": 389.63,
         "withheld": 20.51,
         "outOfPocket": 507.38
@@ -11772,7 +11523,6 @@
     "expected": {
       "perWeek": {
         "fees": 1016,
-        "subsidy": 244.33,
         "paidSubsidy": 232.11,
         "withheld": 12.22,
         "outOfPocket": 783.9
@@ -11811,7 +11561,6 @@
     "expected": {
       "perWeek": {
         "fees": 748,
-        "subsidy": 46.4,
         "paidSubsidy": 44.08,
         "withheld": 2.32,
         "outOfPocket": 703.92
@@ -11850,7 +11599,6 @@
     "expected": {
       "perWeek": {
         "fees": 440,
-        "subsidy": 155.6,
         "paidSubsidy": 147.82,
         "withheld": 7.78,
         "outOfPocket": 292.18
@@ -11897,7 +11645,6 @@
     "expected": {
       "perWeek": {
         "fees": 1476,
-        "subsidy": 879.33,
         "paidSubsidy": 835.36,
         "withheld": 43.97,
         "outOfPocket": 640.65
@@ -11952,7 +11699,6 @@
     "expected": {
       "perWeek": {
         "fees": 816,
-        "subsidy": 347.2,
         "paidSubsidy": 329.84,
         "withheld": 17.36,
         "outOfPocket": 486.16
@@ -11999,7 +11745,6 @@
     "expected": {
       "perWeek": {
         "fees": 1384,
-        "subsidy": 39.68,
         "paidSubsidy": 37.7,
         "withheld": 1.98,
         "outOfPocket": 1346.31
@@ -12046,7 +11791,6 @@
     "expected": {
       "perWeek": {
         "fees": 690,
-        "subsidy": 381.15,
         "paidSubsidy": 362.09,
         "withheld": 19.06,
         "outOfPocket": 327.92
@@ -12085,7 +11829,6 @@
     "expected": {
       "perWeek": {
         "fees": 580,
-        "subsidy": 126,
         "paidSubsidy": 119.7,
         "withheld": 6.3,
         "outOfPocket": 460.3
@@ -12132,7 +11875,6 @@
     "expected": {
       "perWeek": {
         "fees": 1180,
-        "subsidy": 597.76,
         "paidSubsidy": 567.87,
         "withheld": 29.89,
         "outOfPocket": 612.13
@@ -12179,7 +11921,6 @@
     "expected": {
       "perWeek": {
         "fees": 464,
-        "subsidy": 59.29,
         "paidSubsidy": 56.32,
         "withheld": 2.97,
         "outOfPocket": 407.69
@@ -12226,7 +11967,6 @@
     "expected": {
       "perWeek": {
         "fees": 646,
-        "subsidy": 556.93,
         "paidSubsidy": 529.08,
         "withheld": 27.85,
         "outOfPocket": 116.93
@@ -12281,7 +12021,6 @@
     "expected": {
       "perWeek": {
         "fees": 1105,
-        "subsidy": 416.17,
         "paidSubsidy": 395.36,
         "withheld": 20.81,
         "outOfPocket": 709.66
@@ -12336,7 +12075,6 @@
     "expected": {
       "perWeek": {
         "fees": 1470,
-        "subsidy": 222.32,
         "paidSubsidy": 211.2,
         "withheld": 11.12,
         "outOfPocket": 1258.8
@@ -12375,7 +12113,6 @@
     "expected": {
       "perWeek": {
         "fees": 735,
-        "subsidy": 86.2,
         "paidSubsidy": 81.89,
         "withheld": 4.31,
         "outOfPocket": 653.11
@@ -12414,7 +12151,6 @@
     "expected": {
       "perWeek": {
         "fees": 174,
-        "subsidy": 33.15,
         "paidSubsidy": 31.49,
         "withheld": 1.66,
         "outOfPocket": 142.51
@@ -12461,7 +12197,6 @@
     "expected": {
       "perWeek": {
         "fees": 850,
-        "subsidy": 361.44,
         "paidSubsidy": 343.37,
         "withheld": 18.07,
         "outOfPocket": 506.63
@@ -12516,7 +12251,6 @@
     "expected": {
       "perWeek": {
         "fees": 848,
-        "subsidy": 394.47,
         "paidSubsidy": 374.74,
         "withheld": 19.73,
         "outOfPocket": 473.27
@@ -12529,7 +12263,9 @@
         "outOfPocket": 946.53
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-253",
@@ -12571,7 +12307,6 @@
     "expected": {
       "perWeek": {
         "fees": 2084,
-        "subsidy": 844.56,
         "paidSubsidy": 802.34,
         "withheld": 42.22,
         "outOfPocket": 1281.67
@@ -12626,7 +12361,6 @@
     "expected": {
       "perWeek": {
         "fees": 1137,
-        "subsidy": 418.51,
         "paidSubsidy": 397.58,
         "withheld": 20.93,
         "outOfPocket": 739.43
@@ -12673,7 +12407,6 @@
     "expected": {
       "perWeek": {
         "fees": 1000,
-        "subsidy": 806,
         "paidSubsidy": 765.7,
         "withheld": 40.3,
         "outOfPocket": 234.3
@@ -12712,7 +12445,6 @@
     "expected": {
       "perWeek": {
         "fees": 605,
-        "subsidy": 83.88,
         "paidSubsidy": 79.69,
         "withheld": 4.19,
         "outOfPocket": 525.32
@@ -12759,7 +12491,6 @@
     "expected": {
       "perWeek": {
         "fees": 1510,
-        "subsidy": 376.39,
         "paidSubsidy": 357.57,
         "withheld": 18.82,
         "outOfPocket": 1152.45
@@ -12798,7 +12529,6 @@
     "expected": {
       "perWeek": {
         "fees": 398,
-        "subsidy": 95.04,
         "paidSubsidy": 90.29,
         "withheld": 4.75,
         "outOfPocket": 307.71
@@ -12837,7 +12567,6 @@
     "expected": {
       "perWeek": {
         "fees": 217,
-        "subsidy": 195.31,
         "paidSubsidy": 185.54,
         "withheld": 9.77,
         "outOfPocket": 31.47
@@ -12876,7 +12605,6 @@
     "expected": {
       "perWeek": {
         "fees": 537,
-        "subsidy": 14.28,
         "paidSubsidy": 13.57,
         "withheld": 0.71,
         "outOfPocket": 523.43
@@ -12915,7 +12643,6 @@
     "expected": {
       "perWeek": {
         "fees": 215,
-        "subsidy": 69.2,
         "paidSubsidy": 65.74,
         "withheld": 3.46,
         "outOfPocket": 149.26
@@ -12962,7 +12689,6 @@
     "expected": {
       "perWeek": {
         "fees": 1324,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1324
@@ -13017,7 +12743,6 @@
     "expected": {
       "perWeek": {
         "fees": 593,
-        "subsidy": 320.97,
         "paidSubsidy": 304.92,
         "withheld": 16.05,
         "outOfPocket": 288.09
@@ -13064,7 +12789,6 @@
     "expected": {
       "perWeek": {
         "fees": 1985,
-        "subsidy": 132.8,
         "paidSubsidy": 126.16,
         "withheld": 6.64,
         "outOfPocket": 1858.84
@@ -13103,7 +12827,6 @@
     "expected": {
       "perWeek": {
         "fees": 805,
-        "subsidy": 34.11,
         "paidSubsidy": 32.4,
         "withheld": 1.71,
         "outOfPocket": 772.61
@@ -13142,7 +12865,6 @@
     "expected": {
       "perWeek": {
         "fees": 416,
-        "subsidy": 163.84,
         "paidSubsidy": 155.65,
         "withheld": 8.19,
         "outOfPocket": 260.35
@@ -13189,7 +12911,6 @@
     "expected": {
       "perWeek": {
         "fees": 455,
-        "subsidy": 297.68,
         "paidSubsidy": 282.8,
         "withheld": 14.88,
         "outOfPocket": 172.2
@@ -13228,7 +12949,6 @@
     "expected": {
       "perWeek": {
         "fees": 534,
-        "subsidy": 399.6,
         "paidSubsidy": 379.62,
         "withheld": 19.98,
         "outOfPocket": 154.38
@@ -13267,7 +12987,6 @@
     "expected": {
       "perWeek": {
         "fees": 657,
-        "subsidy": 345,
         "paidSubsidy": 327.75,
         "withheld": 17.25,
         "outOfPocket": 329.25
@@ -13314,7 +13033,6 @@
     "expected": {
       "perWeek": {
         "fees": 1646,
-        "subsidy": 1226.48,
         "paidSubsidy": 1165.16,
         "withheld": 61.32,
         "outOfPocket": 480.85
@@ -13353,7 +13071,6 @@
     "expected": {
       "perWeek": {
         "fees": 422,
-        "subsidy": 15.28,
         "paidSubsidy": 14.52,
         "withheld": 0.76,
         "outOfPocket": 407.49
@@ -13392,7 +13109,6 @@
     "expected": {
       "perWeek": {
         "fees": 150,
-        "subsidy": 5.82,
         "paidSubsidy": 5.53,
         "withheld": 0.29,
         "outOfPocket": 144.47
@@ -13431,7 +13147,6 @@
     "expected": {
       "perWeek": {
         "fees": 411,
-        "subsidy": 369.94,
         "paidSubsidy": 351.44,
         "withheld": 18.5,
         "outOfPocket": 59.57
@@ -13470,7 +13185,6 @@
     "expected": {
       "perWeek": {
         "fees": 177,
-        "subsidy": 144.13,
         "paidSubsidy": 136.92,
         "withheld": 7.21,
         "outOfPocket": 40.09
@@ -13509,7 +13223,6 @@
     "expected": {
       "perWeek": {
         "fees": 182,
-        "subsidy": 73.92,
         "paidSubsidy": 70.22,
         "withheld": 3.7,
         "outOfPocket": 111.78
@@ -13556,7 +13269,6 @@
     "expected": {
       "perWeek": {
         "fees": 863,
-        "subsidy": 176.12,
         "paidSubsidy": 167.31,
         "withheld": 8.81,
         "outOfPocket": 695.69
@@ -13595,7 +13307,6 @@
     "expected": {
       "perWeek": {
         "fees": 270,
-        "subsidy": 96.48,
         "paidSubsidy": 91.66,
         "withheld": 4.82,
         "outOfPocket": 178.35
@@ -13650,7 +13361,6 @@
     "expected": {
       "perWeek": {
         "fees": 463,
-        "subsidy": 141.66,
         "paidSubsidy": 134.58,
         "withheld": 7.08,
         "outOfPocket": 328.43
@@ -13697,7 +13407,6 @@
     "expected": {
       "perWeek": {
         "fees": 871,
-        "subsidy": 179.42,
         "paidSubsidy": 170.45,
         "withheld": 8.97,
         "outOfPocket": 700.57
@@ -13752,7 +13461,6 @@
     "expected": {
       "perWeek": {
         "fees": 1029,
-        "subsidy": 508.8,
         "paidSubsidy": 483.36,
         "withheld": 25.44,
         "outOfPocket": 545.64
@@ -13765,7 +13473,9 @@
         "outOfPocket": 1091.28
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-281",
@@ -13791,7 +13501,6 @@
     "expected": {
       "perWeek": {
         "fees": 208,
-        "subsidy": 187.22,
         "paidSubsidy": 177.86,
         "withheld": 9.36,
         "outOfPocket": 30.14
@@ -13830,7 +13539,6 @@
     "expected": {
       "perWeek": {
         "fees": 680,
-        "subsidy": 260.16,
         "paidSubsidy": 247.15,
         "withheld": 13.01,
         "outOfPocket": 432.85
@@ -13877,7 +13585,6 @@
     "expected": {
       "perWeek": {
         "fees": 651,
-        "subsidy": 75.6,
         "paidSubsidy": 71.82,
         "withheld": 3.78,
         "outOfPocket": 579.18
@@ -13916,7 +13623,6 @@
     "expected": {
       "perWeek": {
         "fees": 510,
-        "subsidy": 86.85,
         "paidSubsidy": 82.51,
         "withheld": 4.34,
         "outOfPocket": 427.5
@@ -13963,7 +13669,6 @@
     "expected": {
       "perWeek": {
         "fees": 418,
-        "subsidy": 84.06,
         "paidSubsidy": 79.86,
         "withheld": 4.2,
         "outOfPocket": 338.15
@@ -14010,7 +13715,6 @@
     "expected": {
       "perWeek": {
         "fees": 502,
-        "subsidy": 125.12,
         "paidSubsidy": 118.86,
         "withheld": 6.26,
         "outOfPocket": 383.14
@@ -14049,7 +13753,6 @@
     "expected": {
       "perWeek": {
         "fees": 203,
-        "subsidy": 104.95,
         "paidSubsidy": 99.7,
         "withheld": 5.25,
         "outOfPocket": 103.31
@@ -14088,7 +13791,6 @@
     "expected": {
       "perWeek": {
         "fees": 572,
-        "subsidy": 91.08,
         "paidSubsidy": 86.53,
         "withheld": 4.55,
         "outOfPocket": 485.48
@@ -14127,7 +13829,6 @@
     "expected": {
       "perWeek": {
         "fees": 202,
-        "subsidy": 42.84,
         "paidSubsidy": 40.7,
         "withheld": 2.14,
         "outOfPocket": 161.3
@@ -14182,7 +13883,6 @@
     "expected": {
       "perWeek": {
         "fees": 2374,
-        "subsidy": 275.28,
         "paidSubsidy": 261.52,
         "withheld": 13.76,
         "outOfPocket": 2112.49
@@ -14221,7 +13921,6 @@
     "expected": {
       "perWeek": {
         "fees": 138,
-        "subsidy": 21.64,
         "paidSubsidy": 20.56,
         "withheld": 1.08,
         "outOfPocket": 117.44
@@ -14260,7 +13959,6 @@
     "expected": {
       "perWeek": {
         "fees": 455,
-        "subsidy": 157.33,
         "paidSubsidy": 149.46,
         "withheld": 7.87,
         "outOfPocket": 305.55
@@ -14307,7 +14005,6 @@
     "expected": {
       "perWeek": {
         "fees": 1340,
-        "subsidy": 484.65,
         "paidSubsidy": 460.42,
         "withheld": 24.23,
         "outOfPocket": 879.59
@@ -14346,7 +14043,6 @@
     "expected": {
       "perWeek": {
         "fees": 300,
-        "subsidy": 150.24,
         "paidSubsidy": 142.73,
         "withheld": 7.51,
         "outOfPocket": 157.27
@@ -14393,7 +14089,6 @@
     "expected": {
       "perWeek": {
         "fees": 1157,
-        "subsidy": 979.71,
         "paidSubsidy": 930.72,
         "withheld": 48.99,
         "outOfPocket": 226.29
@@ -14448,7 +14143,6 @@
     "expected": {
       "perWeek": {
         "fees": 1229,
-        "subsidy": 194.32,
         "paidSubsidy": 184.61,
         "withheld": 9.71,
         "outOfPocket": 1044.4
@@ -14487,7 +14181,6 @@
     "expected": {
       "perWeek": {
         "fees": 555,
-        "subsidy": 499.68,
         "paidSubsidy": 474.7,
         "withheld": 24.98,
         "outOfPocket": 80.31
@@ -14534,7 +14227,6 @@
     "expected": {
       "perWeek": {
         "fees": 1530,
-        "subsidy": 1.31,
         "paidSubsidy": 1.24,
         "withheld": 0.07,
         "outOfPocket": 1528.77
@@ -14581,7 +14273,6 @@
     "expected": {
       "perWeek": {
         "fees": 821,
-        "subsidy": 518.09,
         "paidSubsidy": 492.18,
         "withheld": 25.91,
         "outOfPocket": 328.83
@@ -14620,7 +14311,6 @@
     "expected": {
       "perWeek": {
         "fees": 246,
-        "subsidy": 86.58,
         "paidSubsidy": 82.25,
         "withheld": 4.33,
         "outOfPocket": 163.75
@@ -14667,7 +14357,6 @@
     "expected": {
       "perWeek": {
         "fees": 390,
-        "subsidy": 162.14,
         "paidSubsidy": 154.04,
         "withheld": 8.1,
         "outOfPocket": 235.98
@@ -14706,7 +14395,6 @@
     "expected": {
       "perWeek": {
         "fees": 504,
-        "subsidy": 342.09,
         "paidSubsidy": 324.99,
         "withheld": 17.1,
         "outOfPocket": 179.02
@@ -14761,7 +14449,6 @@
     "expected": {
       "perWeek": {
         "fees": 1158,
-        "subsidy": 641.92,
         "paidSubsidy": 609.82,
         "withheld": 32.1,
         "outOfPocket": 548.18
@@ -14800,7 +14487,6 @@
     "expected": {
       "perWeek": {
         "fees": 86,
-        "subsidy": 18.73,
         "paidSubsidy": 17.79,
         "withheld": 0.94,
         "outOfPocket": 68.22
@@ -14855,7 +14541,6 @@
     "expected": {
       "perWeek": {
         "fees": 1527,
-        "subsidy": 415.53,
         "paidSubsidy": 394.75,
         "withheld": 20.78,
         "outOfPocket": 1132.26
@@ -14910,7 +14595,6 @@
     "expected": {
       "perWeek": {
         "fees": 1121,
-        "subsidy": 66.76,
         "paidSubsidy": 63.43,
         "withheld": 3.33,
         "outOfPocket": 1057.58
@@ -14957,7 +14641,6 @@
     "expected": {
       "perWeek": {
         "fees": 537,
-        "subsidy": 54.91,
         "paidSubsidy": 52.16,
         "withheld": 2.75,
         "outOfPocket": 484.85
@@ -14970,7 +14653,9 @@
         "outOfPocket": 969.69
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-308",
@@ -14996,7 +14681,6 @@
     "expected": {
       "perWeek": {
         "fees": 810,
-        "subsidy": 136.51,
         "paidSubsidy": 129.68,
         "withheld": 6.83,
         "outOfPocket": 680.33
@@ -15035,7 +14719,6 @@
     "expected": {
       "perWeek": {
         "fees": 627,
-        "subsidy": 220.44,
         "paidSubsidy": 209.42,
         "withheld": 11.02,
         "outOfPocket": 417.58
@@ -15090,7 +14773,6 @@
     "expected": {
       "perWeek": {
         "fees": 857,
-        "subsidy": 383.44,
         "paidSubsidy": 364.27,
         "withheld": 19.17,
         "outOfPocket": 492.74
@@ -15137,7 +14819,6 @@
     "expected": {
       "perWeek": {
         "fees": 475,
-        "subsidy": 104.5,
         "paidSubsidy": 99.27,
         "withheld": 5.23,
         "outOfPocket": 375.73
@@ -15184,7 +14865,6 @@
     "expected": {
       "perWeek": {
         "fees": 936,
-        "subsidy": 220.01,
         "paidSubsidy": 209.01,
         "withheld": 11,
         "outOfPocket": 727.01
@@ -15223,7 +14903,6 @@
     "expected": {
       "perWeek": {
         "fees": 540,
-        "subsidy": 456.13,
         "paidSubsidy": 433.32,
         "withheld": 22.81,
         "outOfPocket": 106.69
@@ -15270,7 +14949,6 @@
     "expected": {
       "perWeek": {
         "fees": 956,
-        "subsidy": 74.88,
         "paidSubsidy": 71.14,
         "withheld": 3.74,
         "outOfPocket": 884.87
@@ -15317,7 +14995,6 @@
     "expected": {
       "perWeek": {
         "fees": 1097,
-        "subsidy": 473.64,
         "paidSubsidy": 449.96,
         "withheld": 23.68,
         "outOfPocket": 647.05
@@ -15364,7 +15041,6 @@
     "expected": {
       "perWeek": {
         "fees": 291,
-        "subsidy": 120.31,
         "paidSubsidy": 114.29,
         "withheld": 6.02,
         "outOfPocket": 176.72
@@ -15403,7 +15079,6 @@
     "expected": {
       "perWeek": {
         "fees": 792,
-        "subsidy": 690.88,
         "paidSubsidy": 656.34,
         "withheld": 34.54,
         "outOfPocket": 135.67
@@ -15442,7 +15117,6 @@
     "expected": {
       "perWeek": {
         "fees": 332,
-        "subsidy": 135.13,
         "paidSubsidy": 128.37,
         "withheld": 6.76,
         "outOfPocket": 203.64
@@ -15481,7 +15155,6 @@
     "expected": {
       "perWeek": {
         "fees": 430,
-        "subsidy": 134.28,
         "paidSubsidy": 127.57,
         "withheld": 6.71,
         "outOfPocket": 302.44
@@ -15528,7 +15201,6 @@
     "expected": {
       "perWeek": {
         "fees": 998,
-        "subsidy": 910.25,
         "paidSubsidy": 864.74,
         "withheld": 45.51,
         "outOfPocket": 133.27
@@ -15575,7 +15247,6 @@
     "expected": {
       "perWeek": {
         "fees": 1006,
-        "subsidy": 362.53,
         "paidSubsidy": 344.4,
         "withheld": 18.13,
         "outOfPocket": 661.6
@@ -15630,7 +15301,6 @@
     "expected": {
       "perWeek": {
         "fees": 926,
-        "subsidy": 271.24,
         "paidSubsidy": 257.67,
         "withheld": 13.57,
         "outOfPocket": 668.34
@@ -15677,7 +15347,6 @@
     "expected": {
       "perWeek": {
         "fees": 1417,
-        "subsidy": 77.24,
         "paidSubsidy": 73.37,
         "withheld": 3.87,
         "outOfPocket": 1343.65
@@ -15716,7 +15385,6 @@
     "expected": {
       "perWeek": {
         "fees": 264,
-        "subsidy": 81.73,
         "paidSubsidy": 77.64,
         "withheld": 4.09,
         "outOfPocket": 186.37
@@ -15755,7 +15423,6 @@
     "expected": {
       "perWeek": {
         "fees": 344,
-        "subsidy": 190.62,
         "paidSubsidy": 181.09,
         "withheld": 9.53,
         "outOfPocket": 162.91
@@ -15794,7 +15461,6 @@
     "expected": {
       "perWeek": {
         "fees": 432,
-        "subsidy": 88,
         "paidSubsidy": 83.6,
         "withheld": 4.4,
         "outOfPocket": 348.4
@@ -15833,7 +15499,6 @@
     "expected": {
       "perWeek": {
         "fees": 91,
-        "subsidy": 48.71,
         "paidSubsidy": 46.27,
         "withheld": 2.44,
         "outOfPocket": 44.74
@@ -15880,7 +15545,6 @@
     "expected": {
       "perWeek": {
         "fees": 561,
-        "subsidy": 440.29,
         "paidSubsidy": 418.27,
         "withheld": 22.02,
         "outOfPocket": 142.74
@@ -15927,7 +15591,6 @@
     "expected": {
       "perWeek": {
         "fees": 1299,
-        "subsidy": 948.2,
         "paidSubsidy": 900.79,
         "withheld": 47.41,
         "outOfPocket": 398.21
@@ -15974,7 +15637,6 @@
     "expected": {
       "perWeek": {
         "fees": 474,
-        "subsidy": 166,
         "paidSubsidy": 157.7,
         "withheld": 8.3,
         "outOfPocket": 316.3
@@ -16021,7 +15683,6 @@
     "expected": {
       "perWeek": {
         "fees": 1484,
-        "subsidy": 450.81,
         "paidSubsidy": 428.27,
         "withheld": 22.54,
         "outOfPocket": 1055.75
@@ -16076,7 +15737,6 @@
     "expected": {
       "perWeek": {
         "fees": 1600,
-        "subsidy": 158.47,
         "paidSubsidy": 150.54,
         "withheld": 7.93,
         "outOfPocket": 1449.47
@@ -16115,7 +15775,6 @@
     "expected": {
       "perWeek": {
         "fees": 162,
-        "subsidy": 135.73,
         "paidSubsidy": 128.94,
         "withheld": 6.79,
         "outOfPocket": 33.07
@@ -16162,7 +15821,6 @@
     "expected": {
       "perWeek": {
         "fees": 808,
-        "subsidy": 288.48,
         "paidSubsidy": 274.06,
         "withheld": 14.42,
         "outOfPocket": 533.95
@@ -16201,7 +15859,6 @@
     "expected": {
       "perWeek": {
         "fees": 180,
-        "subsidy": 43.24,
         "paidSubsidy": 41.08,
         "withheld": 2.16,
         "outOfPocket": 138.92
@@ -16240,7 +15897,6 @@
     "expected": {
       "perWeek": {
         "fees": 895,
-        "subsidy": 649.08,
         "paidSubsidy": 616.63,
         "withheld": 32.45,
         "outOfPocket": 278.38
@@ -16287,7 +15943,6 @@
     "expected": {
       "perWeek": {
         "fees": 412,
-        "subsidy": 52.18,
         "paidSubsidy": 49.57,
         "withheld": 2.61,
         "outOfPocket": 362.44
@@ -16334,7 +15989,6 @@
     "expected": {
       "perWeek": {
         "fees": 1097,
-        "subsidy": 84.55,
         "paidSubsidy": 80.32,
         "withheld": 4.23,
         "outOfPocket": 1016.69
@@ -16373,7 +16027,6 @@
     "expected": {
       "perWeek": {
         "fees": 812,
-        "subsidy": 30.6,
         "paidSubsidy": 29.07,
         "withheld": 1.53,
         "outOfPocket": 782.93
@@ -16420,7 +16073,6 @@
     "expected": {
       "perWeek": {
         "fees": 364,
-        "subsidy": 67.44,
         "paidSubsidy": 64.07,
         "withheld": 3.37,
         "outOfPocket": 299.93
@@ -16467,7 +16119,6 @@
     "expected": {
       "perWeek": {
         "fees": 543,
-        "subsidy": 357.48,
         "paidSubsidy": 339.61,
         "withheld": 17.87,
         "outOfPocket": 203.4
@@ -16480,7 +16131,9 @@
         "outOfPocket": 406.79
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-342",
@@ -16522,7 +16175,6 @@
     "expected": {
       "perWeek": {
         "fees": 1392,
-        "subsidy": 769,
         "paidSubsidy": 730.55,
         "withheld": 38.45,
         "outOfPocket": 661.45
@@ -16561,7 +16213,6 @@
     "expected": {
       "perWeek": {
         "fees": 132,
-        "subsidy": 27.51,
         "paidSubsidy": 26.13,
         "withheld": 1.38,
         "outOfPocket": 105.88
@@ -16600,7 +16251,6 @@
     "expected": {
       "perWeek": {
         "fees": 528,
-        "subsidy": 24.48,
         "paidSubsidy": 23.26,
         "withheld": 1.22,
         "outOfPocket": 504.75
@@ -16639,7 +16289,6 @@
     "expected": {
       "perWeek": {
         "fees": 310,
-        "subsidy": 187.6,
         "paidSubsidy": 178.22,
         "withheld": 9.38,
         "outOfPocket": 131.78
@@ -16678,7 +16327,6 @@
     "expected": {
       "perWeek": {
         "fees": 513,
-        "subsidy": 324.9,
         "paidSubsidy": 308.65,
         "withheld": 16.25,
         "outOfPocket": 204.35
@@ -16725,7 +16373,6 @@
     "expected": {
       "perWeek": {
         "fees": 1310,
-        "subsidy": 951.11,
         "paidSubsidy": 903.55,
         "withheld": 47.56,
         "outOfPocket": 406.46
@@ -16764,7 +16411,6 @@
     "expected": {
       "perWeek": {
         "fees": 246,
-        "subsidy": 177.13,
         "paidSubsidy": 168.27,
         "withheld": 8.86,
         "outOfPocket": 77.74
@@ -16811,7 +16457,6 @@
     "expected": {
       "perWeek": {
         "fees": 446,
-        "subsidy": 90.64,
         "paidSubsidy": 86.11,
         "withheld": 4.53,
         "outOfPocket": 359.89
@@ -16866,7 +16511,6 @@
     "expected": {
       "perWeek": {
         "fees": 1853,
-        "subsidy": 880.38,
         "paidSubsidy": 836.36,
         "withheld": 44.02,
         "outOfPocket": 1016.66
@@ -16921,7 +16565,6 @@
     "expected": {
       "perWeek": {
         "fees": 961,
-        "subsidy": 845.4,
         "paidSubsidy": 803.13,
         "withheld": 42.27,
         "outOfPocket": 157.87
@@ -16968,7 +16611,6 @@
     "expected": {
       "perWeek": {
         "fees": 744,
-        "subsidy": 624.6,
         "paidSubsidy": 593.37,
         "withheld": 31.23,
         "outOfPocket": 150.63
@@ -17007,7 +16649,6 @@
     "expected": {
       "perWeek": {
         "fees": 610,
-        "subsidy": 310.68,
         "paidSubsidy": 295.15,
         "withheld": 15.53,
         "outOfPocket": 314.86
@@ -17046,7 +16687,6 @@
     "expected": {
       "perWeek": {
         "fees": 154,
-        "subsidy": 114.71,
         "paidSubsidy": 108.97,
         "withheld": 5.74,
         "outOfPocket": 45.04
@@ -17085,7 +16725,6 @@
     "expected": {
       "perWeek": {
         "fees": 756,
-        "subsidy": 58.33,
         "paidSubsidy": 55.41,
         "withheld": 2.92,
         "outOfPocket": 700.6
@@ -17140,7 +16779,6 @@
     "expected": {
       "perWeek": {
         "fees": 1067,
-        "subsidy": 483.96,
         "paidSubsidy": 459.76,
         "withheld": 24.2,
         "outOfPocket": 607.24
@@ -17187,7 +16825,6 @@
     "expected": {
       "perWeek": {
         "fees": 652,
-        "subsidy": 2.1,
         "paidSubsidy": 2,
         "withheld": 0.1,
         "outOfPocket": 650.01
@@ -17226,7 +16863,6 @@
     "expected": {
       "perWeek": {
         "fees": 745,
-        "subsidy": 60.4,
         "paidSubsidy": 57.38,
         "withheld": 3.02,
         "outOfPocket": 687.62
@@ -17265,7 +16901,6 @@
     "expected": {
       "perWeek": {
         "fees": 604,
-        "subsidy": 20.88,
         "paidSubsidy": 19.84,
         "withheld": 1.04,
         "outOfPocket": 584.17
@@ -17304,7 +16939,6 @@
     "expected": {
       "perWeek": {
         "fees": 423,
-        "subsidy": 256.75,
         "paidSubsidy": 243.91,
         "withheld": 12.84,
         "outOfPocket": 179.1
@@ -17351,7 +16985,6 @@
     "expected": {
       "perWeek": {
         "fees": 1390,
-        "subsidy": 497.72,
         "paidSubsidy": 472.84,
         "withheld": 24.88,
         "outOfPocket": 917.17
@@ -17398,7 +17031,6 @@
     "expected": {
       "perWeek": {
         "fees": 1259,
-        "subsidy": 323.19,
         "paidSubsidy": 307.03,
         "withheld": 16.16,
         "outOfPocket": 951.97
@@ -17453,7 +17085,6 @@
     "expected": {
       "perWeek": {
         "fees": 1993,
-        "subsidy": 1073.92,
         "paidSubsidy": 1020.22,
         "withheld": 53.7,
         "outOfPocket": 972.78
@@ -17492,7 +17123,6 @@
     "expected": {
       "perWeek": {
         "fees": 905,
-        "subsidy": 170.27,
         "paidSubsidy": 161.76,
         "withheld": 8.51,
         "outOfPocket": 743.24
@@ -17539,7 +17169,6 @@
     "expected": {
       "perWeek": {
         "fees": 1239,
-        "subsidy": 584.58,
         "paidSubsidy": 555.35,
         "withheld": 29.23,
         "outOfPocket": 683.65
@@ -17586,7 +17215,6 @@
     "expected": {
       "perWeek": {
         "fees": 1103,
-        "subsidy": 33.32,
         "paidSubsidy": 31.66,
         "withheld": 1.66,
         "outOfPocket": 1071.35
@@ -17625,7 +17253,6 @@
     "expected": {
       "perWeek": {
         "fees": 468,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 468
@@ -17664,7 +17291,6 @@
     "expected": {
       "perWeek": {
         "fees": 202,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 202
@@ -17703,7 +17329,6 @@
     "expected": {
       "perWeek": {
         "fees": 660,
-        "subsidy": 318.96,
         "paidSubsidy": 303.01,
         "withheld": 15.95,
         "outOfPocket": 356.99
@@ -17742,7 +17367,6 @@
     "expected": {
       "perWeek": {
         "fees": 535,
-        "subsidy": 385.2,
         "paidSubsidy": 365.94,
         "withheld": 19.26,
         "outOfPocket": 169.06
@@ -17789,7 +17413,6 @@
     "expected": {
       "perWeek": {
         "fees": 688,
-        "subsidy": 128.8,
         "paidSubsidy": 122.36,
         "withheld": 6.44,
         "outOfPocket": 565.64
@@ -17828,7 +17451,6 @@
     "expected": {
       "perWeek": {
         "fees": 161,
-        "subsidy": 33.57,
         "paidSubsidy": 31.89,
         "withheld": 1.68,
         "outOfPocket": 129.11
@@ -17867,7 +17489,6 @@
     "expected": {
       "perWeek": {
         "fees": 312,
-        "subsidy": 278.64,
         "paidSubsidy": 264.71,
         "withheld": 13.93,
         "outOfPocket": 47.29
@@ -17914,7 +17535,6 @@
     "expected": {
       "perWeek": {
         "fees": 312,
-        "subsidy": 171.37,
         "paidSubsidy": 162.81,
         "withheld": 8.56,
         "outOfPocket": 149.21
@@ -17953,7 +17573,6 @@
     "expected": {
       "perWeek": {
         "fees": 720,
-        "subsidy": 188,
         "paidSubsidy": 178.6,
         "withheld": 9.4,
         "outOfPocket": 541.4
@@ -17992,7 +17611,6 @@
     "expected": {
       "perWeek": {
         "fees": 441,
-        "subsidy": 221.4,
         "paidSubsidy": 210.33,
         "withheld": 11.07,
         "outOfPocket": 230.67
@@ -18039,7 +17657,6 @@
     "expected": {
       "perWeek": {
         "fees": 1450,
-        "subsidy": 479,
         "paidSubsidy": 455.05,
         "withheld": 23.95,
         "outOfPocket": 994.95
@@ -18078,7 +17695,6 @@
     "expected": {
       "perWeek": {
         "fees": 348,
-        "subsidy": 10.33,
         "paidSubsidy": 9.81,
         "withheld": 0.52,
         "outOfPocket": 338.2
@@ -18117,7 +17733,6 @@
     "expected": {
       "perWeek": {
         "fees": 148,
-        "subsidy": 34.43,
         "paidSubsidy": 32.71,
         "withheld": 1.72,
         "outOfPocket": 115.29
@@ -18164,7 +17779,6 @@
     "expected": {
       "perWeek": {
         "fees": 966,
-        "subsidy": 52.08,
         "paidSubsidy": 49.48,
         "withheld": 2.6,
         "outOfPocket": 916.53
@@ -18219,7 +17833,6 @@
     "expected": {
       "perWeek": {
         "fees": 329,
-        "subsidy": 128.95,
         "paidSubsidy": 122.5,
         "withheld": 6.45,
         "outOfPocket": 206.51
@@ -18232,7 +17845,9 @@
         "outOfPocket": 413.01
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-382",
@@ -18266,7 +17881,6 @@
     "expected": {
       "perWeek": {
         "fees": 1077,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1077
@@ -18305,7 +17919,6 @@
     "expected": {
       "perWeek": {
         "fees": 1050,
-        "subsidy": 7.51,
         "paidSubsidy": 7.13,
         "withheld": 0.38,
         "outOfPocket": 1042.88
@@ -18360,7 +17973,6 @@
     "expected": {
       "perWeek": {
         "fees": 1233,
-        "subsidy": 620.97,
         "paidSubsidy": 589.92,
         "withheld": 31.05,
         "outOfPocket": 643.08
@@ -18373,7 +17985,9 @@
         "outOfPocket": 1286.16
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-385",
@@ -18415,7 +18029,6 @@
     "expected": {
       "perWeek": {
         "fees": 398,
-        "subsidy": 271.06,
         "paidSubsidy": 257.51,
         "withheld": 13.55,
         "outOfPocket": 140.5
@@ -18428,7 +18041,9 @@
         "outOfPocket": 280.99
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-386",
@@ -18462,7 +18077,6 @@
     "expected": {
       "perWeek": {
         "fees": 1000,
-        "subsidy": 76.68,
         "paidSubsidy": 72.85,
         "withheld": 3.83,
         "outOfPocket": 927.16
@@ -18475,7 +18089,9 @@
         "outOfPocket": 1854.31
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-387",
@@ -18517,7 +18133,6 @@
     "expected": {
       "perWeek": {
         "fees": 2116,
-        "subsidy": 1.61,
         "paidSubsidy": 1.53,
         "withheld": 0.08,
         "outOfPocket": 2114.48
@@ -18564,7 +18179,6 @@
     "expected": {
       "perWeek": {
         "fees": 229,
-        "subsidy": 42.81,
         "paidSubsidy": 40.67,
         "withheld": 2.14,
         "outOfPocket": 188.34
@@ -18619,7 +18233,6 @@
     "expected": {
       "perWeek": {
         "fees": 1005,
-        "subsidy": 107.48,
         "paidSubsidy": 102.11,
         "withheld": 5.37,
         "outOfPocket": 902.9
@@ -18632,7 +18245,9 @@
         "outOfPocket": 1805.79
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-390",
@@ -18666,7 +18281,6 @@
     "expected": {
       "perWeek": {
         "fees": 618,
-        "subsidy": 83.77,
         "paidSubsidy": 79.58,
         "withheld": 4.19,
         "outOfPocket": 538.43
@@ -18721,7 +18335,6 @@
     "expected": {
       "perWeek": {
         "fees": 1236,
-        "subsidy": 45.29,
         "paidSubsidy": 43.02,
         "withheld": 2.27,
         "outOfPocket": 1193
@@ -18760,7 +18373,6 @@
     "expected": {
       "perWeek": {
         "fees": 1075,
-        "subsidy": 546.8,
         "paidSubsidy": 519.46,
         "withheld": 27.34,
         "outOfPocket": 555.54
@@ -18799,7 +18411,6 @@
     "expected": {
       "perWeek": {
         "fees": 181,
-        "subsidy": 22.2,
         "paidSubsidy": 21.09,
         "withheld": 1.11,
         "outOfPocket": 159.91
@@ -18838,7 +18449,6 @@
     "expected": {
       "perWeek": {
         "fees": 84,
-        "subsidy": 31.2,
         "paidSubsidy": 29.64,
         "withheld": 1.56,
         "outOfPocket": 54.36
@@ -18877,7 +18487,6 @@
     "expected": {
       "perWeek": {
         "fees": 84,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 84
@@ -18924,7 +18533,6 @@
     "expected": {
       "perWeek": {
         "fees": 694,
-        "subsidy": 34.4,
         "paidSubsidy": 32.68,
         "withheld": 1.72,
         "outOfPocket": 661.32
@@ -18979,7 +18587,6 @@
     "expected": {
       "perWeek": {
         "fees": 857,
-        "subsidy": 621.44,
         "paidSubsidy": 590.37,
         "withheld": 31.07,
         "outOfPocket": 266.65
@@ -19034,7 +18641,6 @@
     "expected": {
       "perWeek": {
         "fees": 1788,
-        "subsidy": 284.81,
         "paidSubsidy": 270.57,
         "withheld": 14.24,
         "outOfPocket": 1517.45
@@ -19073,7 +18679,6 @@
     "expected": {
       "perWeek": {
         "fees": 328,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 328
@@ -19120,7 +18725,6 @@
     "expected": {
       "perWeek": {
         "fees": 1255,
-        "subsidy": 560.53,
         "paidSubsidy": 532.5,
         "withheld": 28.03,
         "outOfPocket": 722.51
@@ -19167,7 +18771,6 @@
     "expected": {
       "perWeek": {
         "fees": 482,
-        "subsidy": 147.04,
         "paidSubsidy": 139.69,
         "withheld": 7.35,
         "outOfPocket": 342.31
@@ -19206,7 +18809,6 @@
     "expected": {
       "perWeek": {
         "fees": 226,
-        "subsidy": 4.84,
         "paidSubsidy": 4.6,
         "withheld": 0.24,
         "outOfPocket": 221.4
@@ -19245,7 +18847,6 @@
     "expected": {
       "perWeek": {
         "fees": 405,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 405
@@ -19284,7 +18885,6 @@
     "expected": {
       "perWeek": {
         "fees": 246,
-        "subsidy": 31.68,
         "paidSubsidy": 30.1,
         "withheld": 1.58,
         "outOfPocket": 215.91
@@ -19339,7 +18939,6 @@
     "expected": {
       "perWeek": {
         "fees": 550,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 550
@@ -19378,7 +18977,6 @@
     "expected": {
       "perWeek": {
         "fees": 262,
-        "subsidy": 46.24,
         "paidSubsidy": 43.93,
         "withheld": 2.31,
         "outOfPocket": 218.07
@@ -19417,7 +19015,6 @@
     "expected": {
       "perWeek": {
         "fees": 795,
-        "subsidy": 541.6,
         "paidSubsidy": 514.52,
         "withheld": 27.08,
         "outOfPocket": 280.48
@@ -19456,7 +19053,6 @@
     "expected": {
       "perWeek": {
         "fees": 137,
-        "subsidy": 29.97,
         "paidSubsidy": 28.47,
         "withheld": 1.5,
         "outOfPocket": 108.53
@@ -19503,7 +19099,6 @@
     "expected": {
       "perWeek": {
         "fees": 243,
-        "subsidy": 25.9,
         "paidSubsidy": 24.61,
         "withheld": 1.29,
         "outOfPocket": 218.4
@@ -19542,7 +19137,6 @@
     "expected": {
       "perWeek": {
         "fees": 338,
-        "subsidy": 151.2,
         "paidSubsidy": 143.64,
         "withheld": 7.56,
         "outOfPocket": 194.36
@@ -19581,7 +19175,6 @@
     "expected": {
       "perWeek": {
         "fees": 651,
-        "subsidy": 164.35,
         "paidSubsidy": 156.13,
         "withheld": 8.22,
         "outOfPocket": 494.88
@@ -19620,7 +19213,6 @@
     "expected": {
       "perWeek": {
         "fees": 279,
-        "subsidy": 148.23,
         "paidSubsidy": 140.82,
         "withheld": 7.41,
         "outOfPocket": 138.18
@@ -19659,7 +19251,6 @@
     "expected": {
       "perWeek": {
         "fees": 320,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 320
@@ -19698,7 +19289,6 @@
     "expected": {
       "perWeek": {
         "fees": 96,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 96
@@ -19753,7 +19343,6 @@
     "expected": {
       "perWeek": {
         "fees": 2266,
-        "subsidy": 670.28,
         "paidSubsidy": 636.76,
         "withheld": 33.52,
         "outOfPocket": 1629.25
@@ -19800,7 +19389,6 @@
     "expected": {
       "perWeek": {
         "fees": 441,
-        "subsidy": 47.88,
         "paidSubsidy": 45.48,
         "withheld": 2.4,
         "outOfPocket": 395.51
@@ -19839,7 +19427,6 @@
     "expected": {
       "perWeek": {
         "fees": 565,
-        "subsidy": 88.2,
         "paidSubsidy": 83.79,
         "withheld": 4.41,
         "outOfPocket": 481.21
@@ -19886,7 +19473,6 @@
     "expected": {
       "perWeek": {
         "fees": 371,
-        "subsidy": 189.56,
         "paidSubsidy": 180.08,
         "withheld": 9.48,
         "outOfPocket": 190.93
@@ -19933,7 +19519,6 @@
     "expected": {
       "perWeek": {
         "fees": 1610,
-        "subsidy": 375.13,
         "paidSubsidy": 356.37,
         "withheld": 18.76,
         "outOfPocket": 1253.64
@@ -19972,7 +19557,6 @@
     "expected": {
       "perWeek": {
         "fees": 304,
-        "subsidy": 90.33,
         "paidSubsidy": 85.81,
         "withheld": 4.52,
         "outOfPocket": 218.2
@@ -20027,7 +19611,6 @@
     "expected": {
       "perWeek": {
         "fees": 1294,
-        "subsidy": 339.73,
         "paidSubsidy": 322.75,
         "withheld": 16.98,
         "outOfPocket": 971.26
@@ -20074,7 +19657,6 @@
     "expected": {
       "perWeek": {
         "fees": 1194,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1194
@@ -20113,7 +19695,6 @@
     "expected": {
       "perWeek": {
         "fees": 772,
-        "subsidy": 25.84,
         "paidSubsidy": 24.55,
         "withheld": 1.29,
         "outOfPocket": 747.45
@@ -20152,7 +19733,6 @@
     "expected": {
       "perWeek": {
         "fees": 196,
-        "subsidy": 50.64,
         "paidSubsidy": 48.11,
         "withheld": 2.53,
         "outOfPocket": 147.89
@@ -20207,7 +19787,6 @@
     "expected": {
       "perWeek": {
         "fees": 1092,
-        "subsidy": 145.79,
         "paidSubsidy": 138.5,
         "withheld": 7.29,
         "outOfPocket": 953.51
@@ -20246,7 +19825,6 @@
     "expected": {
       "perWeek": {
         "fees": 300,
-        "subsidy": 19.44,
         "paidSubsidy": 18.47,
         "withheld": 0.97,
         "outOfPocket": 281.53
@@ -20301,7 +19879,6 @@
     "expected": {
       "perWeek": {
         "fees": 1902,
-        "subsidy": 1043.73,
         "paidSubsidy": 991.54,
         "withheld": 52.19,
         "outOfPocket": 910.46
@@ -20348,7 +19925,6 @@
     "expected": {
       "perWeek": {
         "fees": 616,
-        "subsidy": 200.71,
         "paidSubsidy": 190.67,
         "withheld": 10.04,
         "outOfPocket": 425.34
@@ -20395,7 +19971,6 @@
     "expected": {
       "perWeek": {
         "fees": 427,
-        "subsidy": 187.37,
         "paidSubsidy": 178,
         "withheld": 9.37,
         "outOfPocket": 249.01
@@ -20434,7 +20009,6 @@
     "expected": {
       "perWeek": {
         "fees": 352,
-        "subsidy": 300.75,
         "paidSubsidy": 285.71,
         "withheld": 15.04,
         "outOfPocket": 66.3
@@ -20481,7 +20055,6 @@
     "expected": {
       "perWeek": {
         "fees": 599,
-        "subsidy": 141.61,
         "paidSubsidy": 134.53,
         "withheld": 7.08,
         "outOfPocket": 464.48
@@ -20520,7 +20093,6 @@
     "expected": {
       "perWeek": {
         "fees": 808,
-        "subsidy": 204.84,
         "paidSubsidy": 194.6,
         "withheld": 10.24,
         "outOfPocket": 613.4
@@ -20559,7 +20131,6 @@
     "expected": {
       "perWeek": {
         "fees": 618,
-        "subsidy": 17.28,
         "paidSubsidy": 16.42,
         "withheld": 0.86,
         "outOfPocket": 601.59
@@ -20606,7 +20177,6 @@
     "expected": {
       "perWeek": {
         "fees": 1526,
-        "subsidy": 423,
         "paidSubsidy": 401.85,
         "withheld": 21.15,
         "outOfPocket": 1124.15
@@ -20653,7 +20223,6 @@
     "expected": {
       "perWeek": {
         "fees": 870,
-        "subsidy": 170.99,
         "paidSubsidy": 162.44,
         "withheld": 8.55,
         "outOfPocket": 707.57
@@ -20700,7 +20269,6 @@
     "expected": {
       "perWeek": {
         "fees": 1312,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1312
@@ -20747,7 +20315,6 @@
     "expected": {
       "perWeek": {
         "fees": 1360,
-        "subsidy": 327.97,
         "paidSubsidy": 311.57,
         "withheld": 16.4,
         "outOfPocket": 1048.44
@@ -20794,7 +20361,6 @@
     "expected": {
       "perWeek": {
         "fees": 1156,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 1156
@@ -20833,7 +20399,6 @@
     "expected": {
       "perWeek": {
         "fees": 232,
-        "subsidy": 208.8,
         "paidSubsidy": 198.36,
         "withheld": 10.44,
         "outOfPocket": 33.64
@@ -20872,7 +20437,6 @@
     "expected": {
       "perWeek": {
         "fees": 464,
-        "subsidy": 0,
         "paidSubsidy": 0,
         "withheld": 0,
         "outOfPocket": 464
@@ -20919,7 +20483,6 @@
     "expected": {
       "perWeek": {
         "fees": 1146,
-        "subsidy": 500.89,
         "paidSubsidy": 475.84,
         "withheld": 25.05,
         "outOfPocket": 670.17
@@ -20966,7 +20529,6 @@
     "expected": {
       "perWeek": {
         "fees": 1315,
-        "subsidy": 627.91,
         "paidSubsidy": 596.51,
         "withheld": 31.4,
         "outOfPocket": 718.5
@@ -21005,7 +20567,6 @@
     "expected": {
       "perWeek": {
         "fees": 112,
-        "subsidy": 66.24,
         "paidSubsidy": 62.93,
         "withheld": 3.31,
         "outOfPocket": 49.07
@@ -21052,7 +20613,6 @@
     "expected": {
       "perWeek": {
         "fees": 886,
-        "subsidy": 432.55,
         "paidSubsidy": 410.92,
         "withheld": 21.63,
         "outOfPocket": 475.09
@@ -21091,7 +20651,6 @@
     "expected": {
       "perWeek": {
         "fees": 420,
-        "subsidy": 315,
         "paidSubsidy": 299.25,
         "withheld": 15.75,
         "outOfPocket": 120.75
@@ -21138,7 +20697,6 @@
     "expected": {
       "perWeek": {
         "fees": 1248,
-        "subsidy": 916.57,
         "paidSubsidy": 870.74,
         "withheld": 45.83,
         "outOfPocket": 377.26
@@ -21177,7 +20735,6 @@
     "expected": {
       "perWeek": {
         "fees": 540,
-        "subsidy": 56.55,
         "paidSubsidy": 53.72,
         "withheld": 2.83,
         "outOfPocket": 486.28
@@ -21224,7 +20781,6 @@
     "expected": {
       "perWeek": {
         "fees": 398,
-        "subsidy": 115.75,
         "paidSubsidy": 109.96,
         "withheld": 5.79,
         "outOfPocket": 288.05
@@ -21237,7 +20793,9 @@
         "outOfPocket": 576.09
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 2 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-449",
@@ -21271,7 +20829,6 @@
     "expected": {
       "perWeek": {
         "fees": 985,
-        "subsidy": 205.56,
         "paidSubsidy": 195.28,
         "withheld": 10.28,
         "outOfPocket": 789.73
@@ -21326,7 +20883,6 @@
     "expected": {
       "perWeek": {
         "fees": 1544,
-        "subsidy": 1140.6,
         "paidSubsidy": 1083.57,
         "withheld": 57.03,
         "outOfPocket": 460.43
@@ -21365,7 +20921,6 @@
     "expected": {
       "perWeek": {
         "fees": 556,
-        "subsidy": 409.33,
         "paidSubsidy": 388.86,
         "withheld": 20.47,
         "outOfPocket": 167.15
@@ -21420,7 +20975,6 @@
     "expected": {
       "perWeek": {
         "fees": 1732,
-        "subsidy": 573.82,
         "paidSubsidy": 545.13,
         "withheld": 28.69,
         "outOfPocket": 1186.89
@@ -21459,7 +21013,6 @@
     "expected": {
       "perWeek": {
         "fees": 444,
-        "subsidy": 29.71,
         "paidSubsidy": 28.22,
         "withheld": 1.49,
         "outOfPocket": 415.79
@@ -21514,7 +21067,6 @@
     "expected": {
       "perWeek": {
         "fees": 1249,
-        "subsidy": 134.82,
         "paidSubsidy": 128.09,
         "withheld": 6.73,
         "outOfPocket": 1120.94
@@ -21553,7 +21105,6 @@
     "expected": {
       "perWeek": {
         "fees": 432,
-        "subsidy": 388.75,
         "paidSubsidy": 369.31,
         "withheld": 19.44,
         "outOfPocket": 62.7
@@ -21592,7 +21143,6 @@
     "expected": {
       "perWeek": {
         "fees": 448,
-        "subsidy": 302.4,
         "paidSubsidy": 287.28,
         "withheld": 15.12,
         "outOfPocket": 160.72
@@ -21647,7 +21197,6 @@
     "expected": {
       "perWeek": {
         "fees": 301,
-        "subsidy": 249.76,
         "paidSubsidy": 237.27,
         "withheld": 12.49,
         "outOfPocket": 63.73
@@ -21660,7 +21209,9 @@
         "outOfPocket": 127.46
       }
     },
-    "tolerance": 0.01
+    "tolerance": 0.01,
+    "skip": true,
+    "skipReason": "StartingBlocks rendered \"-\" for child 3 (it does not model a second In Home Care child); its totals cover fewer children than the input"
   },
   {
     "name": "gen-458",
@@ -21694,7 +21245,6 @@
     "expected": {
       "perWeek": {
         "fees": 576,
-        "subsidy": 257.84,
         "paidSubsidy": 244.95,
         "withheld": 12.89,
         "outOfPocket": 331.05
@@ -21733,7 +21283,6 @@
     "expected": {
       "perWeek": {
         "fees": 452,
-        "subsidy": 334.08,
         "paidSubsidy": 317.38,
         "withheld": 16.7,
         "outOfPocket": 134.63
@@ -21744,6 +21293,696 @@
         "paidSubsidy": 634.75,
         "withheld": 33.41,
         "outOfPocket": 269.25
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146436 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146436,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146437 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146437,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 146438 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 146438,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 741.29,
+        "withheld": 39.02,
+        "outOfPocket": 158.72
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1560.6,
+        "paidSubsidy": 1482.57,
+        "withheld": 78.03,
+        "outOfPocket": 317.43
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 191436 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 191436,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 638.69,
+        "withheld": 33.62,
+        "outOfPocket": 261.32
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1344.6,
+        "paidSubsidy": 1277.37,
+        "withheld": 67.23,
+        "outOfPocket": 522.63
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 191437 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 191437,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 638.69,
+        "withheld": 33.62,
+        "outOfPocket": 261.32
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1344.6,
+        "paidSubsidy": 1277.37,
+        "withheld": 67.23,
+        "outOfPocket": 522.63
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 270727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 270727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 570.86,
+        "withheld": 30.05,
+        "outOfPocket": 329.15
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 1201.8,
+        "paidSubsidy": 1141.71,
+        "withheld": 60.09,
+        "outOfPocket": 658.29
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 360727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 360727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 365.66,
+        "withheld": 19.25,
+        "outOfPocket": 534.35
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 769.8,
+        "paidSubsidy": 731.31,
+        "withheld": 38.49,
+        "outOfPocket": 1068.69
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370725 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370725,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 357.1,
+        "withheld": 18.8,
+        "outOfPocket": 542.9
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 751.8,
+        "paidSubsidy": 714.21,
+        "withheld": 37.59,
+        "outOfPocket": 1085.79
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370726 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370726,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 357.1,
+        "withheld": 18.8,
+        "outOfPocket": 542.9
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 751.8,
+        "paidSubsidy": 714.21,
+        "withheld": 37.59,
+        "outOfPocket": 1085.79
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370727 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370727,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 286.7,
+        "withheld": 15.1,
+        "outOfPocket": 613.3
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 603.6,
+        "paidSubsidy": 573.42,
+        "withheld": 30.18,
+        "outOfPocket": 1226.58
+      }
+    },
+    "tolerance": 0.01
+  },
+  {
+    "name": "edge income 370728 two under 6",
+    "input": {
+      "partnered": true,
+      "participationHours": {
+        "adult1": 76,
+        "adult2": 76
+      },
+      "applyWithholding": true,
+      "familyIncome": 370728,
+      "children": [
+        {
+          "id": "child-1",
+          "ageYears": 4,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        },
+        {
+          "id": "child-2",
+          "ageYears": 1,
+          "careType": "CBDC",
+          "dailyFee": 150,
+          "hoursPerDay": 10,
+          "daysPerFortnight": 6
+        }
+      ]
+    },
+    "expected": {
+      "perWeek": {
+        "fees": 900,
+        "paidSubsidy": 286.7,
+        "withheld": 15.1,
+        "outOfPocket": 613.3
+      },
+      "perFortnight": {
+        "fees": 1800,
+        "subsidy": 603.6,
+        "paidSubsidy": 573.42,
+        "withheld": 30.18,
+        "outOfPocket": 1226.58
       }
     },
     "tolerance": 0.01

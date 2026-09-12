@@ -554,16 +554,30 @@ async function dumpForm(page) {
 
 /** The case list, generated once and reused so a resumed run compares the same inputs. */
 function caseList() {
-  if (!FRESH && existsSync(CASES_FILE)) {
-    const saved = JSON.parse(readFileSync(CASES_FILE, 'utf8'));
-    if (saved.length >= N - 40) return saved;
-    console.log(`${CASES_FILE} holds ${saved.length} cases, fewer than asked for; regenerating.`);
-  }
-  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))].map(c => ({
+  const wrap = c => ({
     name: c.name,
     // The site always reports net of the 5% withholding; match its convention.
     input: { ...c.input, applyWithholding: SITE_APPLIES_WITHHOLDING },
-  }));
+  });
+  if (!FRESH && existsSync(CASES_FILE)) {
+    const saved = JSON.parse(readFileSync(CASES_FILE, 'utf8'));
+    if (saved.length >= N - 40) {
+      // Edge cases are deterministic and named, so ones added to edge-cases.mjs
+      // since the list was saved should extend the run rather than be ignored.
+      // The random gen-* sample is left exactly as it was, so a resumed run stays
+      // comparable with the report it is extending.
+      const have = new Set(saved.map(c => c.name));
+      const added = edgeCases().filter(c => !have.has(c.name)).map(wrap);
+      if (added.length) {
+        console.log(`${added.length} new edge case(s) since this list was saved; adding them.`);
+        saved.push(...added);
+        writeFileSync(CASES_FILE, JSON.stringify(saved, null, 2));
+      }
+      return saved;
+    }
+    console.log(`${CASES_FILE} holds ${saved.length} cases, fewer than asked for; regenerating.`);
+  }
+  const cases = [...edgeCases(), ...generateCases(Math.max(0, N - 40))].map(wrap);
   mkdirSync('reports', { recursive: true });
   writeFileSync(CASES_FILE, JSON.stringify(cases, null, 2));
   return cases;
@@ -575,69 +589,95 @@ function compareCase(c, sb, error) {
   const cmp = (o, s) => (s == null ? null : round2(o - s));
   const row = {
     name: c.name, error: error ?? null,
-    ourWeekSub: ours.totals.perWeek.subsidy, sbWeekSub: sb?.perWeek?.subsidy ?? null,
+    ourFnSub: ours.totals.perFortnight.subsidy, sbFnSub: sb?.perFortnight?.subsidy ?? null,
     ourWeekPaid: ours.totals.perWeek.paidSubsidy, sbWeekPaid: sb?.perWeek?.paidSubsidy ?? null,
     ourWeekOop: ours.totals.perWeek.outOfPocket, sbWeekOop: sb?.perWeek?.outOfPocket ?? null,
     ourFnOop: ours.totals.perFortnight.outOfPocket, sbFnOop: sb?.perFortnight?.outOfPocket ?? null,
     ourFnFees: ours.totals.perFortnight.fees, sbFnFees: sb?.perFortnight?.fees ?? null,
     ourPct: ours.standardPercent, sbShownPct: sb?.ccsPercent ?? null,
+    // A child the page rendered as "-": the site declined to model it, so its
+    // totals cover fewer children than the input. Reported, never counted as
+    // a pass or a fail of the engine.
+    unmodelled: sb ? sb.children.filter(ch => ch.feePerFortnight == null).map(ch => ch.n) : [],
   };
-  row.dWeekSub = cmp(row.ourWeekSub, row.sbWeekSub);
+  row.dFnSub = cmp(row.ourFnSub, row.sbFnSub);
   row.dWeekPaid = cmp(row.ourWeekPaid, row.sbWeekPaid);
   row.dWeekOop = cmp(row.ourWeekOop, row.sbWeekOop);
   row.dFnOop = cmp(row.ourFnOop, row.sbFnOop);
   row.dFnFees = cmp(row.ourFnFees, row.sbFnFees);
-  row.pass = !row.error && [row.dWeekSub, row.dWeekPaid, row.dWeekOop, row.dFnOop, row.dFnFees]
+  // Judged on displayed figures plus the fortnightly gross (a one-step sum that
+  // reconciles exactly). Weekly gross is not displayed and is not judged.
+  row.pass = !row.error && !row.unmodelled.length && [row.dFnSub, row.dWeekPaid, row.dWeekOop, row.dFnOop, row.dFnFees]
     .every(d => d === null || Math.abs(d) <= TOL);
+  row.unmodelled = row.unmodelled.join(' ');
   return row;
 }
 
 function writeReports(cases, recorded) {
   const rows = cases.filter(c => recorded.has(c.name))
     .map(c => { const r = recorded.get(c.name); return compareCase(c, r.sb, r.error); });
-  const golden = cases.filter(c => recorded.get(c.name)?.sb).map(c => ({
-    name: c.name, input: c.input,
-    expected: {
-      // Only figures the page displayed, plus the two documented sums (gross
-      // subsidy, family fees) explained on readResults.
-      //
-      // The displayed "Your CCS Rate" is NOT recorded as a child's ccsPercent:
-      // the site prints it rounded to a whole percent with two decimal places
-      // tacked on (84.70% shows as "85.00%"), so it is a display convention,
-      // not a figure to compare against. It is kept in
-      // reports/comparison.{md,csv} as `sbShownPct` instead.
-      perWeek: recorded.get(c.name).sb.perWeek,
-      perFortnight: recorded.get(c.name).sb.perFortnight,
-    },
-    tolerance: TOL,
-  }));
+  const golden = cases.filter(c => recorded.get(c.name)?.sb).map(c => {
+    const sb = recorded.get(c.name).sb;
+    // A child the page rendered as "-" (every figure blank) is one the site
+    // declined to model — it does this for the second and later In Home Care
+    // child. The family totals then cover fewer children than the input, so
+    // the case cannot be a fair test of any engine. Record it, skip it, say why.
+    const unread = sb.children.filter(ch => ch.feePerFortnight == null).map(ch => ch.n);
+    // Weekly gross subsidy is dropped: the page displays neither gross figure,
+    // and summing its two rounded weekly rows drifts a cent or two from the
+    // fortnightly sum across several children. The fortnightly sum reconciles
+    // exactly and is kept.
+    const { subsidy: _weeklyGross, ...perWeek } = sb.perWeek;
+    return {
+      name: c.name, input: c.input,
+      expected: {
+        // Only figures the page displayed, plus the two documented sums
+        // (fortnightly gross subsidy, family fees) explained on readResults.
+        //
+        // The displayed "Your CCS Rate" is NOT recorded as a child's ccsPercent:
+        // the site prints it rounded to a whole percent with two decimal places
+        // tacked on (84.70% shows as "85.00%"), so it is a display convention,
+        // not a figure to compare against. It is kept in
+        // reports/comparison.{md,csv} as `sbShownPct` instead.
+        perWeek,
+        perFortnight: sb.perFortnight,
+      },
+      tolerance: TOL,
+      ...(unread.length ? {
+        skip: true,
+        skipReason: `StartingBlocks rendered "-" for child ${unread.join(', ')} (it does not model a second In Home Care child); its totals cover fewer children than the input`,
+      } : {}),
+    };
+  });
 
   mkdirSync('reports', { recursive: true });
   writeFileSync('tests/golden-cases.json', JSON.stringify(golden, null, 2));
-  const fails = rows.filter(r => !r.pass);
+  const unmodelled = rows.filter(r => r.unmodelled);
+  const fails = rows.filter(r => !r.pass && !r.unmodelled);
   const errs = rows.filter(r => r.error);
   const complete = rows.length === cases.length;
   const md = [
     `# StartingBlocks comparison — ${new Date().toISOString().slice(0, 10)}`, '',
     complete
-      ? `${rows.length} cases, ${rows.length - fails.length} pass, ${fails.length} fail ` +
-        `(${errs.length} of them could not be read at all). Tolerance $${TOL}.`
+      ? `${rows.length} cases: ${rows.length - fails.length - unmodelled.length} pass, ${fails.length} fail ` +
+        `(${errs.length} of them could not be read at all), ${unmodelled.length} not modelled by the site ` +
+        `(it renders "-" for a second In Home Care child; those are skipped in the golden file). Tolerance $${TOL}.`
       : `PARTIAL RUN: ${rows.length} of ${cases.length} cases read so far. ` +
         `${rows.length - fails.length} pass, ${fails.length} fail (${errs.length} unreadable). Tolerance $${TOL}.`,
     '',
     'Every case ran with `applyWithholding: true`, the convention the results panel uses.',
-    'Subsidy columns are GROSS (the page\'s "government pays" plus its "withholding").',
+    'The subsidy column is the fortnightly GROSS (the page\'s "government pays" plus its "withholding").',
     '"SB %" is the rate the page printed, which it rounds to a whole percent, so it is',
     'not comparable to "Our %" and is shown for reference only.', '',
-    '| Case | Our wk subsidy | SB wk subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Our fn fees | SB fn fees | Δ | Our % | SB % | Result |',
+    '| Case | Our fn subsidy | SB fn subsidy | Δ | Our wk pay | SB wk pay | Δ | Our fn pay | SB fn pay | Δ | Our fn fees | SB fn fees | Δ | Our % | SB % | Result |',
     '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|',
-    ...rows.map(r => `| ${r.name} | ${r.ourWeekSub} | ${r.sbWeekSub ?? '—'} | ${r.dWeekSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.ourFnFees} | ${r.sbFnFees ?? '—'} | ${r.dFnFees ?? '—'} | ${r.ourPct} | ${r.sbShownPct ?? '—'} | ${r.error ? 'ERROR: ' + r.error : r.pass ? 'pass' : 'FAIL'} |`),
+    ...rows.map(r => `| ${r.name} | ${r.ourFnSub} | ${r.sbFnSub ?? '—'} | ${r.dFnSub ?? '—'} | ${r.ourWeekOop} | ${r.sbWeekOop ?? '—'} | ${r.dWeekOop ?? '—'} | ${r.ourFnOop} | ${r.sbFnOop ?? '—'} | ${r.dFnOop ?? '—'} | ${r.ourFnFees} | ${r.sbFnFees ?? '—'} | ${r.dFnFees ?? '—'} | ${r.ourPct} | ${r.sbShownPct ?? '—'} | ${r.error ? 'ERROR: ' + r.error : r.unmodelled ? `NOT MODELLED by site (child ${r.unmodelled} rendered "-")` : r.pass ? 'pass' : 'FAIL'} |`),
   ].join('\n');
   writeFileSync('reports/comparison.md', md);
   const csvCell = v => (typeof v === 'string' && /[",]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   writeFileSync('reports/comparison.csv',
     [Object.keys(rows[0]).join(','), ...rows.map(r => Object.values(r).map(csvCell).join(','))].join('\n'));
-  return { rows, fails, errs, complete };
+  return { rows, fails, errs, unmodelled, complete };
 }
 
 async function main() {
@@ -696,14 +736,14 @@ async function main() {
   await Promise.all(Array.from({ length: Math.max(1, JOBS) }, worker));
   await browser.close();
 
-  const { rows, fails, complete } = writeReports(cases, recorded);
+  const { rows, fails, unmodelled, complete } = writeReports(cases, recorded);
   if (!complete) {
     const left = cases.length - rows.length;
     console.log(`\n${rows.length - fails.length}/${rows.length} pass so far. ` +
       `${left} case(s) still to read${stopped ? ' (time budget reached)' : ''} — re-run the same command to resume.`);
     process.exit(3);
   }
-  console.log(`\n${rows.length - fails.length}/${rows.length} pass. Report: reports/comparison.md`);
+  console.log(`\n${rows.length - fails.length - unmodelled.length} pass, ${fails.length} fail, ${unmodelled.length} not modelled by the site, of ${rows.length}. Report: reports/comparison.md`);
   process.exit(fails.length ? 1 : 0);
 }
 main();

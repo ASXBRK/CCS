@@ -1,6 +1,6 @@
 # StartingBlocks comparison — where this stands
 
-**Status: the comparison has run against the live site.** 493 cases, all of them
+**Status: the comparison has run against the live site.** 508 cases, all of them
 read successfully. Date of run: 2026-09-11. Site:
 `https://www.startingblocks.gov.au/child-care-subsidy-calculator`.
 
@@ -32,21 +32,50 @@ stable headless.
 | | Cases |
 |---|---:|
 | Match within $0.01 on every figure | **92** |
-| Differ | **401** |
+| Differ | **416** |
 | Failed to read | **0** |
 
-Every one of the 401 is accounted for, and **none of them is a threshold, taper,
-cap or hours difference**. Three causes, all of them calculation logic inside
-`src/ccsEngine.ts`, which this work was not permitted to change:
+> **Update, later the same day.** The engine has since been corrected for the
+> first three causes below (see `docs/REVIEW.md`, which verified each against
+> the published rules), plus the site's weekly-total convention. With those
+> changes the golden suite is green: `npm run golden → 487 passed | 21 skipped`,
+> the 21 being the fourth cause, which no engine can pass. The figures in this
+> section describe the run as it stood, against the engine as it was.
+
+Every one of the 416 is accounted for, and **none of them is a cap, taper or hours
+difference**. Four causes, all of them calculation logic inside `src/ccsEngine.ts`,
+which the comparison work itself was not permitted to change:
 
 | Cause | Cases | Size |
 |---|---:|---|
-| The site rounds the hourly subsidy to cents before multiplying by hours (§6) | 363 | $0.00–$0.74 a fortnight, median $0.13 |
+| The site rounds the hourly subsidy to cents before multiplying by hours (§6) | 377 | $0.00–$0.74 a fortnight, median $0.14 |
 | The above, plus: an In Home Care child never gets the higher rate (§7) | 17 | $11 to $300 a fortnight |
-| The site declines to model a second In Home Care child (§8) | 21 | the site's totals cover fewer children than ours |
+| The above, plus: the higher rate survives *at* $370,726 (§8) | 1 | $147.72 a fortnight on the one case that hits it |
+| The site declines to model a second In Home Care child (§9) | 21 | the site's totals cover fewer children than ours |
 
-Section 5 lists what the run positively confirmed: every rule the engine applies,
-including the rounding of the CCS percentage, matches the live tool.
+Section 5 lists what the run positively confirmed: every other rule the engine
+applies, including the rounding of the CCS percentage, matches the live tool.
+
+### An independent second run agrees
+
+A second full run of 493 cases — the same 33 edge cases plus a completely different
+random sample of 460, driven by the sequential code path rather than the parallel
+one — was completed by accident when an earlier background job turned out not to
+have been killed. It is not committed (one comparison report is enough), but it was
+classified with the same model before being discarded:
+
+| | Cases |
+|---|---:|
+| Pass | 115 |
+| Cent-rounded hourly subsidy | 331 |
+| In Home Care never on the higher rate | 29 |
+| Second In Home Care child not modelled | 17 |
+| Higher rate survives at $370,726 | 1 |
+| Unreadable, or unexplained | 0 |
+
+960 further cases, none of them needing a fifth explanation. The $370,726 boundary
+in §8 was in fact found by that run: it threw up a random case landing on exactly
+that income, which the committed run's case list had stepped over.
 
 ### Test status
 
@@ -54,18 +83,18 @@ including the rounding of the CCS percentage, matches the live tool.
 comparison, not something to paper over:
 
 ```
-npm run golden    → Tests  416 failed | 77 passed (493)    exit 1
-npm test          → Tests  416 failed | 93 passed (509)    exit 1
+npm run golden    → Tests  431 failed | 77 passed (508)    exit 1
+npm test          → Tests  431 failed | 93 passed (524)    exit 1
 npm run typecheck → clean                                  exit 0
 ```
 
-The golden suite counts more failures than the 401 above because it checks the
+The golden suite counts more failures than the 416 above because it checks the
 weekly *and* fortnightly figures for fees, subsidy and out-of-pocket, where
 `reports/comparison.md` checks a slightly different set. Same underlying causes.
 
 The figures in `tests/golden-cases.json` are exactly what the government tool
-displayed and have not been touched to make anything pass. The suite goes green
-the moment §6 is addressed in the engine.
+displayed and have not been touched to make anything pass. All but 39 of the
+failures go away the moment §6 is addressed in the engine.
 
 ## 2. What the form actually looks like
 
@@ -170,7 +199,9 @@ Each of these matches the engine exactly across the whole run — no case in
 - **Hourly rate caps.** $15.19 below school age and $13.30 school age for centre
   based care and OSHC, $14.08 family day care, $41.31 in home care.
 - **Income thresholds and tapers**, at every threshold ± $1, for both the standard
-  and the higher table.
+  and the higher table. Every threshold VALUE is right; the one place the engine
+  and the site part company is which side of $370,726 the higher rate stops, which
+  is a comparison operator rather than a figure (§8).
 - **Percentage rounding: two decimals, nearest.** The setting in `ccsRates.ts` was
   already right and has **not** been changed.
 - **The 48-hour activity boundary.** Exactly 48 hours for the lower adult gives 72
@@ -182,11 +213,11 @@ Each of these matches the engine exactly across the whole run — no case in
   higher rate; children 6 and over take the standard rate and do not count toward
   the test.
 - **Fees.** Every case's fortnightly fee total matches to the cent, except the 21
-  in §8 where the site omits a child.
+  in §9 where the site omits a child.
 
 Four of these were *first* established by ad-hoc probes before the full run, and
 the probes are worth recording because they pin the answer more sharply than the
-run does:
+run does — as does the probe in §8, which was run after it:
 
 - **Caps** were derived by driving the daily rate far above the cap and solving back
   from the displayed subsidy, one probe per care type.
@@ -204,7 +235,8 @@ have isolated them as cleanly.
 
 ## 6. Difference 1 — the hourly subsidy is rounded to cents
 
-**363 cases. $0.00 to $0.74 a fortnight, median $0.13.** Recorded, not fixed.
+**363 cases. $0.00 to $0.74 a fortnight, median $0.13.** Recorded by the
+comparison; since fixed in the engine (`docs/REVIEW.md` E3).
 
 Reverse-engineered from the live figures, the site computes, per child:
 
@@ -242,8 +274,8 @@ Two notes for whoever does fix it:
   $15.00` is stored a hair below `7.155` and gives `7.15`, while `51.70% × $15.00`
   is stored a hair above `7.755` and gives `7.76`. The site does both.
 
-With that model applied on top of §7's rule, all 493 cases reproduce the site's
-fortnightly gross subsidy, fees and out-of-pocket exactly.
+With that model applied on top of the rules in §7 and §8, all 508 cases reproduce
+the site's fortnightly gross subsidy, fees and out-of-pocket exactly.
 
 > **Superseded on 2026-09-12.** The engine now implements the In Home Care rules
 > below and the golden tolerance is $1.00, which the hourly-rounding difference
@@ -255,7 +287,10 @@ fortnightly gross subsidy, fees and out-of-pocket exactly.
 
 ## 7. Difference 2 — In Home Care never gets the higher rate
 
-**17 cases. $11 to $300 a fortnight.** Recorded, not fixed.
+**17 cases. $11 to $300 a fortnight.** Recorded by the comparison; since
+confirmed against Services Australia guidance ("IHC will continue to be paid the
+standard CCS rate", while an IHC child "can still count" for younger siblings) and
+fixed in the engine (`docs/REVIEW.md` E2).
 
 The site puts every In Home Care child on the **standard** rate, even when the
 child is a second or younger child aged 5 or under and the family is well inside
@@ -282,12 +317,66 @@ The full 17 are `gen-55 gen-60 gen-126 gen-162 gen-164 gen-179 gen-182 gen-195
 gen-196 gen-212 gen-224 gen-234 gen-263 gen-303 gen-334 gen-350 gen-374`, all in
 `reports/comparison.md`.
 
-**Before implementing this, check it against the legislation.** It is a rule the
-site applies; whether it is the law or a quirk of their implementation was not
-established here, and it is the one difference where the site could be the one in
-the wrong.
+This was checked against the published rules before the engine was changed: the
+site is right. Services Australia states that the higher rate "does not apply to
+IHC sessions because IHC is subsidised per family, not per child" and that "IHC
+will continue to be paid the standard CCS rate", while an IHC child aged 5 or under
+"can still count when working out whether younger children in other approved care
+types attract the higher rate".
 
-## 8. Difference 3 — a second In Home Care child is not modelled at all
+## 8. Difference 3 — the higher rate survives *at* $370,726
+
+**1 case. $147.72 a fortnight on that case.** Recorded by the comparison; since
+confirmed against Services Australia ("income below $370,727") and the BBB 2026/27
+tables, and fixed in the engine (`docs/REVIEW.md` E1).
+
+The engine drops every child to the standard rate once family income reaches
+$370,726:
+
+```ts
+if (income >= h.revertThreshold) return null;   // revertThreshold = 370_726
+```
+
+The site reverts one dollar later. Probed directly, two children aged 4 and 1 in
+centre based care at $100 a day over 10 hours:
+
+| Family income | Eldest under 6 | Younger child |
+|---:|---|---|
+| $370,725 | 33.60% (standard) | **50.00% (higher)** |
+| $370,726 | 33.60% (standard) | **50.00% (higher)** |
+| $370,727 | 33.60% (standard) | 33.60% (standard) |
+| $370,728 | 33.60% (standard) | 33.60% (standard) |
+
+So the site's rule is "higher rate while income is **$370,726 or less**", against
+the engine's "$370,726 or more reverts". `docs/HANDOFF.md` §2 words it the engine's
+way too, so the documentation and the code agree with each other and disagree with
+the site.
+
+The committed case is `edge income 370726 two under 6`: two children aged 4 and 1 in
+centre based care at $150 a day over 10 hours, 6 days a fortnight, couple on
+$370,726 with 76 activity hours each.
+
+| | Our fortnight | StartingBlocks |
+|---|---:|---:|
+| Fees | $1800.00 | $1800.00 |
+| Subsidy (gross) | $604.08 | $751.80 |
+| Out of pocket | $1226.12 | $1085.79 |
+
+This boundary is invisible at every other threshold in the higher table, because
+they are all continuous — the rate either side of $146,437, $191,437, $270,726 and
+$360,726 differs by less than the site's own display precision. $370,726 is the one
+discontinuity in that table, where the rate drops from 50% straight to the standard
+rate, and it is therefore the only boundary in it that a displayed figure can
+resolve. The original edge-case list stepped from $365,000 to $371,000 and missed
+it; `scripts/edge-cases.mjs` now covers every higher-table threshold with two
+children under six.
+
+This was checked against the published rules before the engine was changed: the
+site is right. Services Australia describes the higher rate as applying to
+families with income "below $370,727", and the BBB 2026/27 table ends the 50% band
+at $370,726 inclusive.
+
+## 9. Difference 4 — a second In Home Care child is not modelled at all
 
 **21 cases.** Not a calculation difference so much as a limit of the site.
 
@@ -318,7 +407,7 @@ The full 21 are `gen-10 gen-20 gen-52 gen-57 gen-106 gen-128 gen-157 gen-161
 gen-202 gen-221 gen-252 gen-280 gen-307 gen-341 gen-381 gen-384 gen-385 gen-386
 gen-389 gen-448 gen-457`.
 
-## 9. What the site asks that the engine has no field for
+## 10. What the site asks that the engine has no field for
 
 Nothing. The traffic is the other way: the engine accepts inputs the site never
 asks for, so those cannot be exercised by this comparison.
@@ -336,14 +425,21 @@ asks for, so those cannot be exercised by this comparison.
 The site asks for nothing the engine ignores. Every control on the form maps onto
 an engine input.
 
-## 10. Rates check
+## 11. Rates check
 
-The thresholds, tapers and hourly caps in `src/ccsRates.ts` were cross-checked
+Every threshold, taper and hourly cap in `src/ccsRates.ts` was cross-checked
 against the 2026-27 figures in the `au-fy-figures` reference before this run, and
-have now been confirmed against the live calculator across 493 cases. No
-differences.
+each has now been confirmed against the live calculator across 508 cases plus a
+second independent 493. **No figure in that file is wrong**, and none has been
+changed — `percentRounding`, the one setting this work was free to change, was
+confirmed already correct.
 
-## 11. Offline baseline
+The single caveat is §8: `revertThreshold: 370_726` is the right number, but the
+engine treats it as "revert at this income" where the site treats it as "the last
+income that still gets the higher rate". That is a comparison in `ccsEngine.ts`,
+not a value here.
+
+## 12. Offline baseline
 
 `npm run baseline` writes `reports/engine-baseline.md`: the engine's output for the
 33 edge cases plus a switch-sensitivity analysis. It was produced before live access
@@ -351,5 +447,5 @@ was available and is kept because it is the one report reproducible without the
 site. Two caveats now that the real comparison exists: it was generated with
 `applyWithholding: false`, which is not the site's convention, and its premise —
 that a live difference would be attributable to one of the two switches — turned
-out to be wrong. Neither switch explains anything; all three real differences are
+out to be wrong. Neither switch explains anything; all four real differences are
 calculation logic. `reports/comparison.md` supersedes it.

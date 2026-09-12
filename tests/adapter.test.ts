@@ -131,11 +131,14 @@ describe('In Home Care matches StartingBlocks', () => {
     ],
   };
 
-  it('costs only the first In Home Care child, fees included', () => {
+  it('costs both In Home Care children and warns that the site models only one', () => {
+    // StartingBlocks renders "-" for a second In Home Care child, so it cannot
+    // be reconciled against. Costing both is the safer side to err on: dropping
+    // one would understate a real family's fees.
     const { result } = calculateForHousehold(twoIhc);
-    expect(result.children.map(c => c.id)).toEqual(['c1']);
-    expect(result.totals.perFortnight.fees).toBe(2000);
-    expect(result.warnings.join(' ')).toMatch(/In Home Care covers the whole family/);
+    expect(result.children.map(c => c.id)).toEqual(['c1', 'c2']);
+    expect(result.totals.perFortnight.fees).toBe(2000 + 2180);
+    expect(result.warnings.join(' ')).toMatch(/In Home Care/i);
   });
 
   it('gives an In Home Care child the standard rate even as the younger sibling', () => {
