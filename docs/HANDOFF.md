@@ -116,7 +116,9 @@ Tips:
 
 ### Withholding → `applyWithholding`
 
-Whether to show amounts after the 5% Services Australia holds back. Default off. The government calculator's convention should be confirmed during golden testing; match it.
+Whether to show amounts after the 5% Services Australia holds back. **Default on**, confirmed against the live calculator on 2026-09-11: StartingBlocks always applies it and offers no switch, so every figure it displays is already net of the 5%. Off by default put us a few per cent below the tool we reproduce on every figure.
+
+It is a timing difference rather than a cost. The 5% is a buffer against the family's income estimate being wrong; if the estimate holds up it is repaid at end-of-year balancing. The fortnightly figure with it on is what leaves the bank account; the same figure with it off is what the year actually costs. Show the first as cash flow and the second in the plan — `result.totals.perYear.withheld` is the difference, and the adapter's assumption note states both.
 
 ---
 
@@ -170,7 +172,7 @@ The engine implements the legislated formula the government calculator uses. Wha
 | Switch | Where | Options |
 |---|---|---|
 | CCS % rounding | `percentRounding` in `ccsRates.ts` | 2 decimals nearest (Services Australia convention) / down / none |
-| Withholding | `applyWithholding` on the input | on / off |
+| Withholding | `applyWithholding` on the input | on / off — settled: **on**, the site has no switch |
 | Default session hours per care type | `DEFAULTS.hoursPerDay` in the adapter | match what StartingBlocks pre-fills |
 
 Procedure:

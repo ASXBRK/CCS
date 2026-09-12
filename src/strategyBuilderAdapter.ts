@@ -151,7 +151,13 @@ export const DEFAULTS = {
   careType: 'CBDC' as CareType,
   /** Last resort only: care days normally derive from the work pattern. */
   daysPerFortnight: 6,
-  applyWithholding: false,
+  /**
+   * On, because that is what StartingBlocks does and there is no switch on it:
+   * every figure the site displays is already net of the 5% Services Australia
+   * holds back during the year. Showing gross by default put us a few per cent
+   * below the tool we are reproducing on every single figure.
+   */
+  applyWithholding: true,
 } as const;
 
 // ---------- Weeks, fortnights and who is minding the child ----------
@@ -475,6 +481,18 @@ export function buildAssumptionNote(derived: DerivedInputs, result: FamilyResult
     `(${money(result.totals.perYear.outOfPocket)} a year), with the government paying ` +
     `${money(result.totals.perFortnight.paidSubsidy)} a fortnight.`,
   );
+
+  // The 5% withholding is a timing difference, not a cost. Quoting the
+  // fortnightly cash figure as the annual cost overstates it by the whole of
+  // the withheld amount, which is worth saying rather than leaving to be found.
+  if (result.totals.perYear.withheld > 0) {
+    const trueCost = result.totals.perYear.outOfPocket - result.totals.perYear.withheld;
+    lines.push(
+      `That is after the 5% Services Australia holds back during the year. It is a buffer against the ` +
+      `income estimate, not a cost: if the estimate holds up, ${money(result.totals.perYear.withheld)} comes ` +
+      `back at balancing, so the cost over a full year is nearer ${money(trueCost)}.`,
+    );
+  }
 
   // Say which numbers were guesses, so the sentence above is not mistaken for a quote.
   const guessed = new Set<string>();

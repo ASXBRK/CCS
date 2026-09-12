@@ -57,7 +57,7 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
     partnered: true,
     familyIncome: 150_000,
     participationHours: { adult1: 76, adult2: 76 },
-    applyWithholding: false,
+    applyWithholding: true,
     children: [newChild(1)],
     ...initial,
   });
@@ -220,10 +220,25 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
             </p>
           );
         })()}
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={!!input.applyWithholding} onChange={e => update({ applyWithholding: e.target.checked })} />
-          Show amounts after the 5% withheld until end-of-year balancing
+        <label className="flex items-start gap-2 text-sm">
+          <input className="mt-1" type="checkbox" checked={!!input.applyWithholding} onChange={e => update({ applyWithholding: e.target.checked })} />
+          <span>
+            Hold back the 5% Services Australia withholds during the year
+            <span className="block text-xs text-slate-500">
+              On by default, because it is what StartingBlocks shows and it has no switch for it. The 5% is a buffer against the family's
+              income estimate being wrong, not a cost: if the estimate holds up, it comes back at end-of-year balancing. Untick it to see
+              the position after that.
+            </span>
+          </span>
         </label>
+        {input.applyWithholding && result.totals.perYear.withheld > 0 && (
+          <p className="text-sm text-slate-600">
+            {money(result.totals.perYear.withheld)} of subsidy is held back across the year. If the income estimate is right it is repaid at
+            balancing, so the true annual cost is nearer{' '}
+            <strong>{money(result.totals.perYear.outOfPocket - result.totals.perYear.withheld)}</strong> than{' '}
+            {money(result.totals.perYear.outOfPocket)}.
+          </p>
+        )}
       </section>
 
       {/* Children */}

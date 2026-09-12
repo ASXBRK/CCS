@@ -26,6 +26,13 @@ national averages, not round numbers someone picked. Do not change one without
 a source, and set its `source` to match — that field is what makes the note say
 "the national average for centre based day care" rather than "an estimate".
 
+`applyWithholding` defaults to **on**, because StartingBlocks always applies the
+5% and gives no switch for it — off by default put every figure a few per cent
+away from the tool we reproduce. It is a timing difference, not a cost: the 5%
+is a buffer against the family's income estimate and comes back at balancing if
+the estimate holds up. Quote the fortnightly figure as cash flow and the
+balanced figure as the annual cost; the note says both.
+
 **Always show the assumption note with the figure.** `calculateForHousehold`
 returns it as `note`, and it reads like this:
 
