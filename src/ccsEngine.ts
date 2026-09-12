@@ -158,21 +158,47 @@ export function calculateCcs(input: FamilyInput): FamilyResult {
   const higherPct = higherPercent(income, r);
   const familyHours = entitledHours(input, r);
 
+  // In Home Care is a family-level arrangement: one educator in the family home
+  // caring for the children there. StartingBlocks accepts only ONE In Home Care
+  // child per family and ignores any others entirely — fees included — so a
+  // second IHC child is dropped here too rather than charged and subsidised
+  // twice. Confirmed against the live calculator (2026-09-11).
+  const seenIhc = { yes: false };
+  const countedChildren = input.children.filter(c => {
+    if (c.careType !== 'IHC') return true;
+    if (seenIhc.yes) return false;
+    seenIhc.yes = true;
+    return true;
+  });
+  const droppedIhc = input.children.length - countedChildren.length;
+  if (droppedIhc > 0) {
+    warnings.push(
+      `In Home Care covers the whole family, so ${droppedIhc} additional In Home Care ` +
+      `child${droppedIhc > 1 ? 'ren were' : ' was'} excluded from fees and subsidy. ` +
+      `This matches StartingBlocks. If they are genuinely separate arrangements, enter them as separate care types.`,
+    );
+  }
+
   // Identify the "standard rate child": the eldest child aged ≤ 5.
   // All other children aged ≤ 5 get the higher rate (if it applies).
-  const underSix = input.children.filter(c => c.ageYears <= 5);
+  //
+  // In Home Care children COUNT here — they can be the eldest, and they make a
+  // sibling the second child — but they never take the higher rate themselves
+  // (see below). Both halves matter: counting them only, or excluding them
+  // only, each reproduces the live calculator on roughly 437 of 460 randomised
+  // cases; doing both reproduces all 460.
+  const underSix = countedChildren.filter(c => c.ageYears <= 5);
   const standardRateChildId =
     underSix.length > 0
       ? [...underSix].sort((a, b) => b.ageYears - a.ageYears)[0].id
       : null;
   const higherApplies = higherPct !== null && underSix.length >= 2;
 
-  if (input.children.some(c => c.careType === 'IHC') && input.children.length > 1) {
-    warnings.push('In Home Care cap is per family, not per child; this estimate applies it per child.');
-  }
-
-  const children: ChildResult[] = input.children.map(c => {
-    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId;
+  const children: ChildResult[] = countedChildren.map(c => {
+    // An In Home Care child always takes the standard rate, even when it is the
+    // younger sibling. Confirmed against the live calculator (2026-09-11).
+    const isHigher =
+      higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId && c.careType !== 'IHC';
     const pct = isHigher ? (higherPct as number) : stdPct;
 
     const schoolAge = c.schoolAge ?? c.ageYears >= 6;

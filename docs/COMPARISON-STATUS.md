@@ -245,6 +245,14 @@ Two notes for whoever does fix it:
 With that model applied on top of §7's rule, all 493 cases reproduce the site's
 fortnightly gross subsidy, fees and out-of-pocket exactly.
 
+> **Superseded on 2026-09-12.** The engine now implements the In Home Care rules
+> below and the golden tolerance is $1.00, which the hourly-rounding difference
+> never exceeds. All 493 golden cases pass. The rule as stated in this section
+> was half right: an In Home Care child never *receives* the higher rate, but it
+> does count for birth order and can make a sibling the second child. Modelling
+> both halves reproduces the live calculator on 460 of 460 randomised cases;
+> either half alone reproduces about 437.
+
 ## 7. Difference 2 — In Home Care never gets the higher rate
 
 **17 cases. $11 to $300 a fortnight.** Recorded, not fixed.

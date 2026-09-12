@@ -68,6 +68,29 @@ Tips:
 - If it only holds employment status (full-time / part-time / not working), map full-time → 76, part-time → ask or default to 38, not working → 0. Flag the default in the UI.
 - Do not spend effort modelling participation precisely. The only threshold that matters is 48, and most working couples clear it. The interesting case is the "reduce work" life event pushing one adult from above 48 to at or below it.
 
+### Days of care → `careDaysPerWeek`, `familySupportDaysPerWeek`
+
+The engine takes days per fortnight, but nobody thinks in days per fortnight.
+The adapter takes the week instead:
+
+| Field | Meaning |
+|---|---|
+| `careDaysPerWeek` | days the child needs minding — normally the days the primary carer works |
+| `familySupportDaysPerWeek` | of those, the days family covers for free |
+| `daysPerFortnight` | escape hatch: an explicit fortnightly figure, overrides both |
+| `hoursPerFortnight` | second escape hatch, for weeks that do not divide into whole days |
+
+Days in paid care = `careDaysPerWeek − familySupportDaysPerWeek`, doubled for
+the fortnight. Left undefined, `careDaysPerWeek` is derived from the work
+pattern: for a couple, the days the **lesser-working** parent works, since the
+other is at work on all of them; for a single parent, their own work days. That
+is a guess and is marked `default` in provenance.
+
+Family support matters more than it looks. One grandparent day a week is a fifth
+off the fee and a fifth off the subsidy, and families routinely have one.
+Modelling a return to work without asking about it overstates the cost of going
+back.
+
 ### Children → `children[]`
 
 Per child: age in years, whether they attend school, care type, daily fee, session hours, days per fortnight.
@@ -151,7 +174,12 @@ Each June the Department of Education publishes the next year's thresholds and c
 
 ## 9. Known simplifications (shared with StartingBlocks)
 
-- In-home care cap is per family; applied per child here (flagged in `warnings`).
+- In Home Care is treated as the live calculator treats it, confirmed against it
+  on 2026-09-11: only the first In Home Care child is costed at all (fees
+  included), and an In Home Care child never takes the higher rate, though it
+  does count for birth order and can make a sibling the second child. Both are
+  flagged in `warnings`. If a family genuinely runs two separate arrangements,
+  this understates their fees — enter the second under its real care type.
 - No Additional Child Care Subsidy, no preschool-year exemptions.
 - Session hours count in full even if the child attends fewer hours; that is how CCS works.
 - Income is one annual figure per run; run per year for projections.

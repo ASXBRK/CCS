@@ -158,13 +158,23 @@ function entitledHours(input) {
 function calculateCcs(input) {
   const income = Math.max(0, input.familyIncome || 0);
   const stdPct = standardPercent(income), higherPct = higherPercent(income), familyHours = entitledHours(input);
-  const underSix = input.children.filter(c => c.ageYears <= 5);
+  const warnings = [];
+  // In Home Care is a family arrangement: StartingBlocks costs only the first
+  // such child and ignores any others entirely, fees included.
+  let seenIhc = false;
+  const countedChildren = input.children.filter(c => {
+    if (c.careType !== 'IHC') return true;
+    if (seenIhc) return false;
+    seenIhc = true; return true;
+  });
+  const droppedIhc = input.children.length - countedChildren.length;
+  if (droppedIhc > 0) warnings.push('In Home Care covers the whole family, so ' + droppedIhc + ' additional In Home Care child' + (droppedIhc > 1 ? 'ren were' : ' was') + ' excluded from fees and subsidy. This matches StartingBlocks.');
+  const underSix = countedChildren.filter(c => c.ageYears <= 5);
   const standardRateChildId = underSix.length ? [...underSix].sort((a,b)=>b.ageYears-a.ageYears)[0].id : null;
   const higherApplies = higherPct !== null && underSix.length >= 2;
-  const warnings = [];
-  if (input.children.some(c => c.careType === 'IHC') && input.children.length > 1) warnings.push('In Home Care cap is per family; applied per child here.');
-  const children = input.children.map(c => {
-    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId;
+  const children = countedChildren.map(c => {
+    // IHC children count for birth order but never take the higher rate.
+    const isHigher = higherApplies && c.ageYears <= 5 && c.id !== standardRateChildId && c.careType !== 'IHC';
     const pct = isHigher ? higherPct : stdPct;
     const schoolAge = c.schoolAge ?? c.ageYears >= 6;
     const cap = schoolAge ? RATES.hourlyCaps[c.careType].schoolAge : RATES.hourlyCaps[c.careType].belowSchoolAge;

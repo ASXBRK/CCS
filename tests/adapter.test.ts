@@ -57,3 +57,111 @@ describe('strategy builder adapter', () => {
     expect(derived.engineInput.children[0].dailyFee).toBe(175);
   });
 });
+
+describe('days per week, family support and the assumption note', () => {
+  const household = (child: Partial<SbHousehold['children'][0]> = {}): SbHousehold => ({
+    partnered: true,
+    adults: [
+      { id: 'mum', atiAnnual: 55_000, workDaysPerWeek: 3 },
+      { id: 'dad', atiAnnual: 95_000, workDaysPerWeek: 5 },
+    ],
+    children: [{
+      id: 'c1', ageYears: 3, inCare: true, careType: 'CBDC',
+      dailyFee: 150, hoursPerDay: 10, ...child,
+    }],
+  });
+
+  it('derives days needing care from the lesser-working parent', () => {
+    const { derived } = calculateForHousehold(household());
+    expect(derived.carePatterns.c1.careDaysPerWeek).toBe(3);
+    expect(derived.engineInput.children[0].daysPerFortnight).toBe(6);
+  });
+
+  it('subtracts family support days from the days in paid care', () => {
+    const { derived } = calculateForHousehold(household({ careDaysPerWeek: 3, familySupportDaysPerWeek: 1 }));
+    expect(derived.carePatterns.c1.childcareDaysPerWeek).toBe(2);
+    expect(derived.engineInput.children[0].daysPerFortnight).toBe(4);
+  });
+
+  it('never goes below zero days when family support exceeds the days needed', () => {
+    const { derived } = calculateForHousehold(household({ careDaysPerWeek: 2, familySupportDaysPerWeek: 3 }));
+    expect(derived.engineInput.children[0].daysPerFortnight).toBe(0);
+    expect(derived.notes.join(' ')).toMatch(/exceeds the days needing care/);
+  });
+
+  it('lets hours per fortnight override the day figures for edge cases', () => {
+    const { derived } = calculateForHousehold(household({ careDaysPerWeek: 3, hoursPerFortnight: 45 }));
+    expect(derived.carePatterns.c1.basis).toBe('hours');
+    expect(derived.engineInput.children[0].daysPerFortnight).toBe(4.5);
+  });
+
+  it('still accepts days per fortnight directly', () => {
+    const { derived } = calculateForHousehold(household({ daysPerFortnight: 7 }));
+    expect(derived.carePatterns.c1.basis).toBe('daysPerFortnight');
+    expect(derived.engineInput.children[0].daysPerFortnight).toBe(7);
+  });
+
+  it('writes an assumption note naming the work, support and care split', () => {
+    const { note } = calculateForHousehold(household({ careDaysPerWeek: 3, familySupportDaysPerWeek: 1 }));
+    expect(note).toMatch(/you work 3 days a week/);
+    expect(note).toMatch(/1 day of family support/);
+    expect(note).toMatch(/2 days in child care/);
+    expect(note).toMatch(/a fortnight/);
+  });
+
+  it('flags defaults in the note so the figure is not mistaken for a quote', () => {
+    const h = household();
+    delete (h.children[0] as { dailyFee?: number }).dailyFee;
+    const { note } = calculateForHousehold(h);
+    expect(note).toMatch(/the daily fee/);
+    expect(note).toMatch(/default/);
+  });
+});
+
+describe('In Home Care matches StartingBlocks', () => {
+  const twoIhc: SbHousehold = {
+    partnered: true,
+    adults: [
+      { id: 'a', atiAnnual: 60_000, workDaysPerWeek: 5 },
+      { id: 'b', atiAnnual: 60_000, workDaysPerWeek: 5 },
+    ],
+    children: [
+      { id: 'c1', ageYears: 0, inCare: true, careType: 'IHC', dailyFee: 200, hoursPerDay: 8, careDaysPerWeek: 5 },
+      { id: 'c2', ageYears: 1, inCare: true, careType: 'IHC', dailyFee: 218, hoursPerDay: 9, careDaysPerWeek: 5 },
+    ],
+  };
+
+  it('costs only the first In Home Care child, fees included', () => {
+    const { result } = calculateForHousehold(twoIhc);
+    expect(result.children.map(c => c.id)).toEqual(['c1']);
+    expect(result.totals.perFortnight.fees).toBe(2000);
+    expect(result.warnings.join(' ')).toMatch(/In Home Care covers the whole family/);
+  });
+
+  it('gives an In Home Care child the standard rate even as the younger sibling', () => {
+    const { result } = calculateForHousehold({
+      partnered: true,
+      adults: [{ id: 'a', atiAnnual: 50_000, workDaysPerWeek: 5 }, { id: 'b', atiAnnual: 50_000, workDaysPerWeek: 5 }],
+      children: [
+        { id: 'elder', ageYears: 4, inCare: true, careType: 'CBDC', dailyFee: 150, hoursPerDay: 10, careDaysPerWeek: 5 },
+        { id: 'younger', ageYears: 1, inCare: true, careType: 'IHC', dailyFee: 200, hoursPerDay: 10, careDaysPerWeek: 5 },
+      ],
+    });
+    expect(result.children.find(c => c.id === 'younger')!.rateType).toBe('standard');
+  });
+
+  it('still counts an In Home Care child for birth order', () => {
+    // IHC eldest under 6 takes the standard slot, so the CBDC sibling is second
+    // and does get the higher rate.
+    const { result } = calculateForHousehold({
+      partnered: true,
+      adults: [{ id: 'a', atiAnnual: 50_000, workDaysPerWeek: 5 }, { id: 'b', atiAnnual: 50_000, workDaysPerWeek: 5 }],
+      children: [
+        { id: 'ihc-elder', ageYears: 5, inCare: true, careType: 'IHC', dailyFee: 200, hoursPerDay: 10, careDaysPerWeek: 5 },
+        { id: 'cbdc-younger', ageYears: 1, inCare: true, careType: 'CBDC', dailyFee: 150, hoursPerDay: 10, careDaysPerWeek: 5 },
+      ],
+    });
+    expect(result.children.find(c => c.id === 'ihc-elder')!.rateType).toBe('standard');
+    expect(result.children.find(c => c.id === 'cbdc-younger')!.rateType).toBe('higher');
+  });
+});
