@@ -2,6 +2,8 @@
 
 Read `docs/HANDOFF.md` first. It explains what this module is, how the calculation works, and how to wire it into another codebase.
 
+Wiring it into the Strategy Builder specifically: `docs/STRATEGY-BUILDER-INTEGRATION.md`.
+
 Rules for this repo:
 - `src/ccsRates.ts` holds every number. Never hard-code a threshold or cap anywhere else.
 - `src/ccsEngine.ts` is pure and framework-free. Keep it that way.
