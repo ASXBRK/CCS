@@ -98,7 +98,20 @@ Per child: age in years, whether they attend school, care type, daily fee, sessi
 
 Tips:
 - Age and count of dependants are almost certainly in the builder. Pull them. `schoolAge` can default from age (6 and over) and be flipped by the adviser.
-- Care type, fee, session hours and days are unlikely to be in the builder. Use the defaults in the adapter (`DEFAULTS`) and show them clearly as defaults so the adviser overrides them from the fact find. Replace the placeholder daily-fee defaults with figures the firm is comfortable quoting locally.
+- Care type, fee, session hours and days are unlikely to be in the builder. Use the defaults in the adapter (`CARE_DEFAULTS`) and show them clearly as defaults so the adviser overrides them from the fact find.
+
+  The fee and session defaults are **StartingBlocks' own national averages**, read off the live calculator on 2026-09-11 — the figures behind its "use the national average for my type of service" checkbox:
+
+  | Care type | Daily fee | Hours a day | Source |
+  |---|---:|---:|---|
+  | Centre based day care | $120 | 10 | national average |
+  | Family day care | $110 | 10 | national average |
+  | Outside school hours care | $32 | 3 | national average |
+  | In home care | $400 | 10 | estimate |
+
+  In Home Care has no published average and no checkbox on the site. It is charged per family per hour, so $400 over a 10-hour day is $40/hr — just under the $41.31 cap, which is where these services sit in practice. It carries `source: 'estimate'`, and the assumption note calls it an estimate rather than an average.
+
+  A firm with its own local fee data should replace these and change `source` with them, since that field decides how the note describes the number.
 - Only children marked "in care" go to the engine. A child who is not in care simply does not appear.
 
 ### Withholding → `applyWithholding`

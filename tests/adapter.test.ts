@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateForHousehold, compareLifeEvent, SbHousehold } from '../src/strategyBuilderAdapter';
+import { calculateForHousehold, compareLifeEvent, SbHousehold, CARE_DEFAULTS } from '../src/strategyBuilderAdapter';
+import { getRates } from '../src/ccsRates';
 
 const household: SbHousehold = {
   partnered: true,
@@ -166,5 +167,34 @@ describe('In Home Care matches StartingBlocks', () => {
     });
     expect(result.children.find(c => c.id === 'ihc-elder')!.rateType).toBe('standard');
     expect(result.children.find(c => c.id === 'cbdc-younger')!.rateType).toBe('higher');
+  });
+});
+
+describe('care defaults', () => {
+  it('uses StartingBlocks national averages, so a change has to be deliberate', () => {
+    // Read off the live calculator's "use the national average for my type of
+    // service" checkbox on 2026-09-11. If StartingBlocks reindexes these, this
+    // test is the thing that should fail first.
+    expect(CARE_DEFAULTS.CBDC).toMatchObject({ dailyFee: 120, hoursPerDay: 10, source: 'nationalAverage' });
+    expect(CARE_DEFAULTS.FDC).toMatchObject({ dailyFee: 110, hoursPerDay: 10, source: 'nationalAverage' });
+    expect(CARE_DEFAULTS.OSHC).toMatchObject({ dailyFee: 32, hoursPerDay: 3, source: 'nationalAverage' });
+    // The site publishes no In Home Care average, so ours is an estimate and
+    // must say so — the note reads differently for the two.
+    expect(CARE_DEFAULTS.IHC.source).toBe('estimate');
+  });
+
+  it('keeps the In Home Care estimate under the hourly cap', () => {
+    const hourly = CARE_DEFAULTS.IHC.dailyFee / CARE_DEFAULTS.IHC.hoursPerDay;
+    expect(hourly).toBeLessThanOrEqual(getRates().hourlyCaps.IHC.belowSchoolAge);
+  });
+
+  it('names a national average as such in the note, and an estimate as an estimate', () => {
+    const base = (careType: 'CBDC' | 'IHC'): SbHousehold => ({
+      partnered: false,
+      adults: [{ id: 'a', atiAnnual: 90_000, workDaysPerWeek: 4 }],
+      children: [{ id: 'c1', ageYears: 3, inCare: true, careType, careDaysPerWeek: 3 }],
+    });
+    expect(calculateForHousehold(base('CBDC')).note).toMatch(/national average for centre based day care/);
+    expect(calculateForHousehold(base('IHC')).note).toMatch(/an estimate for in home care/);
   });
 });

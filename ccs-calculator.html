@@ -123,8 +123,12 @@ const RATES = {
   percentRounding: { decimals: 2, mode: 'nearest' }, // try 'down' or 'none' if golden cases differ by cents
 };
 const CARE_LABELS = { CBDC:'Centre based day care', FDC:'Family day care', OSHC:'Outside school hours care', IHC:'In home care' };
+// StartingBlocks' own national averages, read off the live calculator on
+// 2026-09-11 (its "use the national average for my type of service" checkbox).
+// In Home Care has no published average: $40/hr over a 10-hour day, just under
+// the $41.31 cap, is an estimate.
 const DEFAULT_HOURS = { CBDC:10, FDC:10, OSHC:3, IHC:10 };
-const DEFAULT_FEE = { CBDC:150, FDC:120, OSHC:35, IHC:400 };
+const DEFAULT_FEE = { CBDC:120, FDC:110, OSHC:32, IHC:400 };
 
 const round2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
 function roundPercent(p) {
@@ -201,7 +205,9 @@ let children = [];
 let golden = [];
 let seq = 0;
 
-function newChild(){ seq++; return { id:`child-${seq}`, ageYears:3, careType:'CBDC', dailyFee:DEFAULT_FEE.CBDC, hoursPerDay:DEFAULT_HOURS.CBDC, daysPerFortnight:6, schoolAge:undefined }; }
+function newChild(){ seq++; return { id:`child-${seq}`, ageYears:3, careType:'CBDC', dailyFee:DEFAULT_FEE.CBDC, hoursPerDay:DEFAULT_HOURS.CBDC, careDaysPerWeek:3, familySupportDaysPerWeek:0, daysPerFortnight:6, schoolAge:undefined }; }
+// Days in paid care are the days needing care less the days family covers.
+function paidDays(c){ return Math.max(0, (c.careDaysPerWeek||0) - (c.familySupportDaysPerWeek||0)); }
 
 function readInput(){
   return {
@@ -223,7 +229,9 @@ function renderChildren(){
         <label>Type of care <select data-f="careType">${Object.entries(CARE_LABELS).map(([k,v])=>`<option value="${k}" ${c.careType===k?'selected':''}>${v}</option>`).join('')}</select></label>
         <label>Daily fee ($) <input type="number" min="0" step="1" data-f="dailyFee" value="${c.dailyFee}"></label>
         <label>Hours per day <input type="number" min="1" max="24" step="0.5" data-f="hoursPerDay" value="${c.hoursPerDay}"></label>
-        <label>Days per fortnight <input type="number" min="0" max="10" data-f="daysPerFortnight" value="${c.daysPerFortnight}"></label>
+        <label>Days a week needing care <input type="number" min="0" max="7" step="0.5" data-f="careDaysPerWeek" value="${c.careDaysPerWeek}"></label>
+        <label>Days a week of family support <input type="number" min="0" max="7" step="0.5" data-f="familySupportDaysPerWeek" value="${c.familySupportDaysPerWeek}"></label>
+        <label>Days per fortnight in paid care <input type="number" min="0" max="10" step="0.5" data-f="daysPerFortnight" value="${c.daysPerFortnight}"></label>
         <label class="inline" style="align-self:end"><input type="checkbox" data-f="schoolAge" ${(c.schoolAge ?? c.ageYears>=6)?'checked':''}> Attends school</label>
       </div>
       <p class="note" data-summary></p>
@@ -275,6 +283,7 @@ $('children').addEventListener('input', e => {
   if (!c || !f) return;
   if (f==='schoolAge') c.schoolAge = e.target.checked;
   else if (f==='careType') { c.careType = e.target.value; c.hoursPerDay = DEFAULT_HOURS[c.careType]; c.dailyFee = DEFAULT_FEE[c.careType]; renderChildren(); }
+  else if (f==='careDaysPerWeek' || f==='familySupportDaysPerWeek') { c[f] = Number(e.target.value)||0; c.daysPerFortnight = paidDays(c)*2; renderChildren(); }
   else { c[f] = Number(e.target.value); if (f==='ageYears') { c.schoolAge = undefined; wrap.querySelector('[data-f=schoolAge]').checked = c.ageYears>=6; } }
   render();
 });

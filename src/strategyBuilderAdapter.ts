@@ -95,13 +95,61 @@ export interface CcsOverrides {
 
 // ---------- Smart defaults (mirror the StartingBlocks defaults) ----------
 
+/**
+ * Where a default fee or session length came from, so the assumption note can
+ * say "the national average" rather than the uninformative "a default".
+ */
+export type DefaultSource = 'nationalAverage' | 'estimate';
+
+/**
+ * Fee and session defaults by care type.
+ *
+ * The first three are StartingBlocks' own national averages — the figures its
+ * "Use the national average for my type of service" checkbox substitutes, read
+ * off the live calculator on 2026-09-11. Using anything else would put us at
+ * odds with the tool we are trying to reproduce, and they are better than a
+ * made-up round number besides.
+ *
+ * In Home Care has no such checkbox and no published average. It is charged per
+ * family per hour, so the figure below is $40/hr over a 10-hour day: just under
+ * the $41.31 hourly cap, which is where IHC services in practice sit. Marked as
+ * an estimate, and it says so in the note.
+ *
+ * A firm with its own local fee data should replace these. The `source` is what
+ * decides how the note describes the number, so change it too if you do.
+ */
+export const CARE_DEFAULTS: Record<CareType, { dailyFee: number; hoursPerDay: number; source: DefaultSource }> = {
+  CBDC: { dailyFee: 120, hoursPerDay: 10, source: 'nationalAverage' },
+  FDC:  { dailyFee: 110, hoursPerDay: 10, source: 'nationalAverage' },
+  OSHC: { dailyFee: 32,  hoursPerDay: 3,  source: 'nationalAverage' },
+  IHC:  { dailyFee: 400, hoursPerDay: 10, source: 'estimate' },
+};
+
+export const CARE_TYPE_LABELS: Record<CareType, string> = {
+  CBDC: 'centre based day care',
+  FDC: 'family day care',
+  OSHC: 'outside school hours care',
+  IHC: 'in home care',
+};
+
 export const DEFAULTS = {
   hoursPerWorkDay: 7.6,
-  /** Default session length by care type (hours). Align to StartingBlocks defaults during golden testing. */
-  hoursPerDay: { CBDC: 10, FDC: 10, OSHC: 3, IHC: 10 } as Record<CareType, number>,
-  /** Default daily fee by care type ($). Placeholder national figures — replace with Perth/firm data. */
-  dailyFee: { CBDC: 150, FDC: 120, OSHC: 35, IHC: 400 } as Record<CareType, number>,
+  /** Session length by care type (hours). See CARE_DEFAULTS for where these come from. */
+  hoursPerDay: {
+    CBDC: CARE_DEFAULTS.CBDC.hoursPerDay,
+    FDC: CARE_DEFAULTS.FDC.hoursPerDay,
+    OSHC: CARE_DEFAULTS.OSHC.hoursPerDay,
+    IHC: CARE_DEFAULTS.IHC.hoursPerDay,
+  } as Record<CareType, number>,
+  /** Daily fee by care type ($). See CARE_DEFAULTS for where these come from. */
+  dailyFee: {
+    CBDC: CARE_DEFAULTS.CBDC.dailyFee,
+    FDC: CARE_DEFAULTS.FDC.dailyFee,
+    OSHC: CARE_DEFAULTS.OSHC.dailyFee,
+    IHC: CARE_DEFAULTS.IHC.dailyFee,
+  } as Record<CareType, number>,
   careType: 'CBDC' as CareType,
+  /** Last resort only: care days normally derive from the work pattern. */
   daysPerFortnight: 6,
   applyWithholding: false,
 } as const;
@@ -432,8 +480,12 @@ export function buildAssumptionNote(derived: DerivedInputs, result: FamilyResult
   const guessed = new Set<string>();
   for (const id of kids) {
     const pr = derived.provenance.children[id];
-    if (pr.dailyFee.source === 'default') guessed.add('the daily fee');
-    if (pr.hoursPerDay.source === 'default') guessed.add('the session length');
+    const ct = pr.careType.value;
+    const how = CARE_DEFAULTS[ct].source === 'nationalAverage'
+      ? `the national average for ${CARE_TYPE_LABELS[ct]}`
+      : `an estimate for ${CARE_TYPE_LABELS[ct]}`;
+    if (pr.dailyFee.source === 'default') guessed.add(`the daily fee (${how}, $${CARE_DEFAULTS[ct].dailyFee} a day)`);
+    if (pr.hoursPerDay.source === 'default') guessed.add(`the session length (${CARE_DEFAULTS[ct].hoursPerDay} hours)`);
     // Only worth flagging when the care days were actually used. If the caller
     // gave hours or days per fortnight outright, the derived figure was ignored.
     if (pr.careDaysPerWeek.source === 'default' && derived.carePatterns[id].basis === 'days') {

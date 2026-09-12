@@ -39,6 +39,15 @@ function newChild(n: number): ChildInput {
   };
 }
 
+/**
+ * The week as advisers describe it. The engine wants days per fortnight, but
+ * nobody says "six days a fortnight" out loud, and days needing care are not
+ * the same as days in paid care once a grandparent covers one.
+ */
+interface WeekPattern { careDaysPerWeek: number; familySupportDaysPerWeek: number }
+const DEFAULT_WEEK: WeekPattern = { careDaysPerWeek: DEFAULTS.daysPerFortnight / 2, familySupportDaysPerWeek: 0 };
+const paidDaysPerWeek = (w: WeekPattern) => Math.max(0, w.careDaysPerWeek - w.familySupportDaysPerWeek);
+
 export default function CcsCalculator({ initial, locked = [], onChange }: CcsCalculatorProps) {
   const [input, setInput] = useState<FamilyInput>({
     partnered: true,
@@ -48,6 +57,19 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
     children: [newChild(1)],
     ...initial,
   });
+  const [weeks, setWeeks] = useState<Record<string, WeekPattern>>({ 'child-1': { ...DEFAULT_WEEK } });
+  const weekOf = (id: string) => weeks[id] ?? DEFAULT_WEEK;
+  /** Change one child's week and push the resulting fortnightly days into the engine input. */
+  const updateWeek = (id: string, patch: Partial<WeekPattern>) => {
+    setWeeks(prev => {
+      const next = { ...(prev[id] ?? DEFAULT_WEEK), ...patch };
+      setInput(i => ({
+        ...i,
+        children: i.children.map(c => c.id === id ? { ...c, daysPerFortnight: paidDaysPerWeek(next) * 2 } : c),
+      }));
+      return { ...prev, [id]: next };
+    });
+  };
   const rates = getRates(input.ccsYear);
   const result = useMemo(() => calculateCcs(input), [input]);
 
@@ -136,7 +158,11 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
           <button
             type="button"
             className="rounded bg-slate-800 px-3 py-1.5 text-sm text-white"
-            onClick={() => update({ children: [...input.children, newChild(input.children.length + 1)] })}
+            onClick={() => {
+              const c = newChild(input.children.length + 1);
+              setWeeks(w => ({ ...w, [c.id]: { ...DEFAULT_WEEK } }));
+              update({ children: [...input.children, c] });
+            }}
           >
             Add a child
           </button>
@@ -148,7 +174,10 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium">Child {i + 1}</h3>
                 {input.children.length > 1 && (
-                  <button type="button" className="text-sm text-slate-500 underline" onClick={() => update({ children: input.children.filter(x => x.id !== c.id) })}>
+                  <button type="button" className="text-sm text-slate-500 underline" onClick={() => {
+                    setWeeks(w => { const { [c.id]: _drop, ...rest } = w; return rest; });
+                    update({ children: input.children.filter(x => x.id !== c.id) });
+                  }}>
                     Remove
                   </button>
                 )}
@@ -184,9 +213,29 @@ export default function CcsCalculator({ initial, locked = [], onChange }: CcsCal
                     onChange={e => updateChild(c.id, { hoursPerDay: num(e.target.value) })} />
                 </label>
                 <label className="flex flex-col gap-1 text-sm">
-                  Days per fortnight
-                  <input type="number" min={0} max={10} className="rounded border border-slate-300 p-2" value={c.daysPerFortnight}
+                  Days a week needing care
+                  <input type="number" min={0} max={7} step={0.5} className="rounded border border-slate-300 p-2"
+                    value={weekOf(c.id).careDaysPerWeek}
+                    onChange={e => updateWeek(c.id, { careDaysPerWeek: num(e.target.value) })} />
+                  <span className="text-xs text-slate-500">Usually the days the primary carer works.</span>
+                </label>
+                <label className="flex flex-col gap-1 text-sm">
+                  Days a week of family support
+                  <input type="number" min={0} max={7} step={0.5} className="rounded border border-slate-300 p-2"
+                    value={weekOf(c.id).familySupportDaysPerWeek}
+                    onChange={e => updateWeek(c.id, { familySupportDaysPerWeek: num(e.target.value) })} />
+                  <span className="text-xs text-slate-500">Grandparents or similar. Free, so it cuts fees and subsidy alike.</span>
+                </label>
+                <label className="flex flex-col gap-1 text-sm">
+                  Days per fortnight in paid care
+                  <input type="number" min={0} max={10} step={0.5} className="rounded border border-slate-300 p-2"
+                    value={c.daysPerFortnight}
                     onChange={e => updateChild(c.id, { daysPerFortnight: num(e.target.value) })} />
+                  <span className="text-xs text-slate-500">
+                    {paidDaysPerWeek(weekOf(c.id)) * 2 === c.daysPerFortnight
+                      ? `${weekOf(c.id).careDaysPerWeek} − ${weekOf(c.id).familySupportDaysPerWeek} = ${paidDaysPerWeek(weekOf(c.id))} days a week.`
+                      : 'Set directly; the weekly figures above are not driving this.'}
+                  </span>
                 </label>
               </div>
               <p className="text-sm text-slate-600">

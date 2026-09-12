@@ -21,6 +21,11 @@ a day of family support is a day of fees and subsidy that does not happen.
 `hoursPerFortnight` is there for the edge cases that do not divide into whole
 days; most of the time it should be left alone.
 
+Fee and session defaults live in `CARE_DEFAULTS` and are StartingBlocks' own
+national averages, not round numbers someone picked. Do not change one without
+a source, and set its `source` to match — that field is what makes the note say
+"the national average for centre based day care" rather than "an estimate".
+
 **Always show the assumption note with the figure.** `calculateForHousehold`
 returns it as `note`, and it reads like this:
 
